@@ -1,6 +1,7 @@
 import 'package:app/model/meeting.dart';
 import 'package:app/provider/date_provider.dart';
 import 'package:app/test/test_data.dart';
+import 'package:app/view/detail_meeting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -115,21 +116,18 @@ class DayCalender extends StatelessWidget {
 
                             if (i.roomId == 0) {
                               if (startNum == index ||
-                                  endNum == index ||
                                   (startNum < index && index < endNum)) {
                                 m1 = i;
                               }
                             }
                             if (i.roomId == 1) {
                               if (startNum == index ||
-                                  endNum == index ||
                                   (startNum < index && index < endNum)) {
                                 m2 = i;
                               }
                             }
                             if (i.roomId == 2) {
                               if (startNum == index ||
-                                  endNum == index ||
                                   (startNum < index && index < endNum)) {
                                 m3 = i;
                               }
@@ -159,8 +157,18 @@ class DayCalender extends StatelessWidget {
                                         alignment: Alignment.center,
                                         height: 50,
                                         color: Colors.red,
-                                        child: Text("${m1.title}",
-                                            textAlign: TextAlign.center))),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        DetailMeeting(
+                                                            meeting: m1!))));
+                                          },
+                                          child: Text("${m1.title}",
+                                              textAlign: TextAlign.center),
+                                        ))),
                               ] else ...[
                                 Expanded(
                                     flex: 2,
@@ -180,8 +188,18 @@ class DayCalender extends StatelessWidget {
                                         alignment: Alignment.center,
                                         height: 50,
                                         color: Colors.orange,
-                                        child: Text("${m2.title}",
-                                            textAlign: TextAlign.center))),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        DetailMeeting(
+                                                            meeting: m2!))));
+                                          },
+                                          child: Text("${m2.title}",
+                                              textAlign: TextAlign.center),
+                                        ))),
                               ] else ...[
                                 Expanded(
                                     flex: 2,
@@ -201,8 +219,18 @@ class DayCalender extends StatelessWidget {
                                         alignment: Alignment.center,
                                         height: 50,
                                         color: Colors.amber,
-                                        child: Text("${m3.title}",
-                                            textAlign: TextAlign.center))),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        DetailMeeting(
+                                                            meeting: m3!))));
+                                          },
+                                          child: Text("${m3.title}",
+                                              textAlign: TextAlign.center),
+                                        ))),
                               ] else ...[
                                 Expanded(
                                     flex: 2,
