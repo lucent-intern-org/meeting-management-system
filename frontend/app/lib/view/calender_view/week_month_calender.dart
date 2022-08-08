@@ -1,16 +1,21 @@
+import 'package:app/model/meeting.dart';
 import 'package:app/provider/date_provider.dart';
+import 'package:app/test/test_data.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 
-class MonthCalender extends StatefulWidget {
-  MonthCalender({Key? key}) : super(key: key);
+class WeekMonthCalender extends StatefulWidget {
+  WeekMonthCalender({Key? key}) : super(key: key);
 
   @override
-  State<MonthCalender> createState() => _MonthCalenderState();
+  State<WeekMonthCalender> createState() => _WeekMonthCalenderState();
 }
 
-class _MonthCalenderState extends State<MonthCalender> {
+class _WeekMonthCalenderState extends State<WeekMonthCalender> {
+  late ValueNotifier<List<Meeting>> _selectedEvents;
+
+  List<List<Meeting>> meetings = TestData().meetings;
   late DateTime _focusedDay;
   late DateTime _selectedDay;
   late CalendarFormat format;
@@ -21,6 +26,7 @@ class _MonthCalenderState extends State<MonthCalender> {
     _focusedDay = Provider.of<DateProvider>(context, listen: false).focusedDay;
     _selectedDay =
         Provider.of<DateProvider>(context, listen: false).selectedDay;
+    _selectedEvents = ValueNotifier(meetings[_selectedDay.day.toInt()]);
   }
 
   @override
@@ -38,7 +44,7 @@ class _MonthCalenderState extends State<MonthCalender> {
           headerVisible: false,
           calendarStyle: const CalendarStyle(
               weekendTextStyle: TextStyle(color: Colors.red)),
-          locale: 'ko-KR',
+          locale: 'ko-KR', //한국어
           currentDay: DateTime.now(),
           focusedDay: _focusedDay,
           firstDay: DateTime.utc(2010, 10, 16),
@@ -48,6 +54,9 @@ class _MonthCalenderState extends State<MonthCalender> {
                 .setCalender(dateTime);
           },
           eventLoader: (day) {
+            if (meetings.length > day.day.toInt()) {
+              return meetings[day.day.toInt()];
+            }
             return [];
           },
           onDaySelected: _onDaySelected,
@@ -59,6 +68,35 @@ class _MonthCalenderState extends State<MonthCalender> {
         alignment: Alignment.centerRight,
         child: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
       ),
+      ValueListenableBuilder<List<Meeting>>(
+        valueListenable: _selectedEvents,
+        builder: (context, value, _) {
+          return ListView.builder(
+            //해당 일의 회의리스트
+            shrinkWrap: true,
+            itemCount: value.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 4.0,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: ListTile(
+                  onTap: () {
+                    print("회의");
+                  },
+                  title: Text(
+                      '${value[index].startTime} ~ ${value[index].endTime} : ${value[index].title}'),
+                ),
+              );
+            },
+          );
+        },
+      )
     ]));
   }
 
@@ -70,6 +108,7 @@ class _MonthCalenderState extends State<MonthCalender> {
       });
       Provider.of<DateProvider>(context, listen: false)
           .setday(focusedDay, selectedDay);
+      _selectedEvents.value = meetings[_selectedDay.day.toInt()];
     }
   }
 }

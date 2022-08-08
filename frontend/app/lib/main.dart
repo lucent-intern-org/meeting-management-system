@@ -31,7 +31,11 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
-  List<Widget> calenders = [DayCalender(), MonthCalender(), MonthCalender()];
+  List<Widget> calenders = [
+    DayCalender(),
+    WeekMonthCalender(),
+    WeekMonthCalender()
+  ];
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CalenderAppBar(),
