@@ -1,6 +1,7 @@
 import 'package:app/model/meeting.dart';
 import 'package:app/provider/date_provider.dart';
 import 'package:app/test/test_data.dart';
+import 'package:app/view/detail_meeting.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
@@ -87,7 +88,11 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
                 ),
                 child: ListTile(
                   onTap: () {
-                    print("회의");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) =>
+                                DetailMeeting(meeting: value[index]))));
                   },
                   title: Text(
                       '${value[index].startTime} ~ ${value[index].endTime} : ${value[index].title}'),
