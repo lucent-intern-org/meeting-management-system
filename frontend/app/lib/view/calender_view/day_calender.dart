@@ -1,6 +1,7 @@
 import 'package:app/model/meeting.dart';
 import 'package:app/provider/date_provider.dart';
 import 'package:app/test/test_data.dart';
+import 'package:app/view/add_meeting.dart';
 import 'package:app/view/detail_meeting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -175,6 +176,11 @@ class DayCalender extends StatelessWidget {
                                     child: TextButton(
                                       onPressed: () {
                                         print("$index Thiel");
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    AddMeeting())));
                                       },
                                       child: const SizedBox(
                                         height: 50,
@@ -206,6 +212,11 @@ class DayCalender extends StatelessWidget {
                                     child: TextButton(
                                       onPressed: () {
                                         print("$index Bezos");
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    AddMeeting())));
                                       },
                                       child: const SizedBox(
                                         height: 50,
@@ -237,6 +248,11 @@ class DayCalender extends StatelessWidget {
                                     child: TextButton(
                                       onPressed: () {
                                         print("$index Musk");
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    AddMeeting())));
                                       },
                                       child: const SizedBox(
                                         height: 50,

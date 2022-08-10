@@ -1,6 +1,7 @@
 import 'package:app/model/meeting.dart';
 import 'package:app/provider/date_provider.dart';
 import 'package:app/test/test_data.dart';
+import 'package:app/view/add_meeting.dart';
 import 'package:app/view/detail_meeting.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -67,7 +68,12 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
       Container(
         //width: MediaQuery.of(context).size.width,
         alignment: Alignment.centerRight,
-        child: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+        child: IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => AddMeeting())));
+            },
+            icon: Icon(Icons.add)),
       ),
       ValueListenableBuilder<List<Meeting>>(
         valueListenable: _selectedEvents,
