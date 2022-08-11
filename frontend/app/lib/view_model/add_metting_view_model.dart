@@ -1,10 +1,10 @@
-import 'package:app/model/add_meeting_model.dart';
+import 'package:app/model/meeting_form_model.dart';
 import 'package:app/model/meeting.dart';
 import 'package:flutter/material.dart';
 
-class Add_Metting_View_Model {
+class AddMettingViewModel {
   Meeting? meeting;
-  Add_Meeting_Model addMeetingModel = Add_Meeting_Model();
+  Meeting_Form_Model addMeetingModel = Meeting_Form_Model();
 
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
@@ -50,6 +50,7 @@ class Add_Metting_View_Model {
     if (title == "" || content == "") {
       return false;
     }
+    //해당 시간에 등록 가능한가 체크
     meeting = Meeting(
         meetingId, roomId, date, startTime, endTime, title, content, repeat);
     return true;

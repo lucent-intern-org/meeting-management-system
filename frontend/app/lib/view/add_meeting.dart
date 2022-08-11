@@ -13,7 +13,7 @@ class AddMeeting extends StatefulWidget {
 class _AddMeetingState extends State<AddMeeting> {
   _AddMeetingState(this.date);
 
-  Add_Metting_View_Model addMettingViewModel = Add_Metting_View_Model();
+  AddMettingViewModel addMettingViewModel = AddMettingViewModel();
   WidgetStyle widgetstyle = WidgetStyle();
   final String date;
   late Size size;
@@ -21,7 +21,7 @@ class _AddMeetingState extends State<AddMeeting> {
   @override
   Widget build(BuildContext context) {
     addMettingViewModel.addMeetingModel.date =
-        date.substring(0, 10).replaceAll('-', '.');
+        date.substring(0, 10).replaceAll('-', '');
     size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -71,7 +71,7 @@ class _AddMeetingState extends State<AddMeeting> {
                             margin: EdgeInsets.only(left: 15),
                             width: size.width * 0.7,
                             child: Text(
-                                addMettingViewModel.addMeetingModel.date!)),
+                                date.substring(0, 10).replaceAll('-', '.'))),
                       ]),
                 ),
                 Container(
