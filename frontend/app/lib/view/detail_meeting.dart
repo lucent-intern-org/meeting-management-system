@@ -1,4 +1,5 @@
 import 'package:app/model/meeting.dart';
+import 'package:app/view/update_meeting.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,8 +13,25 @@ class DetailMeeting extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    UpdateMeeting(meeting: meeting)));
+                      },
+                      icon: Icon(Icons.edit)),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.delete))
+                ],
+              ),
+            ),
+            Container(
               //제목
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               alignment: Alignment.center,
               child: Text(
                 "${meeting.title}",
@@ -25,7 +43,7 @@ class DetailMeeting extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               alignment: Alignment.centerRight,
               child: Text(
-                "${DateFormat('yyyy년 MM월 dd일').format(DateTime.utc(int.parse(meeting.date!.substring(0, 4)), int.parse(meeting.date!.substring(4, 6)), int.parse(meeting.date!.substring(6, 8))))} ${DateFormat('E', 'ko_KR').format(DateTime.now())}요일",
+                "${meeting.date!.substring(0, 4)}년 ${meeting.date!.substring(4, 6)}월 ${meeting.date!.substring(6, 8)}일 ${DateFormat('E', 'ko_KR').format(DateTime(int.parse(meeting.date!.substring(0, 4)), int.parse(meeting.date!.substring(4, 6)), int.parse(meeting.date!.substring(6, 8))))}요일",
                 style: const TextStyle(fontSize: 20),
               ),
             ),
