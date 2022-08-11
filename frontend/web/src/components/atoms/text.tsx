@@ -5,13 +5,15 @@ type textProps = {
     fontSize?: number;
     fontWeight?: string | number;
     letterSpacing?: string | number;
-    onClick?: (e: any) => void;
+    color?: string;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const Text: React.FC<textProps> = ({
     children,
     fontSize = 1.2,
     fontWeight = 'normal',
+    color = 'black',
     letterSpacing = 'normal',
     onClick,
 }: textProps) => {
@@ -23,6 +25,8 @@ const Text: React.FC<textProps> = ({
                 fontWeight: fontWeight,
                 letterSpacing: `${letterSpacing}rem`,
                 fontFamily: 'inter',
+                color: color,
+                paddingRight: 0,
             }}
             onClick={onClick}
         >
@@ -34,6 +38,7 @@ const Text: React.FC<textProps> = ({
                 fontSize: `${fontSize}rem`,
                 fontWeight: fontWeight,
                 letterSpacing: `${letterSpacing}rem`,
+                color: color,
             }}
         >
             {children}

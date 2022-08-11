@@ -1,19 +1,20 @@
 import React from 'react';
 import FullCalendar, {
     ButtonTextCompoundInput,
+    CssDimValue,
     CustomButtonInput,
+    DateFormatter,
+    EventClickArg,
+    EventSourceInput,
+    FormatterInput,
     PluginDef,
     ToolbarInput,
 } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    /* padding: 3rem 5% 0 5%; */
-    .fc {
-        height: calc(100vh - 11rem);
-    }
-
     .fc .fc-header-toolbar .fc-toolbar-chunk div {
         display: flex;
         flex-direction: row;
@@ -66,6 +67,20 @@ const Container = styled.div`
         align-items: center;
         justify-content: center;
     }
+
+    .fc .fc-daygrid-day-frame {
+        cursor: pointer;
+    }
+
+    .fc .fc-daygrid-day-events .fc-daygrid-event .fc-event-main .fc-event-main-frame {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .fc .fc-daygrid-day-events .fc-daygrid-event .fc-event-main {
+        font-size: 0.5rem;
+        font-weight: 400;
+    }
 `;
 
 type CalendarProps = {
@@ -74,10 +89,25 @@ type CalendarProps = {
     customButtons: { [name: string]: CustomButtonInput };
     headerToolBar: false | ToolbarInput;
     buttonText?: ButtonTextCompoundInput;
+    dateClick: (arg: DateClickArg | EventClickArg) => void;
+    events?: EventSourceInput;
+    displayEventEnd?: boolean;
+    eventTimeFormat: FormatterInput | DateFormatter;
+    eventDisplay?: string;
+    fixedWeekCount?: boolean;
+    height?: CssDimValue;
+    views: {
+        dayGridMonth: {
+            dayMaxEvents: number;
+        };
+        dayGridWeek: {
+            dayMaxEvents: number;
+        };
+    };
 };
 
 const Calendar: React.FC<CalendarProps> = ({
-    plugins = [dayGridPlugin],
+    plugins = [dayGridPlugin, interactionPlugin],
     initialView = 'dayGridWeek',
     customButtons,
     headerToolBar,
@@ -85,6 +115,14 @@ const Calendar: React.FC<CalendarProps> = ({
         month: 'Month',
         week: 'Week',
     },
+    dateClick,
+    events,
+    displayEventEnd = true,
+    eventTimeFormat,
+    eventDisplay = 'block',
+    fixedWeekCount = false,
+    height = 'auto',
+    views,
 }: CalendarProps) => {
     return (
         <Container>
@@ -94,6 +132,15 @@ const Calendar: React.FC<CalendarProps> = ({
                 customButtons={customButtons}
                 headerToolbar={headerToolBar}
                 buttonText={buttonText}
+                dateClick={dateClick}
+                events={events}
+                displayEventEnd={displayEventEnd}
+                eventTimeFormat={eventTimeFormat}
+                eventDisplay={eventDisplay}
+                fixedWeekCount={fixedWeekCount}
+                height={height}
+                views={views}
+                eventClick={dateClick}
             />
         </Container>
     );
