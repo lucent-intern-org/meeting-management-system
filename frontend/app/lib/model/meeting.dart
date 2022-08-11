@@ -6,6 +6,8 @@ class Meeting {
   String? endTime;
   String? title;
   String? content;
+  String? repeat;
+
   Meeting(this.meetingId, this.roomId, this.date, this.startTime, this.endTime,
-      this.title, this.content);
+      this.title, this.content, this.repeat);
 }

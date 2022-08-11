@@ -180,7 +180,10 @@ class DayCalender extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    AddMeeting())));
+                                                    AddMeeting(
+                                                      date:
+                                                          selectDay.toString(),
+                                                    ))));
                                       },
                                       child: const SizedBox(
                                         height: 50,
@@ -216,7 +219,10 @@ class DayCalender extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    AddMeeting())));
+                                                    AddMeeting(
+                                                      date:
+                                                          selectDay.toString(),
+                                                    ))));
                                       },
                                       child: const SizedBox(
                                         height: 50,
@@ -252,7 +258,10 @@ class DayCalender extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    AddMeeting())));
+                                                    AddMeeting(
+                                                      date:
+                                                          selectDay.toString(),
+                                                    ))));
                                       },
                                       child: const SizedBox(
                                         height: 50,

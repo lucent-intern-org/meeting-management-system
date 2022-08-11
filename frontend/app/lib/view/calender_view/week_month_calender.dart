@@ -70,8 +70,12 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
         alignment: Alignment.centerRight,
         child: IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => AddMeeting())));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => AddMeeting(
+                            date: _selectedDay.toString(),
+                          ))));
             },
             icon: Icon(Icons.add)),
       ),
