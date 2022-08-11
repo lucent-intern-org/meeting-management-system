@@ -2,7 +2,7 @@ import React from 'react';
 import Text from '../atoms/text';
 
 type LogoProps = {
-    onClick?: (e: any) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const Logo: React.FC<LogoProps> = ({ onClick = () => {} }: LogoProps) => {
