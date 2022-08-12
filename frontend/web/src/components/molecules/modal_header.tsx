@@ -1,9 +1,7 @@
 import React from 'react';
-import { IoMdClose } from 'react-icons/io';
-import { RecoilState, useSetRecoilState } from 'recoil';
-
+import { RecoilState } from 'recoil';
 import Text from '../atoms/text';
-import FlexRow from './flex_row';
+import ModalCloseButton from './modal_close_button';
 
 type modalHeaderProps = {
     children: string;
@@ -11,17 +9,9 @@ type modalHeaderProps = {
 };
 
 const ModalHeader: React.FC<modalHeaderProps> = ({ children, setState }: modalHeaderProps) => {
-    const setModalOpen = useSetRecoilState(setState);
-
     return (
         <div>
-            <FlexRow>
-                <div />
-                <button type='button' onClick={() => setModalOpen(false)} style={{ padding: 0 }}>
-                    <IoMdClose size={50} color='#808080' />
-                </button>
-            </FlexRow>
-
+            <ModalCloseButton setState={setState} />
             <div style={{ marginTop: '1vh' }}>
                 <Text fontSize={1.7} fontWeight={900} letterSpacing='0.15'>
                     LUCENTBLOCK
