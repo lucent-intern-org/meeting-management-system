@@ -3,6 +3,7 @@ export const meetings = [
         meetingId: 0,
         roomId: 0,
         date: new Date('Wed Aug 10 2022 00:00:00 GMT+0900'),
+
         startTime: '08:00',
         endTime: '09:00',
         title: 'Dummy 1 title',

@@ -14,7 +14,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 main, menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, input {
   margin: 0;
   padding: 0;
   border: 0;
@@ -71,6 +71,19 @@ button {
   font-family: 'inter';
   src: url('./assets/fonts/inter.ttf');
 }
+
+input, select {
+  border-bottom: 2px solid #808080;
+  font-weight: 900;
+  font-size: 0.8rem;
+  height: 4vh;
+  font-family: 'inter';
+}
+
+input:focus, select:focus {
+  outline: none;
+}
+
 `;
 
 export default GlobalStyle;

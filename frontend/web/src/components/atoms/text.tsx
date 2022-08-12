@@ -6,6 +6,7 @@ type textProps = {
     fontWeight?: string | number;
     letterSpacing?: string | number;
     color?: string;
+    marginTop?: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
@@ -15,6 +16,7 @@ const Text: React.FC<textProps> = ({
     fontWeight = 'normal',
     color = 'black',
     letterSpacing = 'normal',
+    marginTop = '0vh',
     onClick,
 }: textProps) => {
     return onClick ? (
@@ -27,6 +29,7 @@ const Text: React.FC<textProps> = ({
                 fontFamily: 'inter',
                 color: color,
                 paddingRight: 0,
+                marginTop: marginTop,
             }}
             onClick={onClick}
         >
@@ -35,10 +38,13 @@ const Text: React.FC<textProps> = ({
     ) : (
         <span
             style={{
+                display: 'inline-block',
                 fontSize: `${fontSize}rem`,
                 fontWeight: fontWeight,
                 letterSpacing: `${letterSpacing}rem`,
                 color: color,
+                marginTop: marginTop,
+                fontFamily: 'inter',
             }}
         >
             {children}

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@leecheuk/react-google-login": "^5.4.0",
     "@fullcalendar/daygrid": "^5.11.2",
     "@fullcalendar/interaction": "^5.11.2",
     "@fullcalendar/react": "^5.11.2",
@@ -68,4 +69,5 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "prettier": "^2.6.2"
   }
+
 }
