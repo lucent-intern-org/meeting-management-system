@@ -1,4 +1,6 @@
+import 'package:app/google_sign_in_api.dart';
 import 'package:app/provider/date_provider.dart';
+import 'package:app/view/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +37,6 @@ class _CalenderMenuState extends State<CalenderMenu> {
               });
               Provider.of<DateProvider>(context, listen: false)
                   .setcalenderIndex(0);
-              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -51,7 +52,6 @@ class _CalenderMenuState extends State<CalenderMenu> {
               });
               Provider.of<DateProvider>(context, listen: false)
                   .setcalenderIndex(1);
-              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -67,7 +67,16 @@ class _CalenderMenuState extends State<CalenderMenu> {
               });
               Provider.of<DateProvider>(context, listen: false)
                   .setcalenderIndex(2);
-              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text('로그아웃'),
+            leading: Icon(Icons.logout),
+            selectedTileColor: Colors.blue[100],
+            onTap: () {
+              GoogleSignInApi.logout();
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Login()));
             },
           )
         ],
