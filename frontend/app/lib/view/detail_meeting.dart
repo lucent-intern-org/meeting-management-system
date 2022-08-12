@@ -25,7 +25,65 @@ class DetailMeeting extends StatelessWidget {
                                     UpdateMeeting(meeting: meeting)));
                       },
                       icon: Icon(Icons.edit)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.delete))
+                  IconButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            //barrierDismissible - Dialog를 제외한 다른 화면 터치 x
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+
+                                //Dialog Main Title
+                                title: Column(
+                                  children: [
+                                    Text("회의실 삭제"),
+                                  ],
+                                ),
+                                //
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "회의를 삭제하시겠습니까?",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ElevatedButton(
+                                        child: Text("확인"),
+                                        //회의실 삭제
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        child: Text("취소"),
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.black38),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                      icon: Icon(Icons.delete))
                 ],
               ),
             ),
