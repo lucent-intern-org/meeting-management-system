@@ -1,9 +1,12 @@
+import 'package:app/google_sign_in_api.dart';
 import 'package:app/provider/date_provider.dart';
 import 'package:app/view/calender_app_bar.dart';
 import 'package:app/view/calender_menu.dart';
 import 'package:app/view/calender_view/day_calender.dart';
 import 'package:app/view/calender_view/week_month_calender.dart';
+import 'package:app/view/login.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
@@ -18,14 +21,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ChangeNotifierProvider(
-          create: (context) => DateProvider(), child: MyHomePage()),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: FutureBuilder(
+          future: GoogleSignIn().isSignedIn(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData == false) {
+              return const Scaffold();
+            } else if (snapshot.data == true) {
+              GoogleSignInApi.login().then((value) {
+                //todo
+                //signvalue 저장
+              });
+              return ChangeNotifierProvider(
+                  create: (context) => DateProvider(), child: MyHomePage());
+            } else if (snapshot.data == false) {
+              return Login();
+            } else {
+              return Scaffold(
+                body: Text(
+                  'Error: ${snapshot.error}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              );
+            }
+          },
+        ));
   }
 }
 
