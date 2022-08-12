@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import DayDetailModal from './components/organisms/day_detail_modal';
-import signUpModalVisibleState, { logInModalVisibleState } from './atom';
+import { signUpModalVisibleState, logInModalVisibleState } from './atom';
 
 import Header from './components/organisms/header';
 import SignupModal from './components/organisms/signup_modal';

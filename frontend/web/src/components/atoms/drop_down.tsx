@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme from '../../theme';
 
 const DropDownBox = styled.select<{ letterSpace?: string | number }>`
     border-top: 0;
@@ -27,7 +28,13 @@ const DropDown: React.FC<dropDownProps> = ({
 }: dropDownProps) => {
     return (
         <DropDownBox letterSpace={letterSpacing} onChange={onChange} defaultValue='default'>
-            <option key='0' value='default' disabled hidden style={{ color: '#808080' }}>
+            <option
+                key='0'
+                value='default'
+                disabled
+                hidden
+                style={{ color: `${theme.inputColor}` }}
+            >
                 {placeholder}
             </option>
             {options.map((option) => (

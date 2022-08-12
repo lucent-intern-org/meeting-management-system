@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ReactDOM from 'react-dom';
+
 import { useSetRecoilState } from 'recoil';
 import {
     GoogleLogin,
@@ -15,29 +15,8 @@ import Text from '../atoms/text';
 import { signUpModalVisibleState, logInModalVisibleState, LogInState } from '../../atom';
 import ModalHeader from '../molecules/modal_header';
 import { users } from '../../temp_db';
-
-const Background = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: rgb(0, 0, 0, 0.5);
-`;
-
-const Container = styled.div`
-    width: 33vw;
-    height: 50vh;
-    position: relative;
-    border-radius: 2%;
-    text-align: center;
-    padding: 2vh;
-    background-color: white;
-    box-shadow: 1px 1px 13px #4a4848;
-`;
+import theme from '../../theme';
+import CenteredModal from './centered_modal';
 
 const MarginTop = styled.div`
     margin-top: 6vh;
@@ -107,49 +86,46 @@ const LoginModal: React.FC = () => {
         console.log(res);
     };
 
-    return ReactDOM.createPortal(
-        <Background>
-            <Container>
-                <ModalHeader setState={logInModalVisibleState}>로그인</ModalHeader>
-                <MarginTop>
-                    <GoogleLogin
-                        clientId={googleClientId}
-                        onSuccess={onLoginSuccess}
-                        onFailure={(error) => {
-                            console.log(error);
-                        }}
-                        pluginName='googleLogin'
-                        isSignedIn={keepLogIn}
-                    />
-                </MarginTop>
-
-                <Align>
-                    <Input
-                        type='checkbox'
-                        onChange={(e) => {
-                            setKeepLogIn(e.target.checked);
-                        }}
-                    />
-                    <Text color='#808080' fontSize={0.7}>
-                        로그인 상태 유지할래요.
-                    </Text>
-                </Align>
-                <br />
-                <Text fontSize={0.7}>아직 회원이 아니신가요?</Text>
-                <Text
-                    marginTop='6vh'
-                    fontSize={0.7}
-                    color='#346DF1'
-                    onClick={() => {
-                        setLogInModalOpen(false);
-                        setSignUpModalOpen(true);
+    return (
+        <CenteredModal width={25} height={30}>
+            <ModalHeader setState={logInModalVisibleState}>로그인</ModalHeader>
+            <MarginTop>
+                <GoogleLogin
+                    clientId={googleClientId}
+                    onSuccess={onLoginSuccess}
+                    onFailure={(error) => {
+                        console.log(error);
                     }}
-                >
-                    회원가입
+                    pluginName='googleLogin'
+                    isSignedIn={keepLogIn}
+                />
+            </MarginTop>
+
+            <Align>
+                <Input
+                    type='checkbox'
+                    onChange={(e) => {
+                        setKeepLogIn(e.target.checked);
+                    }}
+                />
+                <Text color={theme.inputColor} fontSize={0.7}>
+                    로그인 상태 유지할래요.
                 </Text>
-            </Container>
-        </Background>,
-        document.getElementById('modal-root')!,
+            </Align>
+            <br />
+            <Text fontSize={0.7}>아직 회원이 아니신가요?</Text>
+            <Text
+                marginTop='6vh'
+                fontSize={0.7}
+                color='#346DF1'
+                onClick={() => {
+                    setLogInModalOpen(false);
+                    setSignUpModalOpen(true);
+                }}
+            >
+                회원가입
+            </Text>
+        </CenteredModal>
     );
 };
 
