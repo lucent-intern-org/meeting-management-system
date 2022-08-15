@@ -17,6 +17,7 @@ const Text: React.FC<textProps> = ({
     color = 'black',
     letterSpacing = 'normal',
     marginTop = '0vh',
+
     onClick,
 }: textProps) => {
     return onClick ? (
@@ -38,7 +39,6 @@ const Text: React.FC<textProps> = ({
     ) : (
         <span
             style={{
-                display: 'inline-block',
                 fontSize: `${fontSize}rem`,
                 fontWeight: fontWeight,
                 letterSpacing: `${letterSpacing}rem`,

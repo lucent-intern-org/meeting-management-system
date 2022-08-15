@@ -1,7 +1,7 @@
 import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { useRecoilState } from 'recoil';
-import dayDetailModalState from '../../atom';
+import { dayDetailModalState } from '../../atom';
 import { getFullDate } from '../../utils/date';
 import Text from '../atoms/text';
 import FlexRow from '../molecules/flex_row';

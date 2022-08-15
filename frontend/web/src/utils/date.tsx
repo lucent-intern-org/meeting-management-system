@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import dayDetailModalState from '../atom';
+import { dayDetailModalState } from '../atom';
 
 type leftPadType = (monthOrDate: number) => string | number;
 const leftPad: leftPadType = (value) => {

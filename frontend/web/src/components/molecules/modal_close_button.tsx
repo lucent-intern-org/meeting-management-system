@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoMdClose } from 'react-icons/io';
+import { IoClose } from 'react-icons/io5';
 import { RecoilState, useSetRecoilState } from 'recoil';
 import theme from '../../theme';
 import Button from '../atoms/button';
@@ -16,7 +16,7 @@ const ModalCloseButton: React.FC<modalCloseButtonProps> = ({ setState }: modalCl
         <FlexRow>
             <div />
             <Button onClick={() => setModalOpen(false)}>
-                <IoMdClose size={50} color={theme.inputColor} />
+                <IoClose strokeWidth={50} size={40} color={theme.inputColor} />
             </Button>
         </FlexRow>
     );

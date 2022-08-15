@@ -2,7 +2,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import dayDetailModalState from '../../atom';
+import { dayDetailModalState } from '../../atom';
 import { meetings } from '../../temp_db';
 import DayDetailModalContent from './day_detail_modal_content';
 import Text from '../atoms/text';
