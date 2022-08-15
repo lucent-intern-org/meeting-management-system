@@ -1,3 +1,4 @@
+import 'package:app/google_sign_in_api.dart';
 import 'package:app/model/meeting.dart';
 import 'package:app/view/calendar_dialog.dart';
 import 'package:app/view_model/update_metting_view_model.dart';
@@ -20,6 +21,7 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
   WidgetStyle widgetstyle = WidgetStyle();
   String? date;
   late Size size;
+  List<String> participantList = [GoogleSignInApi.currentUser()!.displayName!];
 
   @override
   void initState() {
@@ -304,80 +306,149 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                           height: 40,
                           margin: EdgeInsets.only(left: 15),
                           width: size.width * 0.45 - 10,
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Text(
-                                'Select Item',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                              ),
-                              items: updateMettingViewModel
-                                  .updateMeetingModel.userList
-                                  .map((item) => DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 40,
+                                width: size.width * 0.45 - 10,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    items: updateMettingViewModel
+                                        .updateMeetingModel.userList
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: TextButton(
+                                                style: TextButton.styleFrom(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    fixedSize: Size(
+                                                        size.width * 0.45 - 10,
+                                                        40)),
+                                                onPressed: () {
+                                                  if (!participantList
+                                                      .contains(item)) {
+                                                    participantList.add(item);
+                                                  }
+                                                },
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    //.value: addMettingViewModel.addMeetingModel.user,
+                                    onChanged: (value) {
+                                      // setState(() {
+                                      //   updateMettingViewModel
+                                      //       .updateMeetingModel
+                                      //       .user = value as String;
+                                      // });
+                                    },
+                                    buttonHeight: 40,
+                                    buttonWidth: 200,
+                                    dropdownMaxHeight: 200,
+                                    searchController:
+                                        updateMettingViewModel.searchController,
+                                    searchInnerWidget: Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 8,
+                                        bottom: 4,
+                                        right: 8,
+                                        left: 8,
+                                      ),
+                                      //검색창
+                                      child: TextFormField(
+                                        controller: updateMettingViewModel
+                                            .searchController,
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 8,
+                                          ),
+                                          hintText: 'Search for an User...',
+                                          hintStyle:
+                                              const TextStyle(fontSize: 12),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                         ),
-                                      ))
-                                  .toList(),
-                              value: updateMettingViewModel
-                                  .updateMeetingModel.user,
-                              onChanged: (value) {
-                                setState(() {
-                                  updateMettingViewModel.updateMeetingModel
-                                      .user = value as String;
-                                });
-                              },
-                              buttonHeight: 40,
-                              buttonWidth: 200,
-                              dropdownMaxHeight: 200,
-                              searchController:
-                                  updateMettingViewModel.searchController,
-                              searchInnerWidget: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 4,
-                                  right: 8,
-                                  left: 8,
-                                ),
-                                //검색창
-                                child: TextFormField(
-                                  controller:
-                                      updateMettingViewModel.searchController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 8,
+                                      ),
                                     ),
-                                    hintText: 'Search for an User...',
-                                    hintStyle: const TextStyle(fontSize: 12),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
+                                    //search 값에 해당하는 User있을 경우 리턴
+                                    searchMatchFn: (item, searchValue) {
+                                      if (searchValue == '' ||
+                                          (participantList.contains(
+                                              item.value.toString()))) {
+                                        //검색 값이 있을때만 유저보여줌
+                                        return false;
+                                      }
+                                      return (item.value
+                                          .toString()
+                                          .contains(searchValue));
+                                    },
+                                    //드롭다운메뉴 닫힐 때 search clear
+                                    onMenuStateChange: (isOpen) {
+                                      if (!isOpen) {
+                                        updateMettingViewModel.searchController
+                                            .clear();
+                                      }
+                                    },
                                   ),
                                 ),
                               ),
-                              //search 값에 해당하는 User있을 경우 리턴
-                              searchMatchFn: (item, searchValue) {
-                                return (item.value
-                                    .toString()
-                                    .contains(searchValue));
-                              },
-                              //드롭다운메뉴 닫힐 때 search clear
-                              onMenuStateChange: (isOpen) {
-                                if (!isOpen) {
-                                  updateMettingViewModel.searchController
-                                      .clear();
-                                }
-                              },
-                            ),
+                              Container(
+                                height: 40,
+                                width: size.width * 0.35,
+                                child: ListView.builder(
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: participantList.length,
+                                    itemBuilder: (BuildContext ctx, int idx) {
+                                      if (idx == 0) {
+                                        return Container(
+                                            alignment: Alignment.center,
+                                            height: 40,
+                                            child: Text(
+                                              participantList[idx],
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ));
+                                      }
+                                      return TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              participantList.removeAt(idx);
+                                            });
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            height: 40,
+                                            child: Row(children: [
+                                              Text(
+                                                participantList[idx],
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.black),
+                                              ),
+                                              Icon(
+                                                Icons.close,
+                                                size: 16,
+                                                color: Colors.blue,
+                                              )
+                                            ]),
+                                          ));
+                                    }),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(
