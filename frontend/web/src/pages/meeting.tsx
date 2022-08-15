@@ -4,7 +4,7 @@ import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import dayDetailModalState from '../atom';
+import { dayDetailModalState } from '../atom';
 import Calendar from '../templates/calendar';
 import { meetings, rooms } from '../temp_db';
 import { toStringDateByFormatting } from '../utils/date';

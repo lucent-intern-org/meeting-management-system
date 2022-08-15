@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@leecheuk/react-google-login": "^5.4.0",
     "@fullcalendar/daygrid": "^5.11.2",
     "@fullcalendar/interaction": "^5.11.2",
     "@fullcalendar/react": "^5.11.2",
+    "@leecheuk/react-google-login": "^5.4.0",
     "@tanstack/react-query": "^4.0.10",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-button": "^0.7.2",
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -69,5 +70,4 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "prettier": "^2.6.2"
   }
-
 }

@@ -2,65 +2,55 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState } from 'react';
-import styled from 'styled-components';
-
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
     GoogleLoginResponseOffline,
 } from '@leecheuk/react-google-login';
+import GoogleButton from 'react-google-button';
 import Input from '../atoms/input';
 import Text from '../atoms/text';
-import { signUpModalVisibleState, logInModalVisibleState, LogInState } from '../../atom';
+import {
+    signUpModalVisibleState,
+    logInModalVisibleState,
+    loginState,
+    isAdminState,
+} from '../../atom';
 import ModalHeader from '../molecules/modal_header';
 import { users } from '../../temp_db';
 import theme from '../../theme';
 import CenteredModal from './centered_modal';
-
-const MarginTop = styled.div`
-    margin-top: 6vh;
-`;
-
-const Align = styled.div`
-    margin-top: 1vh;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    align-content: center;
-`;
+import FlexColumn from '../molecules/flex_column';
+import FlexRow from '../molecules/flex_row';
 
 const LoginModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
-    const setSignUpModalOpen = useSetRecoilState(signUpModalVisibleState);
-    const setLogInModalOpen = useSetRecoilState(logInModalVisibleState);
+    const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
+    const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
     const [keepLogIn, setKeepLogIn] = useState(false);
-    const setIsLogIn = useSetRecoilState(LogInState);
+    const [logIn, setLogIn] = useRecoilState(loginState);
+    const [isAdmin, setIsAdmin] = useRecoilState(isAdminState);
 
     const authenticate = (email: string, token: string) => {
         let isMember = false;
+        let role = 'user';
         console.log(email);
-        /*
-        if ) db에 인자로 들어온 email이 있으면 ?
-        - 로그인 ok.
-        - token 저장
-        - 모달 닫기
-        
-        if ) db에 이 email이 없으면?
-        - 로그인 x
-        */
 
         for (let i = 0; i < users.length; i += 1) {
             if (users[i].email === email) {
                 isMember = true;
-
+                role = users[i].role;
                 break;
             }
         }
 
         if (isMember) {
-            setIsLogIn(true);
+            setLogIn(!logIn);
+            if (role === 'admin') {
+                setIsAdmin(!isAdmin);
+            }
 
             if (keepLogIn) {
                 localStorage.setItem('token', token);
@@ -69,7 +59,7 @@ const LoginModal: React.FC = () => {
             alert('LUCETBLOCK의 회원이 아닙니다');
         }
 
-        setLogInModalOpen(false);
+        setLogInModalVisible(!logInModalVisible);
     };
 
     const onLoginSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -87,44 +77,59 @@ const LoginModal: React.FC = () => {
     };
 
     return (
-        <CenteredModal width={25} height={30}>
-            <ModalHeader setState={logInModalVisibleState}>로그인</ModalHeader>
-            <MarginTop>
-                <GoogleLogin
-                    clientId={googleClientId}
-                    onSuccess={onLoginSuccess}
-                    onFailure={(error) => {
-                        console.log(error);
-                    }}
-                    pluginName='googleLogin'
-                    isSignedIn={keepLogIn}
-                />
-            </MarginTop>
+        <CenteredModal width={28} height={28}>
+            <FlexColumn>
+                <ModalHeader setState={logInModalVisibleState}>로그인</ModalHeader>
+                <FlexColumn needMargin>
+                    <GoogleLogin
+                        clientId={googleClientId}
+                        onSuccess={onLoginSuccess}
+                        onFailure={(error) => {
+                            console.log(error);
+                        }}
+                        pluginName='googleLogin'
+                        isSignedIn={keepLogIn}
+                        render={(props) => (
+                            <GoogleButton
+                                style={{
+                                    width: '15rem',
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                }}
+                                onClick={props.onClick}
+                                disabled={props.disabled}
+                            >
+                                Sign in with Google
+                            </GoogleButton>
+                        )}
+                    />
 
-            <Align>
-                <Input
-                    type='checkbox'
-                    onChange={(e) => {
-                        setKeepLogIn(e.target.checked);
-                    }}
-                />
-                <Text color={theme.inputColor} fontSize={0.7}>
-                    로그인 상태 유지할래요.
-                </Text>
-            </Align>
-            <br />
-            <Text fontSize={0.7}>아직 회원이 아니신가요?</Text>
-            <Text
-                marginTop='6vh'
-                fontSize={0.7}
-                color='#346DF1'
-                onClick={() => {
-                    setLogInModalOpen(false);
-                    setSignUpModalOpen(true);
-                }}
-            >
-                회원가입
-            </Text>
+                    <FlexRow needMargin>
+                        <Input
+                            type='checkbox'
+                            onChange={(e) => {
+                                setKeepLogIn(e.target.checked);
+                            }}
+                        />
+                        <Text color={theme.inputColor} fontSize={0.7}>
+                            로그인 상태 유지할래요.
+                        </Text>
+                    </FlexRow>
+                    <div style={{ marginTop: '6rem' }}>
+                        <Text fontSize={0.7}>아직 회원이 아니신가요?</Text>
+                        <Text
+                            fontSize={0.7}
+                            color={theme.submitBtnColor}
+                            onClick={() => {
+                                setSignUpModalVisible(!signUpModalVisible);
+                                setLogInModalVisible(!logInModalVisible);
+                            }}
+                        >
+                            회원가입
+                        </Text>
+                    </div>
+                </FlexColumn>
+            </FlexColumn>
         </CenteredModal>
     );
 };

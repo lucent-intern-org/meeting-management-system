@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
     GoogleLoginResponseOffline,
 } from '@leecheuk/react-google-login';
+import GoogleButton from 'react-google-button';
 import ModalHeader from '../molecules/modal_header';
 import DropDown from '../atoms/drop_down';
 import Input from '../atoms/input';
@@ -16,20 +16,17 @@ import Text from '../atoms/text';
 import { signUpModalVisibleState, logInModalVisibleState, userSignUpInfoState } from '../../atom';
 import { groups } from '../../temp_db';
 import CenteredModal from './centered_modal';
-
-const MarginTop = styled.div`
-    margin-top: 5vh;
-`;
+import theme from '../../theme';
+import FlexColumn from '../molecules/flex_column';
 
 const SignupModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
-    const setSignUpModalOpen = useSetRecoilState(signUpModalVisibleState);
-    const setLogInModalOpen = useSetRecoilState(logInModalVisibleState);
+    const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
+    const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
     const setUserSignUpInfo = useSetRecoilState(userSignUpInfoState);
     const [slackId, setSlackId] = useState('');
     const [position, setPosition] = useState('');
-    const info = useRecoilValue(userSignUpInfoState);
 
     const addUserInfo = (email: string, name: string) => {
         setUserSignUpInfo({
@@ -39,7 +36,6 @@ const SignupModal: React.FC = () => {
             name: name,
             role: 'user',
         });
-        console.log(info);
     };
 
     const onSignUpSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -52,63 +48,77 @@ const SignupModal: React.FC = () => {
         //     token = res.tokenId;
         // }
         addUserInfo(profile.email, profile.name);
+
+        setSignUpModalVisible(!signUpModalVisible);
     };
 
     const hasBlank = () => {
-        if (slackId === '' || position === '') {
-            return true;
-        }
-        return false;
+        return slackId === '' || position === '';
     };
 
     return (
-        <CenteredModal width={30} height={33}>
-            <ModalHeader setState={signUpModalVisibleState}>회원가입</ModalHeader>
-            <Input
-                type='text'
-                placeholder='Slack ID'
-                letterSpacing={0.15}
-                width={305}
-                marginTop='3vh'
-                onChange={(e) => {
-                    setSlackId(e.target.value);
-                }}
-            />
-            <br />
-            <DropDown
-                onChange={(e) => {
-                    setPosition(e.target.value);
-                }}
-                placeholder='Position'
-                letterSpacing={0.15}
-                options={groups}
-            />
-            <br />
-            <MarginTop>
-                <GoogleLogin
-                    clientId={googleClientId}
-                    onSuccess={onSignUpSuccess}
-                    onFailure={(error: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-                        console.log(error);
-                    }}
-                    pluginName='googleSignup'
-                    buttonText='Sign up with Google'
-                    disabled={hasBlank()}
-                />
-            </MarginTop>
-            <br />
-            <Text fontSize={0.7}>이미 계정이 있으신가요?</Text>
-            <Text
-                marginTop='3vh'
-                fontSize={0.7}
-                color='#346DF1'
-                onClick={() => {
-                    setSignUpModalOpen(false);
-                    setLogInModalOpen(true);
-                }}
-            >
-                로그인
-            </Text>
+        <CenteredModal width={34} height={34}>
+            <FlexColumn>
+                <ModalHeader setState={signUpModalVisibleState}>회원가입</ModalHeader>
+                <FlexColumn needMargin>
+                    <Input
+                        type='text'
+                        placeholder=' Slack ID'
+                        letterSpacing={0.15}
+                        width={20}
+                        onChange={(e) => {
+                            setSlackId(e.target.value);
+                        }}
+                    />
+
+                    <DropDown
+                        onChange={(e) => {
+                            setPosition(e.target.value);
+                        }}
+                        placeholder='Position'
+                        letterSpacing={0.15}
+                        options={groups}
+                        width={20}
+                    />
+                </FlexColumn>
+                <FlexColumn needMargin>
+                    <GoogleLogin
+                        clientId={googleClientId}
+                        onSuccess={onSignUpSuccess}
+                        onFailure={(error: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+                            console.log(error);
+                        }}
+                        pluginName='googleSignup'
+                        disabled={hasBlank()}
+                        render={(props) => (
+                            <GoogleButton
+                                style={{
+                                    width: '20rem',
+                                    backgroundColor: 'white',
+                                    color: hasBlank() ? theme.inputColor : 'black',
+                                }}
+                                onClick={props.onClick}
+                                disabled={props.disabled}
+                            >
+                                Sign up with Google
+                            </GoogleButton>
+                        )}
+                    />
+                    <div style={{ marginTop: '4rem' }}>
+                        <Text fontSize={0.7}>이미 계정이 있으신가요?</Text>
+                        <Text
+                            fontSize={0.7}
+                            color={theme.submitBtnColor}
+                            onClick={() => {
+                                setSignUpModalVisible(!signUpModalVisible);
+                                setLogInModalVisible(!logInModalVisible);
+                            }}
+                        >
+                            로그인
+                        </Text>
+                    </div>
+                </FlexColumn>
+            </FlexColumn>
         </CenteredModal>
     );
 };
