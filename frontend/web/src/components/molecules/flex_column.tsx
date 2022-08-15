@@ -7,9 +7,6 @@ const Container = styled.div<{ needMargin: boolean }>`
     align-items: center;
     flex-direction: column;
     margin-top: ${(props) => (props.needMargin ? '4rem' : 0)};
-    /* margin-top: ${(props) => (props.needMargin ? '2rem' : 0)};
-    margin-left: ${(props) => (props.needMargin ? '5%' : 0)};
-    margin-right: ${(props) => (props.needMargin ? '5%' : 0)}; */
 `;
 
 type FlexColumnProps = {
