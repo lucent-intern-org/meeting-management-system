@@ -277,16 +277,23 @@ class _AddMeetingState extends State<AddMeeting> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton2(
                                     isExpanded: true,
-
-                                    hint: SizedBox(),
                                     items: addMettingViewModel
                                         .addMeetingModel.userList
                                         .map((item) => DropdownMenuItem<String>(
                                               value: item,
                                               child: TextButton(
+                                                style: TextButton.styleFrom(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    fixedSize: Size(
+                                                        size.width * 0.45 - 10,
+                                                        40)),
                                                 onPressed: () {
                                                   setState(() {
-                                                    participantList.add(item);
+                                                    if (!participantList
+                                                        .contains(item)) {
+                                                      participantList.add(item);
+                                                    }
                                                   });
                                                 },
                                                 child: Text(
@@ -300,14 +307,15 @@ class _AddMeetingState extends State<AddMeeting> {
                                         .toList(),
                                     //.value: addMettingViewModel.addMeetingModel.user,
                                     onChanged: (value) {
-                                      setState(() {
-                                        addMettingViewModel.addMeetingModel
-                                            .user = value as String;
-                                      });
+                                      // setState(() {
+                                      //   addMettingViewModel.addMeetingModel
+                                      //       .user = value as String;
+                                      // });
                                     },
                                     buttonHeight: 40,
                                     buttonWidth: 200,
                                     dropdownMaxHeight: 200,
+                                    dropdownWidth: size.width * 0.45 - 10,
                                     searchController:
                                         addMettingViewModel.searchController,
                                     searchInnerWidget: Padding(
