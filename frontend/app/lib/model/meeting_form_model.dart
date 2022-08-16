@@ -43,5 +43,5 @@ class Meeting_Form_Model {
 
   String? user;
 
-  String? date;
+  String? date; //yyyymmdd
 }

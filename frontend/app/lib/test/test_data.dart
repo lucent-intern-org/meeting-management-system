@@ -38,6 +38,25 @@ class TestData {
     [],
     [],
     [],
+    [],
     []
+  ];
+  List<List<dynamic>> users = [
+    ['a1', '류건열1', 'a1@naver.com', 1],
+    ['a2', '류건열2', 'a2@naver.com', 2],
+    ['a3', '류건열3', 'a3@naver.com', 3],
+    ['a4', '류건열4', 'a4@naver.com', 4],
+    ['b1', '김재훈1', 'b1@naver.com', 1],
+    ['b2', '김재훈2', 'b2@naver.com', 2],
+    ['b3', '김재훈3', 'b3@naver.com', 3],
+    ['b4', '김재훈4', 'b4@naver.com', 4],
+    ['c1', '이채림1', 'c1@naver.com', 1],
+    ['c2', '이채림2', 'c2@naver.com', 2],
+    ['c3', '이채림3', 'c3@naver.com', 3],
+    ['c4', '이채림4', 'c4@naver.com', 4],
+    ['d1', '이상호1', 'd1@naver.com', 1],
+    ['d2', '이상호2', 'd2@naver.com', 2],
+    ['d3', '이상호3', 'd3@naver.com', 3],
+    ['d4', '이상호4', 'd4@naver.com', 4],
   ];
 }
