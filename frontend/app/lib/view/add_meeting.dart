@@ -5,22 +5,29 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class AddMeeting extends StatefulWidget {
-  AddMeeting({Key? key, required this.date}) : super(key: key);
+  AddMeeting({Key? key, required this.date, required this.timeindex})
+      : super(key: key);
   final String date;
+  final int timeindex;
   @override
-  State<AddMeeting> createState() => _AddMeetingState(date);
+  State<AddMeeting> createState() => _AddMeetingState(date, timeindex);
 }
 
 class _AddMeetingState extends State<AddMeeting> {
-  _AddMeetingState(this.date);
+  _AddMeetingState(this.date, this.time);
 
   AddMettingViewModel addMettingViewModel = AddMettingViewModel();
   WidgetStyle widgetstyle = WidgetStyle();
   final String date;
+  final int time;
   late Size size;
   List<String> participantList = [GoogleSignInApi.currentUser()!.displayName!];
   @override
   Widget build(BuildContext context) {
+    addMettingViewModel.addMeetingModel.start =
+        addMettingViewModel.addMeetingModel.startList[time * 2];
+    addMettingViewModel.addMeetingModel.end =
+        addMettingViewModel.addMeetingModel.endList[time * 2 + 2];
     addMettingViewModel.addMeetingModel.date =
         date.substring(0, 10).replaceAll('-', '');
     size = MediaQuery.of(context).size;
