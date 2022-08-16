@@ -1,4 +1,5 @@
 import 'package:app/google_sign_in_api.dart';
+import 'package:app/model/user.dart';
 import 'package:flutter/material.dart';
 
 class GoogleSignViewModel {
@@ -60,7 +61,10 @@ class GoogleSignViewModel {
       );
       return false;
     } else {
-      //DB에 회원 정보 저장
+      //회원가입 정보
+      User signUpUser = User(slackIdController.text, user.displayName,
+          user.email, gropList.indexOf(grop!));
+      //DB에 회원가입 정보 저장
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: Duration(seconds: 3),
