@@ -21,7 +21,6 @@ class _AddMeetingState extends State<AddMeeting> {
   List<String> participantList = [GoogleSignInApi.currentUser()!.displayName!];
   @override
   Widget build(BuildContext context) {
-    print(GoogleSignInApi.currentUser()!.displayName!);
     addMettingViewModel.addMeetingModel.date =
         date.substring(0, 10).replaceAll('-', '');
     size = MediaQuery.of(context).size;
