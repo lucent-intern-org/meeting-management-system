@@ -29,23 +29,11 @@ class GoogleSignViewModel {
     final user = await GoogleSignInApi.login();
 
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 3),
-          content: Text('로그인 실패'),
-        ),
-      );
-      return false;
+      return '로그인 실패';
     } else {
       //디비에 있는 이메일인가 파악
       //if(user=='dbuser')
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 3),
-          content: Text('로그인 성공'),
-        ),
-      );
-      return true;
+      return '로그인 성공';
     }
   }
 
@@ -53,26 +41,15 @@ class GoogleSignViewModel {
     final user = await GoogleSignInApi.login();
 
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 3),
-          content: Text('회원가입 실패'),
-        ),
-      );
-      return false;
+      return '회원가입 실패';
     } else {
       //회원가입 정보
       User signUpUser = User(slackIdController.text, user.displayName,
           user.email, gropList.indexOf(grop!));
       //DB에 회원가입 정보 저장
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 3),
-          content: Text('회원가입 성공'),
-        ),
-      );
+
       GoogleSignInApi.logout();
-      return true;
+      return '회원가입 성공';
     }
   }
 }
