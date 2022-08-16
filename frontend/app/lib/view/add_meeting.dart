@@ -1,29 +1,37 @@
-import 'package:app/google_sign_in_api.dart';
 import 'package:app/view_model/add_metting_view_model.dart';
 import 'package:app/widget_style.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class AddMeeting extends StatefulWidget {
-  AddMeeting({Key? key, required this.date}) : super(key: key);
+  AddMeeting({Key? key, required this.date, required this.timeindex})
+      : super(key: key);
   final String date;
+  final int timeindex;
   @override
-  State<AddMeeting> createState() => _AddMeetingState(date);
+  State<AddMeeting> createState() => _AddMeetingState(date, timeindex);
 }
 
 class _AddMeetingState extends State<AddMeeting> {
-  _AddMeetingState(this.date);
+  _AddMeetingState(this.date, this.timeindex);
 
   AddMettingViewModel addMettingViewModel = AddMettingViewModel();
   WidgetStyle widgetstyle = WidgetStyle();
-  final String date;
+  final String date; //yyyy-mm-dd
+  final int timeindex;
   late Size size;
-  List<String> participantList = [GoogleSignInApi.currentUser()!.displayName!];
+
   @override
   Widget build(BuildContext context) {
+    addMettingViewModel.setParticipantList();
+    addMettingViewModel.addMeetingModel.start =
+        addMettingViewModel.addMeetingModel.startList[timeindex * 2];
+    addMettingViewModel.addMeetingModel.end =
+        addMettingViewModel.addMeetingModel.endList[timeindex * 2 + 2];
     addMettingViewModel.addMeetingModel.date =
         date.substring(0, 10).replaceAll('-', '');
     size = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: () {
         //다른화면 클릭시 텍스트 필드 포커스해제
@@ -289,10 +297,9 @@ class _AddMeetingState extends State<AddMeeting> {
                                                         40)),
                                                 onPressed: () {
                                                   setState(() {
-                                                    if (!participantList
-                                                        .contains(item)) {
-                                                      participantList.add(item);
-                                                    }
+                                                    addMettingViewModel
+                                                        .addParticipantUsers(
+                                                            item);
                                                   });
                                                 },
                                                 child: Text(
@@ -348,8 +355,9 @@ class _AddMeetingState extends State<AddMeeting> {
                                     //search 값에 해당하는 User있을 경우 리턴
                                     searchMatchFn: (item, searchValue) {
                                       if (searchValue == '' ||
-                                          (participantList.contains(
-                                              item.value.toString()))) {
+                                          (addMettingViewModel.participantList
+                                              .contains(
+                                                  item.value.toString()))) {
                                         //검색 값이 있을때만 유저보여줌
                                         return false;
                                       }
@@ -373,14 +381,16 @@ class _AddMeetingState extends State<AddMeeting> {
                                 child: ListView.builder(
                                     physics: BouncingScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: participantList.length,
+                                    itemCount: addMettingViewModel
+                                        .participantList.length,
                                     itemBuilder: (BuildContext ctx, int idx) {
                                       if (idx == 0) {
                                         return Container(
                                             alignment: Alignment.center,
                                             height: 40,
                                             child: Text(
-                                              participantList[idx],
+                                              addMettingViewModel
+                                                  .participantList[idx],
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
@@ -389,7 +399,8 @@ class _AddMeetingState extends State<AddMeeting> {
                                       return TextButton(
                                           onPressed: () {
                                             setState(() {
-                                              participantList.removeAt(idx);
+                                              addMettingViewModel
+                                                  .removeParticipantList(idx);
                                             });
                                           },
                                           child: Container(
@@ -397,7 +408,8 @@ class _AddMeetingState extends State<AddMeeting> {
                                             height: 40,
                                             child: Row(children: [
                                               Text(
-                                                participantList[idx],
+                                                addMettingViewModel
+                                                    .participantList[idx],
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.normal,
@@ -445,8 +457,8 @@ class _AddMeetingState extends State<AddMeeting> {
                           value: addMettingViewModel.addMeetingModel.grop,
                           onChanged: (value) {
                             setState(() {
-                              addMettingViewModel.addMeetingModel.grop =
-                                  value as String;
+                              addMettingViewModel
+                                  .addParticipantGroups(value.toString());
                             });
                           },
                           buttonHeight: 55,

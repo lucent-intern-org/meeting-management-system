@@ -74,8 +74,8 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
                   context,
                   MaterialPageRoute(
                       builder: ((context) => AddMeeting(
-                            date: _selectedDay.toString(),
-                          ))));
+                          date: _selectedDay.toString(),
+                          timeindex: DateTime.now().hour + 1))));
             },
             icon: Icon(Icons.add)),
       ),
