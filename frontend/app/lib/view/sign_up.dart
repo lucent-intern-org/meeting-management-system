@@ -120,7 +120,13 @@ class _SignUpState extends State<SignUp> {
                               .validate() &&
                           googleSignViewModel.grop != null) {
                         googleSignViewModel.signUp(context).then((value) {
-                          if (value == true) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: Duration(seconds: 3),
+                              content: Text(value),
+                            ),
+                          );
+                          if (value == '회원가입 성공') {
                             Navigator.pop(context);
                           }
                         });
