@@ -49,7 +49,13 @@ class SignIn extends StatelessWidget {
               child: const Text("구글 아이디로 로그인"),
               onPressed: () async {
                 googleSignViewModel.signIn(context).then((value) {
-                  if (value == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 3),
+                      content: Text(value),
+                    ),
+                  );
+                  if (value == '로그인 성공') {
                     //main page로 전환
                     Navigator.pushReplacement(
                         context,
