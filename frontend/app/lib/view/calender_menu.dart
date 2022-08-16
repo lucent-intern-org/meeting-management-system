@@ -1,6 +1,6 @@
 import 'package:app/google_sign_in_api.dart';
 import 'package:app/provider/date_provider.dart';
-import 'package:app/view/login.dart';
+import 'package:app/view/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +76,7 @@ class _CalenderMenuState extends State<CalenderMenu> {
             onTap: () {
               GoogleSignInApi.logout();
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Login()));
+                  context, MaterialPageRoute(builder: (context) => SignIn()));
             },
           )
         ],
