@@ -1,4 +1,3 @@
-import 'package:app/google_sign_in_api.dart';
 import 'package:app/model/meeting.dart';
 import 'package:app/view/calendar_dialog.dart';
 import 'package:app/view_model/update_metting_view_model.dart';
@@ -21,11 +20,9 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
   WidgetStyle widgetstyle = WidgetStyle();
   String? date;
   late Size size;
-  List<String> participantList = [GoogleSignInApi.currentUser()!.displayName!];
 
   @override
   void initState() {
-    // TODO: implement initState
     updateMettingViewModel.updateMeetingModel.date = meeting.date;
     updateMettingViewModel.meeting = meeting;
     super.initState();
@@ -33,6 +30,7 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
 
   @override
   Widget build(BuildContext context) {
+    updateMettingViewModel.setParticipantList();
     size = MediaQuery.of(context).size;
     date = updateMettingViewModel.updateMeetingModel.date;
     date = date!.substring(0, 4) +
@@ -192,7 +190,7 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                         )
                       ]),
                 ),
-                Container(
+                SizedBox(
                   //종료시간 체크
                   width: size.width * 0.9,
                   child: Row(
@@ -326,10 +324,11 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                                                         size.width * 0.45 - 10,
                                                         40)),
                                                 onPressed: () {
-                                                  if (!participantList
-                                                      .contains(item)) {
-                                                    participantList.add(item);
-                                                  }
+                                                  setState(() {
+                                                    updateMettingViewModel
+                                                        .addParticipantUsers(
+                                                            item);
+                                                  });
                                                 },
                                                 child: Text(
                                                   item,
@@ -340,14 +339,7 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                                               ),
                                             ))
                                         .toList(),
-                                    //.value: addMettingViewModel.addMeetingModel.user,
-                                    onChanged: (value) {
-                                      // setState(() {
-                                      //   updateMettingViewModel
-                                      //       .updateMeetingModel
-                                      //       .user = value as String;
-                                      // });
-                                    },
+                                    onChanged: (value) {},
                                     buttonHeight: 40,
                                     buttonWidth: 200,
                                     dropdownMaxHeight: 200,
@@ -384,8 +376,10 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                                     //search 값에 해당하는 User있을 경우 리턴
                                     searchMatchFn: (item, searchValue) {
                                       if (searchValue == '' ||
-                                          (participantList.contains(
-                                              item.value.toString()))) {
+                                          (updateMettingViewModel
+                                              .participantList
+                                              .contains(
+                                                  item.value.toString()))) {
                                         //검색 값이 있을때만 유저보여줌
                                         return false;
                                       }
@@ -403,20 +397,22 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                                   ),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 40,
                                 width: size.width * 0.35,
                                 child: ListView.builder(
                                     physics: BouncingScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: participantList.length,
+                                    itemCount: updateMettingViewModel
+                                        .participantList.length,
                                     itemBuilder: (BuildContext ctx, int idx) {
                                       if (idx == 0) {
                                         return Container(
                                             alignment: Alignment.center,
                                             height: 40,
                                             child: Text(
-                                              participantList[idx],
+                                              updateMettingViewModel
+                                                  .participantList[idx],
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
@@ -425,7 +421,8 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                                       return TextButton(
                                           onPressed: () {
                                             setState(() {
-                                              participantList.removeAt(idx);
+                                              updateMettingViewModel
+                                                  .removeParticipantList(idx);
                                             });
                                           },
                                           child: Container(
@@ -433,7 +430,8 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                                             height: 40,
                                             child: Row(children: [
                                               Text(
-                                                participantList[idx],
+                                                updateMettingViewModel
+                                                    .participantList[idx],
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.normal,
@@ -482,8 +480,8 @@ class _UpdateMeetingState extends State<UpdateMeeting> {
                           value: updateMettingViewModel.updateMeetingModel.grop,
                           onChanged: (value) {
                             setState(() {
-                              updateMettingViewModel.updateMeetingModel.grop =
-                                  value as String;
+                              updateMettingViewModel
+                                  .addParticipantGroups(value.toString());
                             });
                           },
                           buttonHeight: 55,
