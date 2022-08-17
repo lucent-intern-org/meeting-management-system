@@ -20,16 +20,21 @@ class _AddMeetingState extends State<AddMeeting> {
   final String date; //yyyy-mm-dd
   final int timeindex;
   late Size size;
-
   @override
-  Widget build(BuildContext context) {
-    addMettingViewModel.setParticipantList();
+  void initState() {
     addMettingViewModel.addMeetingModel.start =
         addMettingViewModel.addMeetingModel.startList[timeindex * 2];
     addMettingViewModel.addMeetingModel.end =
         addMettingViewModel.addMeetingModel.endList[timeindex * 2 + 2];
     addMettingViewModel.addMeetingModel.date =
         date.substring(0, 10).replaceAll('-', '');
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    addMettingViewModel.setParticipantList();
+
     size = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -59,12 +64,8 @@ class _AddMeetingState extends State<AddMeeting> {
                   //제목
                   width: size.width * 0.8,
                   child: TextFormField(
-                    validator: (value) {
-                      if (value == '') {
-                        return '제목을 입력해주세요.';
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        addMettingViewModel.titleValidator(value),
                     controller: addMettingViewModel.titleController,
                     decoration: InputDecoration(labelText: '제목'),
                   ),
@@ -97,65 +98,82 @@ class _AddMeetingState extends State<AddMeeting> {
                                 margin: EdgeInsets.only(left: 15),
                                 child: Row(
                                   children: [
-                                    DropdownButton2(
-                                      //시작시간
-                                      iconSize: 0,
-                                      items: addMettingViewModel
-                                          .addMeetingModel.startList
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
+                                    SizedBox(
+                                      width: size.width * 0.25,
+                                      height: 60,
+                                      child: DropdownButtonFormField2(
+                                        //시작시간
+                                        validator: (value) =>
+                                            addMettingViewModel
+                                                .startTimeValidator(value),
+                                        iconSize: 0,
+                                        items: addMettingViewModel
+                                            .addMeetingModel.startList
+                                            .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                    ),
                                                   ),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      dropdownMaxHeight: 200,
-                                      value: addMettingViewModel
-                                          .addMeetingModel.start,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          addMettingViewModel.addMeetingModel
-                                              .start = value as String;
-                                        });
-                                      },
-                                      buttonWidth: size.width * 0.25,
-                                    ),
-                                    const Text(
-                                      "  -  ",
-                                      style: TextStyle(
-                                        fontSize: 40,
+                                                ))
+                                            .toList(),
+                                        dropdownMaxHeight: 200,
+                                        value: addMettingViewModel
+                                            .addMeetingModel.start,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            addMettingViewModel.addMeetingModel
+                                                .start = value as String;
+                                          });
+                                        },
+                                        buttonWidth: size.width * 0.25,
                                       ),
                                     ),
-                                    DropdownButton2(
-                                      //종료시간
-                                      iconSize: 0,
-                                      items: addMettingViewModel
-                                          .addMeetingModel.endList
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
+                                    SizedBox(
+                                      height: 60,
+                                      child: const Text(
+                                        "  -  ",
+                                        style: TextStyle(
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: size.width * 0.3,
+                                      height: 60,
+                                      child: DropdownButtonFormField2(
+                                        //종료시간
+                                        validator: (value) =>
+                                            addMettingViewModel
+                                                .endTimeValidator(value),
+                                        iconSize: 0,
+                                        items: addMettingViewModel
+                                            .addMeetingModel.endList
+                                            .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                    ),
                                                   ),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      dropdownMaxHeight: 200,
-                                      value: addMettingViewModel
-                                          .addMeetingModel.end,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          addMettingViewModel.addMeetingModel
-                                              .end = value as String;
-                                        });
-                                      },
-                                      buttonWidth: size.width * 0.30,
+                                                ))
+                                            .toList(),
+                                        dropdownMaxHeight: 200,
+                                        value: addMettingViewModel
+                                            .addMeetingModel.end,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            addMettingViewModel.addMeetingModel
+                                                .end = value as String;
+                                          });
+                                        },
+                                        buttonWidth: size.width * 0.30,
+                                      ),
                                     ),
                                   ],
                                 )),
@@ -311,13 +329,7 @@ class _AddMeetingState extends State<AddMeeting> {
                                               ),
                                             ))
                                         .toList(),
-                                    //.value: addMettingViewModel.addMeetingModel.user,
-                                    onChanged: (value) {
-                                      // setState(() {
-                                      //   addMettingViewModel.addMeetingModel
-                                      //       .user = value as String;
-                                      // });
-                                    },
+                                    onChanged: (value) {},
                                     buttonHeight: 40,
                                     buttonWidth: 200,
                                     dropdownMaxHeight: 200,
@@ -521,15 +533,11 @@ class _AddMeetingState extends State<AddMeeting> {
                           margin: EdgeInsets.only(left: 15),
                           width: size.width * 0.7,
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == '') {
-                                return '내용을 입력해주세요.';
-                              }
-                              return null;
-                            },
+                            validator: (value) =>
+                                addMettingViewModel.contentValidator(value),
                             controller: addMettingViewModel.contentController,
                             maxLines: 5,
-                            decoration: widgetstyle.textFieldDeco('내용을 입력해주세요'),
+                            decoration: widgetstyle.textFieldDeco('내용'),
                           ),
                         )
                       ]),
