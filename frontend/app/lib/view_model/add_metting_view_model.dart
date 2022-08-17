@@ -1,6 +1,7 @@
 import 'package:app/google_sign_in_api.dart';
 import 'package:app/model/meeting_form_model.dart';
 import 'package:app/model/meeting.dart';
+import 'package:app/test/test_data.dart';
 import 'package:flutter/material.dart';
 
 class AddMettingViewModel {
@@ -64,6 +65,53 @@ class AddMettingViewModel {
     } else {
       participantGroups.remove(participantList[idx]);
     }
+  }
+
+  String? titleValidator(value) {
+    if (value == '') {
+      return '제목을 입력해주세요.';
+    }
+    return null;
+  }
+
+  String? startTimeValidator(value) {
+    // 해당 날짜의 미팅들 가져와서 시작 시간과 종료 시간이
+    // 사용자가 설정한 시작 시간과 종료 시간 사이에 있다면 회의중복
+    var startIndex = addMeetingModel.startList.indexOf(addMeetingModel.start);
+    var endIndex = addMeetingModel.endList.indexOf(addMeetingModel.end);
+    //이미 존재하는 회의인지 체크
+    for (Meeting i in TestData().meetings[7]) {
+      if (startIndex < addMeetingModel.endList.indexOf(i.endTime!) &&
+          endIndex > addMeetingModel.startList.indexOf(i.startTime!)) {
+        return '이미 회의 존재';
+      }
+    }
+    return null;
+  }
+
+  String? endTimeValidator(value) {
+    var startIndex = addMeetingModel.startList.indexOf(addMeetingModel.start);
+    var endIndex = addMeetingModel.endList.indexOf(addMeetingModel.end);
+    //이미 존재하는 회의인지 체크
+    for (Meeting i in TestData().meetings[7]) {
+      if (startIndex < addMeetingModel.endList.indexOf(i.endTime!) &&
+          endIndex > addMeetingModel.startList.indexOf(i.startTime!)) {
+        return '이미 회의 존재';
+      }
+    }
+    //종료 시간이 시작 시간보다 빠른지 체크
+    if (addMeetingModel.endList.indexOf(value.toString()) <=
+        addMeetingModel.startList.indexOf(addMeetingModel.start)) {
+      return '종료시간 이상';
+    }
+    return null;
+  }
+
+  String? contentValidator(value) {
+    if (value == '') {
+      return '내용을 입력해주세요.';
+    }
+    return null;
   }
 
   bool addMeeting() {
