@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div<{ needMargin: boolean }>`
+const Container = styled.div<{ needMargin: boolean; justifyContent: string }>`
     display: flex;
-    justify-content: space-between;
+    justify-content: ${(props) => props.justifyContent};
     align-items: center;
     flex-direction: row;
     margin-top: ${(props) => (props.needMargin ? '2rem' : 0)};
@@ -14,10 +14,19 @@ const Container = styled.div<{ needMargin: boolean }>`
 type FlexRowProps = {
     children: ReactNode;
     needMargin?: boolean;
+    justifyContent?: string;
 };
 
-const FlexRow: React.FC<FlexRowProps> = ({ children, needMargin = false }: FlexRowProps) => {
-    return <Container needMargin={needMargin}>{children}</Container>;
+const FlexRow: React.FC<FlexRowProps> = ({
+    children,
+    needMargin = false,
+    justifyContent = 'space-between',
+}: FlexRowProps) => {
+    return (
+        <Container needMargin={needMargin} justifyContent={justifyContent}>
+            {children}
+        </Container>
+    );
 };
 
 export default FlexRow;

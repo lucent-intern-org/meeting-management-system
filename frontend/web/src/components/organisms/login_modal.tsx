@@ -19,24 +19,24 @@ import {
 } from '../../atom';
 import ModalHeader from '../molecules/modal_header';
 import { users } from '../../temp_db';
-import theme from '../../theme';
+import theme from '../../styles/theme';
 import CenteredModal from './centered_modal';
 import FlexColumn from '../molecules/flex_column';
 import FlexRow from '../molecules/flex_row';
+import ModalCloseButton from '../molecules/modal_close_button';
 
 const LoginModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
-    const [keepLogIn, setKeepLogIn] = useState(false);
-    const [logIn, setLogIn] = useRecoilState(loginState);
+    const [keepLogIn, setKeepLogIn] = useState<boolean>(false);
+    const [login, setLogin] = useRecoilState(loginState);
     const [isAdmin, setIsAdmin] = useRecoilState(isAdminState);
 
     const authenticate = (email: string, token: string) => {
         let isMember = false;
         let role = 'user';
-        console.log(email);
 
         for (let i = 0; i < users.length; i += 1) {
             if (users[i].email === email) {
@@ -47,7 +47,7 @@ const LoginModal: React.FC = () => {
         }
 
         if (isMember) {
-            setLogIn(!logIn);
+            setLogin(!login);
             if (role === 'admin') {
                 setIsAdmin(!isAdmin);
             }
@@ -78,9 +78,10 @@ const LoginModal: React.FC = () => {
 
     return (
         <CenteredModal width={28} height={28}>
+            <ModalCloseButton state={logInModalVisibleState} />
             <FlexColumn>
-                <ModalHeader setState={logInModalVisibleState}>로그인</ModalHeader>
-                <FlexColumn needMargin>
+                <ModalHeader>로그인</ModalHeader>
+                <FlexColumn>
                     <GoogleLogin
                         clientId={googleClientId}
                         onSuccess={onLoginSuccess}
@@ -97,7 +98,6 @@ const LoginModal: React.FC = () => {
                                     color: 'black',
                                 }}
                                 onClick={props.onClick}
-                                disabled={props.disabled}
                             >
                                 Sign in with Google
                             </GoogleButton>
@@ -116,12 +116,16 @@ const LoginModal: React.FC = () => {
                         </Text>
                     </FlexRow>
                     <div style={{ marginTop: '6rem' }}>
-                        <Text fontSize={0.7}>아직 회원이 아니신가요?</Text>
+                        <Text fontSize={0.7}>아직 회원이 아니신가요? </Text>
                         <Text
                             fontSize={0.7}
                             color={theme.submitBtnColor}
                             onClick={() => {
-                                setSignUpModalVisible(!signUpModalVisible);
+                                setSignUpModalVisible((prev) => ({
+                                    ...prev,
+                                    visible: !signUpModalVisible.visible,
+                                }));
+
                                 setLogInModalVisible(!logInModalVisible);
                             }}
                         >

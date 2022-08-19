@@ -5,9 +5,10 @@ type inputProps = {
     value?: string;
     placeholder?: string;
     fontSize?: number;
-    width?: number;
+    width?: string;
     letterSpacing?: string | number;
     marginTop?: string;
+    disabled?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const Input: React.FC<inputProps> = ({
@@ -15,15 +16,17 @@ const Input: React.FC<inputProps> = ({
     value,
     placeholder,
     fontSize = 0.8,
-    width,
+    width = '100%',
     letterSpacing = 'normal',
     marginTop = '0vh',
+    disabled = false,
     onChange,
 }: inputProps) => {
     switch (type) {
         case 'text':
             return (
                 <input
+                    disabled={disabled}
                     type={type}
                     placeholder={placeholder}
                     value={value}
@@ -31,8 +34,9 @@ const Input: React.FC<inputProps> = ({
                     style={{
                         fontSize: `${fontSize}rem`,
                         letterSpacing: `${letterSpacing}rem`,
-                        width: `${width}rem`,
+                        width: width,
                         marginTop: marginTop,
+                        backgroundColor: 'white',
                     }}
                 />
             );
