@@ -16,6 +16,7 @@ type CustomButtonProps = {
     marginRight?: number;
     marginLeft?: number;
     border?: string;
+    disabled?: boolean;
 };
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -33,6 +34,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     marginRight = 2,
     marginLeft,
     border = 'none',
+    disabled = false,
 }: CustomButtonProps) => {
     return (
         <button
@@ -53,6 +55,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
                 border: border,
             }}
             type='button'
+            disabled={disabled}
             onClick={onClick}
         >
             {children}
