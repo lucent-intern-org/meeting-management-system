@@ -68,7 +68,6 @@ const SignupModal: React.FC = () => {
                 type='text'
                 placeholder='Slack ID'
                 letterSpacing={0.15}
-                width={305}
                 marginTop='3vh'
                 onChange={(e) => {
                     setSlackId(e.target.value);

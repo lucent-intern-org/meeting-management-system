@@ -1,22 +1,25 @@
 import { atom } from 'recoil';
 
-const dayDetailModalState = atom({
-    key: 'dayDetailModalState',
+export const dayDetailModalState = atom({
+    key: 'dayDetailModal',
     default: {
         visible: false,
         date: new Date(),
     },
 });
 
-// const dayDetailInfoState = atom({})
+export const meetingAddModalVisibleState = atom({
+    key: 'meetingAddModalVisible',
+    default: false,
+});
 
 export const signUpModalVisibleState = atom({
-    key: 'signUpModal',
+    key: 'signUpModalVisible',
     default: false,
 });
 
 export const logInModalVisibleState = atom({
-    key: 'LogInModal',
+    key: 'LogInModalVisible',
     default: false,
 });
 
@@ -25,6 +28,12 @@ export const userSignUpInfoState = atom({
     default: { slackId: '', name: '', email: '', group: '', role: '' },
 });
 
-export const LogInState = atom({ key: 'IsLogIn', default: false });
+export const loginState = atom({ key: 'Login', default: false });
 
-export default dayDetailModalState;
+export const userState = atom({
+    key: 'user',
+    default: {
+        email: '',
+        name: '',
+    },
+});

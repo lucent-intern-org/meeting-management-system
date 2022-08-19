@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { signUpModalVisibleState, logInModalVisibleState, LogInState } from '../../atom';
+import { signUpModalVisibleState, logInModalVisibleState, loginState } from '../../atom';
 import Text from '../atoms/text';
 import FlexRow from './flex_row';
 
@@ -13,7 +13,7 @@ const Li = styled.li`
 const Nav: React.FC = () => {
     const setSignUpModalOpen = useSetRecoilState(signUpModalVisibleState);
     const setLoginModalOpen = useSetRecoilState(logInModalVisibleState);
-    const [isLogIn, setIsLogIn] = useRecoilState(LogInState);
+    const [isLogIn, setIsLogIn] = useRecoilState(loginState);
 
     const removeInfo = () => {
         localStorage.removeItem('token');

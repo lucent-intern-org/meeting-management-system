@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import dayDetailModalState from '../../atom';
+import { dayDetailModalState } from '../../atom';
 import DayDetailModalContents from '../molecules/day_detail_modal_contents';
 import DayDetailModalHeader from '../molecules/day_detail_modal_header';
 

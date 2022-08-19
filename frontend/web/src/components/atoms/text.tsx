@@ -38,7 +38,6 @@ const Text: React.FC<textProps> = ({
     ) : (
         <span
             style={{
-                display: 'inline-block',
                 fontSize: `${fontSize}rem`,
                 fontWeight: fontWeight,
                 letterSpacing: `${letterSpacing}rem`,

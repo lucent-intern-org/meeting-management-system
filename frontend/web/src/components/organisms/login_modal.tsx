@@ -12,10 +12,10 @@ import {
 } from '@leecheuk/react-google-login';
 import Input from '../atoms/input';
 import Text from '../atoms/text';
-import { signUpModalVisibleState, logInModalVisibleState, LogInState } from '../../atom';
+import { signUpModalVisibleState, logInModalVisibleState, loginState, userState } from '../../atom';
 import ModalHeader from '../molecules/modal_header';
 import { users } from '../../temp_db';
-import theme from '../../theme';
+import theme from '../../styles/theme';
 import CenteredModal from './centered_modal';
 
 const MarginTop = styled.div`
@@ -36,9 +36,10 @@ const LoginModal: React.FC = () => {
     const setSignUpModalOpen = useSetRecoilState(signUpModalVisibleState);
     const setLogInModalOpen = useSetRecoilState(logInModalVisibleState);
     const [keepLogIn, setKeepLogIn] = useState(false);
-    const setIsLogIn = useSetRecoilState(LogInState);
+    const setIsLogIn = useSetRecoilState(loginState);
+    const setUser = useSetRecoilState(userState);
 
-    const authenticate = (email: string, token: string) => {
+    const authenticate = (email: string, name: string, token: string) => {
         let isMember = false;
         console.log(email);
         /*
@@ -61,6 +62,7 @@ const LoginModal: React.FC = () => {
 
         if (isMember) {
             setIsLogIn(true);
+            setUser({ email: email, name: name });
 
             if (keepLogIn) {
                 localStorage.setItem('token', token);
@@ -81,7 +83,7 @@ const LoginModal: React.FC = () => {
         if ('tokenId' in res) {
             token = res.tokenId;
         }
-        authenticate(profile.email, token);
+        authenticate(profile.email, profile.name, token);
 
         console.log(res);
     };
