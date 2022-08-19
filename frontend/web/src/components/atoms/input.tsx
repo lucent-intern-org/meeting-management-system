@@ -37,6 +37,7 @@ const Input: React.FC<inputProps> = ({
                         letterSpacing: `${letterSpacing}rem`,
                         width: width,
                         marginTop: marginTop,
+                        backgroundColor: 'white',
                     }}
                 />
             );

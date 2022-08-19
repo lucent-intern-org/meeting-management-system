@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
@@ -12,7 +12,7 @@ import ModalHeader from '../molecules/modal_header';
 import DropDown from '../atoms/drop_down';
 import Input from '../atoms/input';
 import Text from '../atoms/text';
-import { signUpModalVisibleState, logInModalVisibleState, userSignUpInfoState } from '../../atom';
+import { signUpModalVisibleState, logInModalVisibleState } from '../../atom';
 import { groups } from '../../temp_db';
 import CenteredModal from './centered_modal';
 import theme from '../../styles/theme';
@@ -23,9 +23,9 @@ const SignupModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
-    const setUserSignUpInfo = useSetRecoilState(userSignUpInfoState);
     const [slackId, setSlackId] = useState<string>('');
     const [position, setPosition] = useState<string>('');
+
     const toNum = (p: string) => {
         let id = 0;
         groups.map((group) => {
@@ -35,15 +35,20 @@ const SignupModal: React.FC = () => {
         });
         return id;
     };
+
     const addUserInfo = (email: string, name: string, p: number) => {
-        setUserSignUpInfo({
-            slackId: slackId,
-            groupId: p,
-            email: email,
-            name: name,
-            role: 'user',
+        setSignUpModalVisible({
+            visible: !signUpModalVisible.visible,
+            signUpUser: {
+                slackId: slackId,
+                groupId: p,
+                email: email,
+                name: name,
+                role: 'user',
+            },
         });
     };
+
     const onSignUpSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
         let profile = { email: '', name: '' };
         // let token;
@@ -54,14 +59,14 @@ const SignupModal: React.FC = () => {
         //     token = res.tokenId;
         // }
         addUserInfo(profile.email, profile.name, toNum(position));
-        setSignUpModalVisible(!signUpModalVisible);
     };
+
     const hasBlank = () => {
-        return slackId === '' || position === '';
+        return !(slackId.length >= 1 && slackId.length <= 15 && position !== '');
     };
     return (
         <CenteredModal width={34} height={34}>
-            <ModalCloseButton setState={signUpModalVisibleState} />
+            <ModalCloseButton state={signUpModalVisibleState} />
             <FlexColumn>
                 <ModalHeader>회원가입</ModalHeader>
                 <FlexColumn justifyContent='center'>
@@ -112,7 +117,11 @@ const SignupModal: React.FC = () => {
                             fontSize={0.7}
                             color={theme.submitBtnColor}
                             onClick={() => {
-                                setSignUpModalVisible(!signUpModalVisible);
+                                setSignUpModalVisible((prev) => ({
+                                    ...prev,
+                                    visible: !signUpModalVisible.visible,
+                                }));
+
                                 setLogInModalVisible(!logInModalVisible);
                             }}
                         >

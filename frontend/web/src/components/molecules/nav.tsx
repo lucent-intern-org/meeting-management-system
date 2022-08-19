@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -7,6 +8,7 @@ import {
     logInModalVisibleState,
     loginState,
     isAdminState,
+    logoutModalVisibleState,
 } from '../../atom';
 import Text from '../atoms/text';
 import FlexRow from './flex_row';
@@ -18,17 +20,13 @@ const Li = styled.li`
 const Nav: React.FC = () => {
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
-    const [isLogIn, setIsLogIn] = useRecoilState(loginState);
+    const isLogIn = useRecoilValue(loginState);
     const isAdmin = useRecoilValue(isAdminState);
-    const removeInfo = () => {
-        localStorage.removeItem('token');
-        setIsLogIn(false);
-    };
+    const [logoutModalVisible, setLogoutModalVisible] = useRecoilState(logoutModalVisibleState);
+    const navigate = useNavigate();
 
-    const logoutEvent = () => {
-        if (window.confirm('로그아웃 하시겠습니까?')) {
-            removeInfo();
-        }
+    const showLogoutModal = () => {
+        setLogoutModalVisible(!logoutModalVisible);
     };
 
     return (
@@ -37,11 +35,11 @@ const Nav: React.FC = () => {
                 <FlexRow>
                     {isAdmin && (
                         <Li>
-                            <Text onClick={() => console.log('관리자 페이지')}>관리자</Text>
+                            <Text onClick={() => navigate('/admin')}>관리자</Text>
                         </Li>
                     )}
                     <Li>
-                        <Text onClick={logoutEvent}>로그아웃</Text>
+                        <Text onClick={showLogoutModal}>로그아웃</Text>
                     </Li>
                 </FlexRow>
             ) : (
@@ -50,7 +48,14 @@ const Nav: React.FC = () => {
                         <Text onClick={() => setLogInModalVisible(!logInModalVisible)}>로그인</Text>
                     </Li>
                     <Li>
-                        <Text onClick={() => setSignUpModalVisible(!signUpModalVisible)}>
+                        <Text
+                            onClick={() =>
+                                setSignUpModalVisible((prev) => ({
+                                    ...prev,
+                                    visible: !signUpModalVisible.visible,
+                                }))
+                            }
+                        >
                             회원가입
                         </Text>
                     </Li>

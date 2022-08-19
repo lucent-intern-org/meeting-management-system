@@ -23,6 +23,7 @@ time, mark, audio, video, input {
   /* font: inherit; */
   vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, main, menu, nav, section {
@@ -34,6 +35,10 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+}
+@font-face {
+  font-family: 'inter';
+  src: url('../assets/fonts/inter.ttf') format('truetype');
 }
 menu, ol, ul {
   list-style: none;
@@ -67,10 +72,6 @@ button {
   border: none;
   background-color: transparent;
   cursor: pointer;
-}
-@font-face {
-  font-family: 'inter';
-  src: url('./assets/fonts/inter.ttf');
 }
 
 input, select {

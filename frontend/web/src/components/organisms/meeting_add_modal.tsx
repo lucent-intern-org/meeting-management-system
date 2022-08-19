@@ -270,7 +270,7 @@ const MeetingAddModal: React.FC = () => {
 
     return (
         <CenteredModal width={35} height={37}>
-            <ModalCloseButton setState={meetingAddModalVisibleState} />
+            <ModalCloseButton state={meetingAddModalVisibleState} />
             <Container>
                 <FlexColumn>
                     <Input

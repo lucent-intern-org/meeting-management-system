@@ -30,6 +30,7 @@ const Text: React.FC<textProps> = ({
                 fontFamily: 'inter',
                 color: color,
                 paddingRight: 0,
+                paddingLeft: 0,
                 marginTop: marginTop,
             }}
             onClick={onClick}
