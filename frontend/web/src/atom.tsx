@@ -25,10 +25,8 @@ export const logInModalVisibleState = atom({
 
 export const userSignUpInfoState = atom({
     key: 'UserSignUpInfo',
-    default: { slackId: '', name: '', email: '', group: '', role: '' },
+    default: { slackId: '', name: '', email: '', groupId: -1000, role: '' },
 });
-
-export const loginState = atom({ key: 'Login', default: false });
 
 export const userState = atom({
     key: 'user',
@@ -37,3 +35,6 @@ export const userState = atom({
         name: '',
     },
 });
+export const loginState = atom({ key: 'login', default: false });
+
+export const isAdminState = atom({ key: 'isAdmin', default: false });

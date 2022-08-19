@@ -11,7 +11,6 @@ type inputProps = {
     min?: string;
     disabled?: boolean;
 };
-
 const Input: React.FC<inputProps> = ({
     type = 'text',
     value,

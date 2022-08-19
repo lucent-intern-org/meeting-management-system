@@ -17,6 +17,7 @@ const Text: React.FC<textProps> = ({
     color = 'black',
     letterSpacing = 'normal',
     marginTop = '0vh',
+
     onClick,
 }: textProps) => {
     return onClick ? (

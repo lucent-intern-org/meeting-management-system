@@ -1,8 +1,13 @@
 import React from 'react';
 
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { signUpModalVisibleState, logInModalVisibleState, loginState } from '../../atom';
+import {
+    signUpModalVisibleState,
+    logInModalVisibleState,
+    loginState,
+    isAdminState,
+} from '../../atom';
 import Text from '../atoms/text';
 import FlexRow from './flex_row';
 
@@ -11,10 +16,10 @@ const Li = styled.li`
 `;
 
 const Nav: React.FC = () => {
-    const setSignUpModalOpen = useSetRecoilState(signUpModalVisibleState);
-    const setLoginModalOpen = useSetRecoilState(logInModalVisibleState);
+    const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
+    const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
     const [isLogIn, setIsLogIn] = useRecoilState(loginState);
-
+    const isAdmin = useRecoilValue(isAdminState);
     const removeInfo = () => {
         localStorage.removeItem('token');
         setIsLogIn(false);
@@ -28,11 +33,13 @@ const Nav: React.FC = () => {
 
     return (
         <ul>
-            {isLogIn === true || localStorage.getItem('token') ? (
+            {isLogIn || localStorage.getItem('token') ? (
                 <FlexRow>
-                    <Li>
-                        <Text onClick={() => console.log('관리자 페이지')}>관리자</Text>
-                    </Li>
+                    {isAdmin && (
+                        <Li>
+                            <Text onClick={() => console.log('관리자 페이지')}>관리자</Text>
+                        </Li>
+                    )}
                     <Li>
                         <Text onClick={logoutEvent}>로그아웃</Text>
                     </Li>
@@ -40,10 +47,12 @@ const Nav: React.FC = () => {
             ) : (
                 <FlexRow>
                     <Li>
-                        <Text onClick={() => setLoginModalOpen(true)}>로그인</Text>
+                        <Text onClick={() => setLogInModalVisible(!logInModalVisible)}>로그인</Text>
                     </Li>
                     <Li>
-                        <Text onClick={() => setSignUpModalOpen(true)}>회원가입</Text>
+                        <Text onClick={() => setSignUpModalVisible(!signUpModalVisible)}>
+                            회원가입
+                        </Text>
                     </Li>
                 </FlexRow>
             )}
