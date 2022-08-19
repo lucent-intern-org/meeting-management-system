@@ -187,6 +187,7 @@ const MeetingAddModal: React.FC = () => {
     const today = new Date();
     const minDate = toStringDateByFormatting(today);
     const minTime = today.toLocaleTimeString('en-US', { hour12: false }).substring(0, 5);
+    const [validation, setValidation] = React.useState(false);
     const [input, setInput] = React.useState<meetingType>({
         title: '',
         date: minDate,
@@ -242,6 +243,30 @@ const MeetingAddModal: React.FC = () => {
             }) as userType,
         );
     }, []);
+
+    const validateSubmit = () => {
+        return !(
+            input.title.length >= 2 &&
+            input.title.length <= 20 &&
+            input.content.length >= 2 &&
+            input.content.length <= 500 &&
+            (input.participants.length > 0 || input.participateGroups.length > 0) &&
+            input.room !== '' &&
+            input.date !== '' &&
+            input.startTime !== '' &&
+            input.endTime !== ''
+        );
+    };
+
+    React.useEffect(() => {
+        console.log(111);
+        const debounce = setTimeout(() => {
+            setValidation(validateSubmit());
+        }, 200);
+        return () => {
+            clearTimeout(debounce);
+        };
+    }, [input]);
 
     return (
         <CenteredModal width={35} height={37}>
@@ -619,7 +644,8 @@ const MeetingAddModal: React.FC = () => {
                                 width={40}
                                 verticalPadding={0.5}
                                 marginRight={0}
-                                bgColor={theme.submitBtnColor}
+                                bgColor={!validation ? theme.submitBtnColor : theme.cancelBtnColor}
+                                disabled={validation}
                                 onClick={() => {
                                     // todo: 회의실 예약 api call
                                     setMeetingAddModalVisible(!meetingAddModalVisible);
