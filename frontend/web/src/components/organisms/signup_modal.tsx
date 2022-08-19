@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 import React, { useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
@@ -12,32 +12,38 @@ import ModalHeader from '../molecules/modal_header';
 import DropDown from '../atoms/drop_down';
 import Input from '../atoms/input';
 import Text from '../atoms/text';
-
 import { signUpModalVisibleState, logInModalVisibleState, userSignUpInfoState } from '../../atom';
 import { groups } from '../../temp_db';
 import CenteredModal from './centered_modal';
-import theme from '../../theme';
+import theme from '../../styles/theme';
 import FlexColumn from '../molecules/flex_column';
+import ModalCloseButton from '../molecules/modal_close_button';
 
 const SignupModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
     const setUserSignUpInfo = useSetRecoilState(userSignUpInfoState);
-    const [slackId, setSlackId] = useState('');
-    const [position, setPosition] = useState('');
-
-    const addUserInfo = (email: string, name: string) => {
+    const [slackId, setSlackId] = useState<string>('');
+    const [position, setPosition] = useState<string>('');
+    const toNum = (p: string) => {
+        let id = 0;
+        groups.map((group) => {
+            if (group.groupName === p) {
+                id = group.groupId;
+            }
+        });
+        return id;
+    };
+    const addUserInfo = (email: string, name: string, p: number) => {
         setUserSignUpInfo({
             slackId: slackId,
-            group: position,
+            groupId: p,
             email: email,
             name: name,
             role: 'user',
         });
     };
-
     const onSignUpSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
         let profile = { email: '', name: '' };
         // let token;
@@ -47,30 +53,26 @@ const SignupModal: React.FC = () => {
         // if ('tokenId' in res) {
         //     token = res.tokenId;
         // }
-        addUserInfo(profile.email, profile.name);
-
+        addUserInfo(profile.email, profile.name, toNum(position));
         setSignUpModalVisible(!signUpModalVisible);
     };
-
     const hasBlank = () => {
         return slackId === '' || position === '';
     };
-
     return (
         <CenteredModal width={34} height={34}>
+            <ModalCloseButton setState={signUpModalVisibleState} />
             <FlexColumn>
-                <ModalHeader setState={signUpModalVisibleState}>회원가입</ModalHeader>
-                <FlexColumn needMargin>
+                <ModalHeader>회원가입</ModalHeader>
+                <FlexColumn justifyContent='center'>
                     <Input
                         type='text'
                         placeholder=' Slack ID'
                         letterSpacing={0.15}
-                        width={20}
                         onChange={(e) => {
                             setSlackId(e.target.value);
                         }}
                     />
-
                     <DropDown
                         onChange={(e) => {
                             setPosition(e.target.value);
@@ -78,10 +80,10 @@ const SignupModal: React.FC = () => {
                         placeholder='Position'
                         letterSpacing={0.15}
                         options={groups}
-                        width={20}
+                        width={100}
                     />
                 </FlexColumn>
-                <FlexColumn needMargin>
+                <FlexColumn justifyContent='space-around'>
                     <GoogleLogin
                         clientId={googleClientId}
                         onSuccess={onSignUpSuccess}
@@ -104,8 +106,8 @@ const SignupModal: React.FC = () => {
                             </GoogleButton>
                         )}
                     />
-                    <div style={{ marginTop: '4rem' }}>
-                        <Text fontSize={0.7}>이미 계정이 있으신가요?</Text>
+                    <div>
+                        <Text fontSize={0.7}>이미 계정이 있으신가요? </Text>
                         <Text
                             fontSize={0.7}
                             color={theme.submitBtnColor}
@@ -122,5 +124,4 @@ const SignupModal: React.FC = () => {
         </CenteredModal>
     );
 };
-
 export default SignupModal;

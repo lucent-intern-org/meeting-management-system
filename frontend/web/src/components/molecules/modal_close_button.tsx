@@ -1,8 +1,7 @@
 import React from 'react';
 import { IoClose } from 'react-icons/io5';
 import { RecoilState, useSetRecoilState } from 'recoil';
-import theme from '../../theme';
-import Button from '../atoms/button';
+import theme from '../../styles/theme';
 import FlexRow from './flex_row';
 
 type modalCloseButtonProps = {
@@ -15,9 +14,13 @@ const ModalCloseButton: React.FC<modalCloseButtonProps> = ({ setState }: modalCl
     return (
         <FlexRow>
             <div />
-            <Button onClick={() => setModalOpen(false)}>
-                <IoClose strokeWidth={50} size={40} color={theme.inputColor} />
-            </Button>
+            <IoClose
+                onClick={() => setModalOpen(false)}
+                strokeWidth={50}
+                size={40}
+                color={theme.inputColor}
+                cursor='pointer'
+            />
         </FlexRow>
     );
 };

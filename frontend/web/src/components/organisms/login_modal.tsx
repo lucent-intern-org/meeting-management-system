@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
@@ -15,11 +15,12 @@ import {
     signUpModalVisibleState,
     logInModalVisibleState,
     loginState,
+    userState,
     isAdminState,
 } from '../../atom';
 import ModalHeader from '../molecules/modal_header';
 import { users } from '../../temp_db';
-import theme from '../../theme';
+import theme from '../../styles/theme';
 import CenteredModal from './centered_modal';
 import FlexColumn from '../molecules/flex_column';
 import FlexRow from '../molecules/flex_row';
@@ -30,10 +31,11 @@ const LoginModal: React.FC = () => {
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
     const [keepLogIn, setKeepLogIn] = useState(false);
-    const [logIn, setLogIn] = useRecoilState(loginState);
+    const setUser = useSetRecoilState(userState);
+    const [login, setLogin] = useRecoilState(loginState);
     const [isAdmin, setIsAdmin] = useRecoilState(isAdminState);
 
-    const authenticate = (email: string, token: string) => {
+    const authenticate = (email: string, name: string, token: string) => {
         let isMember = false;
         let role = 'user';
         console.log(email);
@@ -47,7 +49,8 @@ const LoginModal: React.FC = () => {
         }
 
         if (isMember) {
-            setLogIn(!logIn);
+            setUser({ email: email, name: name });
+            setLogin(!login);
             if (role === 'admin') {
                 setIsAdmin(!isAdmin);
             }
@@ -71,7 +74,7 @@ const LoginModal: React.FC = () => {
         if ('tokenId' in res) {
             token = res.tokenId;
         }
-        authenticate(profile.email, token);
+        authenticate(profile.email, profile.name, token);
 
         console.log(res);
     };
@@ -79,8 +82,8 @@ const LoginModal: React.FC = () => {
     return (
         <CenteredModal width={28} height={28}>
             <FlexColumn>
-                <ModalHeader setState={logInModalVisibleState}>로그인</ModalHeader>
-                <FlexColumn needMargin>
+                <ModalHeader>로그인</ModalHeader>
+                <FlexColumn>
                     <GoogleLogin
                         clientId={googleClientId}
                         onSuccess={onLoginSuccess}

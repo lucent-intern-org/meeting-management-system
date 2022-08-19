@@ -30,3 +30,19 @@ export const toStringDateByFormatting: toStringDateByFormattingType = (value) =>
 
     return `${year}-${month}-${date}`;
 };
+
+type strToMinsType = (time: string) => number;
+export const strToMins: strToMinsType = (value) => {
+    const str = value.split(':');
+    return Number(str[0]) * 60 + Number(str[1]);
+};
+
+type minsToStrType = (str: number) => string;
+export const minsToStr: minsToStrType = (value) => {
+    // console.log(`00${value % 60}`);
+    const min = `00${Math.abs(value % 60)}`.slice(-2);
+    const val = `${Math.trunc(value / 60)}:${min}`;
+    // console.log(val);
+    return value < 0 ? `-${val}` : val;
+    // return val;
+};

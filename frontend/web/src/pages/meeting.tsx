@@ -4,7 +4,7 @@ import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dayDetailModalState } from '../atom';
+import { dayDetailModalState, meetingAddModalVisibleState } from '../atom';
 import Calendar from '../templates/calendar';
 import { meetings, rooms } from '../temp_db';
 import { toStringDateByFormatting } from '../utils/date';
@@ -15,6 +15,9 @@ const Container = styled.div`
 
 const Meeting: React.FC = () => {
     const [dayDetailModal, setDayDetailModal] = useRecoilState(dayDetailModalState);
+    const [meetingAddModalVisible, setMeetingAddModalVisible] = useRecoilState(
+        meetingAddModalVisibleState,
+    );
 
     return (
         <Container>
@@ -23,7 +26,7 @@ const Meeting: React.FC = () => {
                     addMeeting: {
                         text: '미팅 추가',
                         click: () => {
-                            console.log('미팅 추가');
+                            setMeetingAddModalVisible(!meetingAddModalVisible);
                         },
                     },
                 }}

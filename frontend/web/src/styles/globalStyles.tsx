@@ -84,7 +84,6 @@ input, select {
 input:focus, select:focus {
   outline: none;
 }
-
 `;
 
 export default GlobalStyle;
