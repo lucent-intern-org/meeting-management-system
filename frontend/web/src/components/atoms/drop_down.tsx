@@ -52,6 +52,7 @@ const DropDown: React.FC<dropDownProps> = ({
             id={id}
             defaultValue={defaultValue}
             disabled={disabled}
+            key={defaultValue}
         >
             <option value='default' hidden style={{ color: `${theme.inputColor}` }}>
                 {placeholder}
