@@ -1,10 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { DateClickArg } from '@fullcalendar/interaction';
 import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dayDetailModalState, loginState, meetingAddModalVisibleState } from '../atom';
+import {
+    dayDetailModalState,
+    isAdminState,
+    loginState,
+    meetingAddModalVisibleState,
+} from '../atom';
 import Calendar from '../templates/calendar';
 import { meetings, rooms } from '../temp_db';
 import { toStringDateByFormatting } from '../utils/date';
@@ -18,7 +24,18 @@ const Meeting: React.FC = () => {
     const [meetingAddModalVisible, setMeetingAddModalVisible] = useRecoilState(
         meetingAddModalVisibleState,
     );
-    const isLogin = useRecoilValue(loginState);
+
+    const [login, setLogin] = useRecoilState(loginState);
+    const setIsAdmin = useSetRecoilState(isAdminState);
+
+    React.useEffect(() => {
+        if (localStorage.getItem('token')) {
+            setLogin(!login);
+            if (localStorage.getItem('admin')) {
+                setIsAdmin(true);
+            }
+        }
+    }, []);
 
     return (
         <Container>
@@ -27,7 +44,7 @@ const Meeting: React.FC = () => {
                     addMeeting: {
                         text: '미팅 추가',
                         click: () => {
-                            return isLogin &&
+                            return login &&
                                 localStorage.getItem('name') &&
                                 localStorage.getItem('email')
                                 ? setMeetingAddModalVisible(!meetingAddModalVisible)

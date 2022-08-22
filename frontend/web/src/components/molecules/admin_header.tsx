@@ -33,6 +33,7 @@ const AdminHeader: React.FC = () => {
                 <Text
                     fontSize={1.1}
                     fontWeight={900}
+                    paddingLeft={0}
                     onClick={() => {
                         setAdminPage('users');
                     }}
@@ -44,6 +45,7 @@ const AdminHeader: React.FC = () => {
                 <Text
                     fontSize={1.1}
                     fontWeight={900}
+                    paddingLeft={0}
                     onClick={() => {
                         setAdminPage('rooms');
                     }}

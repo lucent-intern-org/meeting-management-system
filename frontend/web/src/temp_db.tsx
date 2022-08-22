@@ -38,9 +38,9 @@ export const participants = [
 ];
 
 export const rooms = [
-    { roomId: 0, roomName: 'Thiel', roomColor: '#FF0000' },
-    { roomId: 1, roomName: 'Bezos', roomColor: '#FF8A00' },
-    { roomId: 2, roomName: 'Musk', roomColor: '#FFC700' },
+    { roomId: 0, roomColor: '#FF0000', roomName: 'Thiel' },
+    { roomId: 1, roomColor: '#FF8A00', roomName: 'Bezos' },
+    { roomId: 2, roomColor: '#FFC700', roomName: 'Musk' },
 ];
 
 export const users = [

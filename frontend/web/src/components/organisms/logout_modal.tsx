@@ -1,16 +1,22 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { logoutModalVisibleState } from '../../atom';
+import { isAdminState, loginState, logoutModalVisibleState } from '../../atom';
 import Text from '../atoms/text';
 
 import AlertModal from './alert_modal';
 
 const LogoutModal: React.FC = () => {
     const navigate = useNavigate();
+    const setLogIn = useSetRecoilState(loginState);
+    const [isAdmin, setIsAdmin] = useRecoilState(isAdminState);
 
     const removeInfo = () => {
+        setLogIn(false);
+        setIsAdmin(!isAdmin);
         localStorage.removeItem('token');
+        localStorage.removeItem('admin');
         navigate('/');
     };
 

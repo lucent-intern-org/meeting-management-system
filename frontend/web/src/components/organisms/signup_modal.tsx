@@ -61,8 +61,13 @@ const SignupModal: React.FC = () => {
         addUserInfo(profile.email, profile.name, toNum(position));
     };
 
-    const hasBlank = () => {
-        return !(slackId.length >= 1 && slackId.length <= 15 && position !== '');
+    const validation = () => {
+        return !(
+            slackId.length >= 1 &&
+            slackId.length <= 15 &&
+            (slackId[0] === 'W' || slackId[0] === 'U') &&
+            position !== ''
+        );
     };
     return (
         <CenteredModal width={34} height={34}>
@@ -96,16 +101,18 @@ const SignupModal: React.FC = () => {
                             console.log(error);
                         }}
                         pluginName='googleSignup'
-                        disabled={hasBlank()}
+                        buttonText='Sign up with Google'
+                        disabled={validation()}
                         render={(props) => (
                             <GoogleButton
                                 style={{
                                     width: '20rem',
                                     backgroundColor: 'white',
-                                    color: hasBlank() ? theme.inputColor : 'black',
+                                    color: validation() ? theme.inputColor : 'black',
                                 }}
                                 onClick={props.onClick}
                                 disabled={props.disabled}
+                                label='Sign up with Google'
                             >
                                 Sign up with Google
                             </GoogleButton>
