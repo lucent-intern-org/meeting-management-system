@@ -10,29 +10,49 @@ export class RoomController {
         console.log(body);
         let room = await this.RoomService.getRoom(body.roomId);
         console.log(room);
-        return room;
+        return Object.assign({
+            data: room,
+            statusCode: 200,
+            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+          });
     }
     @Get('/all')
     async getAll(){
         let room = await this.RoomService.getAll();
         console.log(room);
-        return room;
+        return Object.assign({
+            data: room,
+            statusCode: 200,
+            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+          });
     }
     @Post('/create')
     async createUser(@Body() body){
         let count = await this.RoomService.getCount();
         let room = await this.RoomService.createRoom(count,body);
-        return room;
+        return Object.assign({
+            data: room,
+            statusCode: 200,
+            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+          });
     }
     @Post('/update')
     async updateUser(@Body() body){
         let room = await this.RoomService.updateRoom(body);
-        return room;
+        return Object.assign({
+            data: room,
+            statusCode: 200,
+            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+          });
     }
     @Post('/delete')
     async deleteUser(@Body() body){
         let count = await this.RoomService.getCount();
         let room = await this.RoomService.deleteRoom(count,body.roomId);
-        return room;
+        return Object.assign({
+            data: room,
+            statusCode: 200,
+            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+          });
     }
 }
