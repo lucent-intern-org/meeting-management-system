@@ -47,6 +47,7 @@ const UserModal: React.FC = () => {
         return !(
             userInfo.slackId.length >= 1 &&
             userInfo.slackId.length <= 15 &&
+            (userInfo.slackId[0] === 'W' || userInfo.slackId[0] === 'U') &&
             userInfo.name.length >= 1 &&
             userInfo.name.length <= 10 &&
             userInfo.email.length >= 1 &&
@@ -69,6 +70,15 @@ const UserModal: React.FC = () => {
     const onChange = (key: string, value: string | number) => {
         console.log(value);
         setUserInfo((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const changeModalOpen = () => {
+        return addUserModalVisible
+            ? setAddUserModalVisible(!addUserModalVisible)
+            : setModifyUserModalVisible((prev) => ({
+                  ...prev,
+                  visible: !modifyUserModalVisible.visible,
+              }));
     };
 
     const roles = [{ roleName: 'user' }, { roleName: 'admin' }];
@@ -148,12 +158,7 @@ const UserModal: React.FC = () => {
                             disabled={validation}
                             onClick={() => {
                                 console.log(userInfo);
-                                return addUserModalVisible
-                                    ? setAddUserModalVisible(!addUserModalVisible)
-                                    : setModifyUserModalVisible((prev) => ({
-                                          ...prev,
-                                          visible: !modifyUserModalVisible.visible,
-                                      }));
+                                changeModalOpen();
                             }}
                         >
                             {addUserModalVisible ? '추가' : '수정'}
@@ -164,12 +169,7 @@ const UserModal: React.FC = () => {
                             verticalPadding={0.3}
                             marginRight={0}
                             onClick={() => {
-                                return addUserModalVisible
-                                    ? setAddUserModalVisible(!addUserModalVisible)
-                                    : setModifyUserModalVisible((prev) => ({
-                                          ...prev,
-                                          visible: !modifyUserModalVisible.visible,
-                                      }));
+                                changeModalOpen();
                             }}
                         >
                             취소

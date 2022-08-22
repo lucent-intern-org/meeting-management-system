@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { FcCancel } from 'react-icons/fc';
 import AdminHeader from '../components/molecules/admin_header';
 import { adminPageState, isAdminState, loginState } from '../atom';
@@ -22,8 +23,17 @@ const Header = styled.div`
 
 const Admin: React.FC = () => {
     const adminPage = useRecoilValue(adminPageState);
-    const isAdmin = useRecoilValue(isAdminState);
-    const login = useRecoilValue(loginState);
+    const [login, setLogin] = useRecoilState(loginState);
+    const [isAdmin, setIsAdmin] = useRecoilState(isAdminState);
+
+    React.useEffect(() => {
+        if (localStorage.getItem('token')) {
+            setLogin(!login);
+            if (localStorage.getItem('admin')) {
+                setIsAdmin(true);
+            }
+        }
+    }, []);
 
     /* TODO: 로그인되어있고 & 관리자인 경우에만 접근 가능하게 */
     return isAdmin && (login || localStorage.getItem('token')) ? (

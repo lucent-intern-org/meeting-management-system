@@ -63,4 +63,22 @@ export const deleteUserModalVisibleState = atom({
     },
 });
 
+export const addRoomModalVisibleState = atom({ key: 'addRoomModalVisible', default: false });
+
+export const modifyRoomModalVisibleState = atom({
+    key: 'modifyRoomModalVisible',
+    default: {
+        visible: false,
+        modifyRoom: { roomId: -9999, roomColor: '', roomName: '' },
+    },
+});
+
+export const deleteRoomModalVisibleState = atom({
+    key: 'deleteRoomModalVisible',
+    default: {
+        visible: false,
+        deleteRoom: { roomId: -9999, roomColor: '', roomName: '' },
+    },
+});
+
 export const logoutModalVisibleState = atom({ key: 'logoutModalVisible', default: false });

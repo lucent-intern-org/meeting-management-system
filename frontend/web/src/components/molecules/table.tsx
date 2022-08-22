@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import styled from 'styled-components';
@@ -9,34 +8,43 @@ import theme from '../../styles/theme';
 import { groups } from '../../temp_db';
 import {
     adminPageState,
+    deleteRoomModalVisibleState,
     deleteUserModalVisibleState,
+    modifyRoomModalVisibleState,
     modifyUserModalVisibleState,
 } from '../../atom';
+import RoomColor from '../atoms/room_color';
 
 const Container = styled.div`
     max-height: 60vh;
     overflow-y: auto;
+
     table,
     td,
     tr {
         border: 1.5px solid ${theme.inputColor};
         vertical-align: middle;
         font-family: 'inter';
+        font-size: 17px;
     }
+
     table {
         width: 100%;
         text-align: center;
     }
+
     thead {
         height: 3rem;
         color: white;
         background-color: ${theme.primaryColor};
         font-weight: 700;
     }
+
     tbody {
         font-weight: 500;
         max-height: 4rem;
     }
+
     tbody > tr {
         height: 4rem;
     }
@@ -57,17 +65,23 @@ type userType = {
 
 type roomType = {
     roomId: number;
-    roomName: string;
     roomColor: string;
+    roomName: string;
 };
 
 const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
     const adminPage = useRecoilValue(adminPageState);
-    const [deleteUserModalOpen, setDeleteUserModalOpen] = useRecoilState(
+    const [deleteUserModalVisible, setDeleteUserModalVisible] = useRecoilState(
         deleteUserModalVisibleState,
     );
-    const [modifyUserModalOpen, setmodifyUserModalOpen] = useRecoilState(
+    const [modifyUserModalVisible, setModifyUserModalVisible] = useRecoilState(
         modifyUserModalVisibleState,
+    );
+    const [deleteRoomModalVisible, setDeleteRoomModalVisible] = useRecoilState(
+        deleteRoomModalVisibleState,
+    );
+    const [modifyRoomModalVisible, setModifyRoomModalVisible] = useRecoilState(
+        modifyRoomModalVisibleState,
     );
 
     return (
@@ -78,8 +92,8 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                         {header.map((value) => {
                             return <td key={value}>{value}</td>;
                         })}
-                        <td>-</td>
-                        <td>-</td>
+                        <td className='modify'>-</td>
+                        <td className='trash'>-</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,52 +106,63 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                             return (
                                 <tr key={idx}>
                                     {Object.values(info).map((value: string | number) => {
-                                        return (
+                                        return adminPage === 'users' ? (
                                             <td key={value}>
                                                 {typeof value === 'number'
                                                     ? groups[value].groupName
                                                     : value}
                                             </td>
+                                        ) : (
+                                            typeof value === 'string' &&
+                                                (value[0] === '#' ? (
+                                                    <td key={value} style={{ width: '10%' }}>
+                                                        <RoomColor backgroundColor={value} />
+                                                    </td>
+                                                ) : (
+                                                    <td key={value} style={{ fontWeight: '600' }}>
+                                                        {value}
+                                                    </td>
+                                                ))
                                         );
                                     })}
-                                    <td key='modify'>
+                                    <td className='modify' key='modify' style={{ width: '6%' }}>
                                         <BiPencil
                                             onClick={() => {
                                                 if (adminPage === 'users') {
-                                                    setmodifyUserModalOpen((prev) => ({
-                                                        ...prev,
+                                                    setModifyUserModalVisible({
+                                                        visible: !modifyUserModalVisible.visible,
                                                         modifyUser: info as userType,
-                                                    }));
+                                                    });
+                                                } else {
+                                                    setModifyRoomModalVisible({
+                                                        visible: !modifyRoomModalVisible.visible,
+                                                        modifyRoom: info as roomType,
+                                                    });
                                                 }
-                                                setmodifyUserModalOpen((prev) => ({
-                                                    ...prev,
-                                                    visible: !modifyUserModalOpen.visible,
-                                                }));
-
-                                                console.log(info);
                                             }}
-                                            size={20}
-                                            color='grey'
+                                            size={21}
+                                            color={theme.cancelBtnColor}
                                         />
                                     </td>
-                                    <td key='trash'>
+                                    <td key='trash' className='trash' style={{ width: '6%' }}>
                                         <VscTrash
                                             onClick={() => {
                                                 /* TODO: 백으로 data 넘겨서 삭제 */
                                                 if (adminPage === 'users') {
-                                                    setDeleteUserModalOpen((prev) => ({
-                                                        ...prev,
+                                                    setDeleteUserModalVisible({
+                                                        visible: !deleteUserModalVisible.visible,
                                                         deleteUser: info as userType,
-                                                    }));
-                                                    console.log(info);
+                                                    });
+                                                } else {
+                                                    setDeleteRoomModalVisible({
+                                                        visible: !deleteRoomModalVisible.visible,
+                                                        deleteRoom: info as roomType,
+                                                    });
                                                 }
-                                                setDeleteUserModalOpen((prev) => ({
-                                                    ...prev,
-                                                    visible: !deleteUserModalOpen.visible,
-                                                }));
+                                                console.log(info);
                                             }}
-                                            size={20}
-                                            color='grey'
+                                            size={21}
+                                            color={theme.cancelBtnColor}
                                         />
                                     </td>
                                 </tr>

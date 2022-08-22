@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable react/jsx-boolean-value */
-import React, { useState } from 'react';
+import React from 'react';
 import { useRecoilState } from 'recoil';
 import {
     GoogleLogin,
@@ -9,7 +9,6 @@ import {
     GoogleLoginResponseOffline,
 } from '@leecheuk/react-google-login';
 import GoogleButton from 'react-google-button';
-import Input from '../atoms/input';
 import Text from '../atoms/text';
 import {
     signUpModalVisibleState,
@@ -22,15 +21,12 @@ import { users } from '../../temp_db';
 import theme from '../../styles/theme';
 import CenteredModal from './centered_modal';
 import FlexColumn from '../molecules/flex_column';
-import FlexRow from '../molecules/flex_row';
 import ModalCloseButton from '../molecules/modal_close_button';
 
 const LoginModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
-    const [keepLogIn, setKeepLogIn] = useState<boolean>(false);
     const [login, setLogin] = useRecoilState(loginState);
     const [isAdmin, setIsAdmin] = useRecoilState(isAdminState);
 
@@ -49,12 +45,12 @@ const LoginModal: React.FC = () => {
         if (isMember) {
             setLogin(!login);
             if (role === 'admin') {
+                localStorage.setItem('admin', 'true');
+                console.log(isAdmin);
                 setIsAdmin(!isAdmin);
             }
 
-            if (keepLogIn) {
-                localStorage.setItem('token', token);
-            }
+            localStorage.setItem('token', token);
         } else {
             alert('LUCETBLOCK의 회원이 아닙니다');
         }
@@ -77,7 +73,7 @@ const LoginModal: React.FC = () => {
     };
 
     return (
-        <CenteredModal width={28} height={28}>
+        <CenteredModal width={28} height={25}>
             <ModalCloseButton state={logInModalVisibleState} />
             <FlexColumn>
                 <ModalHeader>로그인</ModalHeader>
@@ -89,7 +85,7 @@ const LoginModal: React.FC = () => {
                             console.log(error);
                         }}
                         pluginName='googleLogin'
-                        isSignedIn={keepLogIn}
+                        isSignedIn={false}
                         render={(props) => (
                             <GoogleButton
                                 style={{
@@ -104,18 +100,7 @@ const LoginModal: React.FC = () => {
                         )}
                     />
 
-                    <FlexRow needMargin>
-                        <Input
-                            type='checkbox'
-                            onChange={(e) => {
-                                setKeepLogIn(e.target.checked);
-                            }}
-                        />
-                        <Text color={theme.inputColor} fontSize={0.7}>
-                            로그인 상태 유지할래요.
-                        </Text>
-                    </FlexRow>
-                    <div style={{ marginTop: '6rem' }}>
+                    <div style={{ marginTop: '6rem', paddingBottom: '2rem' }}>
                         <Text fontSize={0.7}>아직 회원이 아니신가요? </Text>
                         <Text
                             fontSize={0.7}
