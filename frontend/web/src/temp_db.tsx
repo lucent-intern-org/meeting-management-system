@@ -45,21 +45,21 @@ export const rooms = [
 
 export const users = [
     {
-        slackId: 'rjsduf0503@gmail.com',
+        slackId: 'U03N0QNP3PW',
         name: '류건열',
         email: 'rjsduf0503@gmail.com',
         groupId: 1,
         role: 'admin',
     },
     {
-        slackId: 'leecr1215@gmail.com',
+        slackId: 'U03MYCGGAQJ',
         name: '이채림',
         email: 'leecr1215@gmail.com',
         groupId: 2,
-        role: 'user',
+        role: 'admin',
     },
     {
-        slackId: 'rlawogns@gmail.com',
+        slackId: 'U03MVEYQ421',
         name: '김재훈',
         email: 'rlawogns@gmail.com',
         groupId: 3,

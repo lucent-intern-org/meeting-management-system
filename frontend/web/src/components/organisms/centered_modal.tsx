@@ -16,27 +16,33 @@ const Background = styled.div`
     z-index: 10000;
 `;
 
-const Container = styled.div<{ width: number; height: number }>`
+const Container = styled.div<{ width: number; height: number; borderRadius: number }>`
     width: ${(props) => `${props.width}rem`};
     height: ${(props) => `${props.height}rem`};
     position: relative;
-    border-radius: 2%;
+    border-radius: ${(props) => `${props.borderRadius}%`};
     text-align: center;
     padding: 2vh;
     background-color: white;
     box-shadow: 1px 1px 13px #4a4848;
 `;
 
-type centeredModalProps = { children: ReactNode; width: number; height: number };
+type centeredModalProps = {
+    children: ReactNode;
+    width: number;
+    height: number;
+    borderRadius?: number;
+};
 
 const CenteredModal: React.FC<centeredModalProps> = ({
     children,
     width,
     height,
+    borderRadius = 2,
 }: centeredModalProps) => {
     return ReactDOM.createPortal(
         <Background>
-            <Container width={width} height={height}>
+            <Container width={width} height={height} borderRadius={borderRadius}>
                 {children}
             </Container>
         </Background>,

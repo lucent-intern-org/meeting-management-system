@@ -19,7 +19,7 @@ const ModalCloseButton: React.FC<modalCloseButtonProps> = ({ state }: modalClose
                 strokeWidth={50}
                 size={40}
                 color={theme.inputColor}
-                cursor='pointer'
+                style={{ cursor: 'pointer' }}
             />
         </FlexRow>
     );
