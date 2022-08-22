@@ -1,19 +1,19 @@
 import React from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { useRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 import { dayDetailModalState } from '../../atom';
 import { getFullDate } from '../../utils/date';
 import Text from '../atoms/text';
 import FlexRow from '../molecules/flex_row';
 
 const DayDetailModalHeader: React.FC = () => {
-    const [dayDetailModal, setDayDetailModal] = useRecoilState(dayDetailModalState);
+    const resetState = useResetRecoilState(dayDetailModalState);
     const date = getFullDate();
     return (
         <FlexRow>
             <IoMdClose
                 onClick={() => {
-                    setDayDetailModal({ visible: !dayDetailModal.visible, date: new Date() });
+                    resetState();
                 }}
                 size={50}
                 style={{ cursor: 'pointer' }}

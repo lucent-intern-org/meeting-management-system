@@ -2,24 +2,23 @@ export const meetings = [
     {
         meetingId: 0,
         roomId: 0,
-        date: new Date('Wed Aug 10 2022 00:00:00 GMT+0900'),
-
-        startTime: '08:00',
-        endTime: '09:00',
+        date: '2022-08-19',
+        startTime: '17:10',
+        endTime: '18:00',
         title: 'Dummy 1 title',
         content: 'Dummy 1 content',
-        repeat: 'daily',
+        repeat: '매일 반복',
     },
     {
         meetingId: 1,
         roomId: 0,
-        date: new Date('Wed Aug 10 2022 00:00:00 GMT+0900'),
+        date: '2022-08-19',
         startTime: '08:00',
         endTime: '09:00',
         title: 'Dummy 2 title',
         content:
             'Dummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 contentDummy 1 content',
-        repeat: 'daily',
+        repeat: '매일 반복',
     },
 ];
 

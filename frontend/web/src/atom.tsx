@@ -4,13 +4,31 @@ export const dayDetailModalState = atom({
     key: 'dayDetailModal',
     default: {
         visible: false,
-        date: new Date(),
+        date: '0000-00-00',
     },
 });
 
 export const meetingAddModalVisibleState = atom({
     key: 'meetingAddModalVisible',
     default: false,
+});
+
+export const meetingModifyModalState = atom({
+    key: 'meetingModifyModal',
+    default: {
+        visible: false,
+        meeting: {
+            title: '',
+            date: '0000-00-00',
+            startTime: '00:00',
+            endTime: '00:00',
+            repeat: 'none',
+            content: '',
+            meetingId: -9999,
+            roomId: -9999,
+        },
+        participants: [{ slackId: '', name: '', email: '', groupId: -9999, role: '' }],
+    },
 });
 
 export const signUpModalVisibleState = atom({

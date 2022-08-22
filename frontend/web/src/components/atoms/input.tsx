@@ -7,9 +7,9 @@ type inputProps = {
     width?: string;
     letterSpacing?: string | number;
     marginTop?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     min?: string;
     disabled?: boolean;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const Input: React.FC<inputProps> = ({
     type = 'text',
@@ -19,9 +19,9 @@ const Input: React.FC<inputProps> = ({
     width = '100%',
     letterSpacing = 'normal',
     marginTop = '0vh',
-    onChange,
     min,
     disabled = false,
+    onChange,
 }: inputProps) => {
     switch (type) {
         case 'text':

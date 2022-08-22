@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
@@ -61,7 +61,7 @@ const SignupModal: React.FC = () => {
     };
     return (
         <CenteredModal width={34} height={34}>
-            <ModalCloseButton setState={signUpModalVisibleState} />
+            <ModalCloseButton state={signUpModalVisibleState} />
             <FlexColumn>
                 <ModalHeader>회원가입</ModalHeader>
                 <FlexColumn justifyContent='center'>

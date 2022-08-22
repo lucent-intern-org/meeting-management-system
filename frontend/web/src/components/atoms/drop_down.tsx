@@ -26,6 +26,7 @@ type dropDownProps = {
     width?: number;
     id?: string;
     disabled?: boolean;
+    defaultValue?: string;
     onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
@@ -38,6 +39,7 @@ const DropDown: React.FC<dropDownProps> = ({
     width,
     id,
     disabled = false,
+    defaultValue = 'default',
     onChange,
 }: dropDownProps) => {
     return (
@@ -48,8 +50,9 @@ const DropDown: React.FC<dropDownProps> = ({
             width={width}
             onChange={onChange}
             id={id}
-            defaultValue='default'
+            defaultValue={defaultValue}
             disabled={disabled}
+            key={defaultValue}
         >
             <option value='default' hidden style={{ color: `${theme.inputColor}` }}>
                 {placeholder}

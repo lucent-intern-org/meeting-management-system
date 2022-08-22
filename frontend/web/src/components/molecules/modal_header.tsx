@@ -18,4 +18,4 @@ const ModalHeader: React.FC<modalHeaderProps> = ({ children }: modalHeaderProps)
         </FlexColumn>
     );
 };
-export default ModalHeader;
+export default React.memo(ModalHeader);

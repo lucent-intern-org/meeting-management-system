@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { AiOutlineCalendar, AiOutlineClockCircle } from 'react-icons/ai';
 import { BsPeople } from 'react-icons/bs';
 import { FiRepeat } from 'react-icons/fi';
@@ -10,10 +10,10 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import { IoMdClose } from 'react-icons/io';
 import { IoBusinessOutline } from 'react-icons/io5';
 import styled from 'styled-components';
-import { meetingAddModalVisibleState, userState } from '../../atom';
+import { meetingAddModalVisibleState, meetingModifyModalState, userState } from '../../atom';
 import theme from '../../styles/theme';
 import { groups, rooms, users } from '../../temp_db';
-import { meetingType, userType } from '../../types';
+import { meetingInputType, userType } from '../../types';
 import { minsToStr, strToMins, toStringDateByFormatting } from '../../utils/date';
 import CustomButton from '../atoms/custom_button';
 import DropDown from '../atoms/drop_down';
@@ -178,36 +178,59 @@ const AutoSearchData = styled.li`
     }
 `;
 
-const MeetingAddModal: React.FC = () => {
+const MeetingModal: React.FC = () => {
     if (groups[0].groupName !== 'All') groups.unshift({ groupName: 'All', groupId: -1 });
-    const [meetingAddModalVisible, setMeetingAddModalVisible] = useRecoilState(
-        meetingAddModalVisibleState,
-    );
+    const meetingAddModalVisible = useRecoilValue(meetingAddModalVisibleState);
+    const resetMeetingAddModal = useResetRecoilState(meetingAddModalVisibleState);
+    const meetingModifyModal = useRecoilValue(meetingModifyModalState);
+    const resetMeetingModifyModal = useResetRecoilState(meetingModifyModalState);
+
     const user = useRecoilValue(userState);
     const today = new Date();
     const minDate = toStringDateByFormatting(today);
     const minTime = today.toLocaleTimeString('en-US', { hour12: false }).substring(0, 5);
     const [validation, setValidation] = React.useState(false);
-    const [input, setInput] = React.useState<meetingType>({
-        title: '',
-        date: minDate,
-        startTime: minTime,
-        endTime: minTime,
-        repeat: 'none',
-        content: '',
-        participants: [],
-        room: '',
-        participateGroups: [],
-        keyword: '',
-        keyItems: [],
-    });
-    const [currentUser, setCurrentUser] = React.useState<userType>({
-        slackId: '',
-        name: '',
-        email: '',
-        groupId: -1000,
-        role: '',
-    });
+    const [keyword, setKeyword] = React.useState<string>('');
+    const [keyItems, setKeyItems] = React.useState<userType[]>([]);
+    const [input, setInput] = React.useState<meetingInputType>(
+        meetingAddModalVisible
+            ? {
+                  title: '',
+                  date: minDate,
+                  startTime: minTime,
+                  endTime:
+                      minsToStr(strToMins(minTime) + strToMins('01:00')) > '24:00'
+                          ? '23:59'
+                          : minsToStr(strToMins(minTime) + strToMins('01:00')),
+                  repeat: '반복 없음',
+                  content: '',
+                  participants: [
+                      users.find((u) => {
+                          return u.email === user.email;
+                      }) as userType,
+                  ],
+                  room: '',
+                  participateGroups: [],
+              }
+            : {
+                  title: meetingModifyModal.meeting.title,
+                  date: meetingModifyModal.meeting.date,
+                  startTime: meetingModifyModal.meeting.startTime,
+                  endTime: meetingModifyModal.meeting.endTime,
+                  repeat: meetingModifyModal.meeting.repeat,
+                  content: meetingModifyModal.meeting.content,
+                  participants: [
+                      users.find((u) => {
+                          return u.email === user.email;
+                      }) as userType,
+                      ...meetingModifyModal.participants.filter((p) => {
+                          return p.email !== user.email;
+                      }),
+                  ],
+                  room: rooms[meetingModifyModal.meeting.roomId].roomName,
+                  participateGroups: [],
+              },
+    );
 
     const handleChangeData = (key: string, value: string | string[] | userType[]) => {
         setInput((prev) => ({ ...prev, [key]: value }));
@@ -219,47 +242,73 @@ const MeetingAddModal: React.FC = () => {
             : users.filter((u) => {
                   if (input.participants.includes(u)) return;
                   return (
-                      u.name.includes(input.keyword) &&
-                      !input.participateGroups.includes(groups[u.groupId].groupName) &&
-                      u.slackId !== currentUser.slackId
+                      u.name.includes(keyword) &&
+                      !input.participateGroups.includes(groups[u.groupId + 1].groupName)
                   );
               });
-        handleChangeData('keyItems', filteredUsers);
+        setKeyItems(filteredUsers);
     };
 
     React.useEffect(() => {
         const debounce = setTimeout(() => {
-            if (input.keyword) updateData();
+            if (keyword) updateData();
         }, 200);
         return () => {
             clearTimeout(debounce);
         };
-    }, [input.keyword]);
-
-    React.useEffect(() => {
-        setCurrentUser(
-            users.find((u) => {
-                return u.email === user.email;
-            }) as userType,
-        );
-    }, []);
+    }, [keyword]);
 
     const validateSubmit = () => {
-        return !(
+        const participateUsers: userType[] = [];
+        if (input.participateGroups.length > 0) {
+            if (input.participateGroups.includes('All')) {
+                users.map((u) => {
+                    participateUsers.push(u);
+                });
+            } else {
+                input.participateGroups.map((pg) => {
+                    users
+                        .filter((u) => {
+                            return groups[u.groupId + 1].groupName === pg;
+                        })
+                        .map((pu) => {
+                            participateUsers.push(pu);
+                        });
+                });
+            }
+        }
+        input.participants.map((p) => participateUsers.push(p));
+
+        const defaultValidation =
             input.title.length >= 2 &&
             input.title.length <= 20 &&
             input.content.length >= 2 &&
             input.content.length <= 500 &&
-            (input.participants.length > 0 || input.participateGroups.length > 0) &&
+            participateUsers.length > 0 &&
             input.room !== '' &&
             input.date !== '' &&
             input.startTime !== '' &&
-            input.endTime !== ''
-        );
+            input.endTime !== '';
+        return meetingAddModalVisible
+            ? defaultValidation
+            : defaultValidation &&
+                  !(
+                      input.title === meetingModifyModal.meeting.title &&
+                      input.date === meetingModifyModal.meeting.date &&
+                      input.startTime === meetingModifyModal.meeting.startTime &&
+                      input.endTime === meetingModifyModal.meeting.endTime &&
+                      input.repeat === meetingModifyModal.meeting.repeat &&
+                      input.room === rooms[meetingModifyModal.meeting.roomId].roomName &&
+                      input.content === meetingModifyModal.meeting.content &&
+                      !meetingModifyModal.participants
+                          .map((p) => {
+                              return participateUsers.includes(p);
+                          })
+                          .includes(false)
+                  );
     };
 
     React.useEffect(() => {
-        console.log(111);
         const debounce = setTimeout(() => {
             setValidation(validateSubmit());
         }, 200);
@@ -270,7 +319,11 @@ const MeetingAddModal: React.FC = () => {
 
     return (
         <CenteredModal width={35} height={37}>
-            <ModalCloseButton setState={meetingAddModalVisibleState} />
+            <ModalCloseButton
+                state={
+                    meetingAddModalVisible ? meetingAddModalVisibleState : meetingModifyModalState
+                }
+            />
             <Container>
                 <FlexColumn>
                     <Input
@@ -290,7 +343,6 @@ const MeetingAddModal: React.FC = () => {
                                 type='date'
                                 fontSize={1.1}
                                 value={input.date}
-                                min={minDate}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeData('date', e.target.value);
                                 }}
@@ -305,15 +357,10 @@ const MeetingAddModal: React.FC = () => {
                                     type='time'
                                     fontSize={1.1}
                                     value={input.startTime}
-                                    min={minTime}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        if (e.target.value < minTime) {
-                                            handleChangeData('startTime', minTime);
-                                        } else {
-                                            handleChangeData('startTime', e.target.value);
-                                            if (e.target.value > input.endTime)
-                                                handleChangeData('endTime', e.target.value);
-                                        }
+                                        handleChangeData('startTime', e.target.value);
+                                        if (e.target.value > input.endTime)
+                                            handleChangeData('endTime', e.target.value);
                                     }}
                                 />
                             </label>
@@ -414,48 +461,48 @@ const MeetingAddModal: React.FC = () => {
                         <RepeatContainer>
                             <input
                                 type='radio'
-                                id='none'
+                                id='반복 없음'
                                 name='repeat'
-                                value='none'
-                                checked={input.repeat === 'none'}
+                                value='반복 없음'
+                                checked={input.repeat === '반복 없음'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeData('repeat', e.target.value);
                                 }}
                             />
-                            <label htmlFor='none'>없음</label>
+                            <label htmlFor='반복 없음'>없음</label>
                             <input
                                 type='radio'
-                                id='daily'
+                                id='매일 반복'
                                 name='repeat'
-                                value='daily'
-                                checked={input.repeat === 'daily'}
+                                value='매일 반복'
+                                checked={input.repeat === '매일 반복'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeData('repeat', e.target.value);
                                 }}
                             />
-                            <label htmlFor='daily'>매일</label>
+                            <label htmlFor='매일 반복'>매일</label>
                             <input
                                 type='radio'
-                                id='weekly'
+                                id='매주 반복'
                                 name='repeat'
-                                value='weekly'
-                                checked={input.repeat === 'weekly'}
+                                value='매주 반복'
+                                checked={input.repeat === '매주 반복'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeData('repeat', e.target.value);
                                 }}
                             />
-                            <label htmlFor='weekly'>매주</label>
+                            <label htmlFor='매주 반복'>매주</label>
                             <input
                                 type='radio'
-                                id='monthly'
+                                id='매월 반복'
                                 name='repeat'
-                                value='monthly'
-                                checked={input.repeat === 'monthly'}
+                                value='매월 반복'
+                                checked={input.repeat === '매월 반복'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     handleChangeData('repeat', e.target.value);
                                 }}
                             />
-                            <label htmlFor='monthly'>매월</label>
+                            <label htmlFor='매월 반복'>매월</label>
                         </RepeatContainer>
                     </InputContainer>
                     <div style={{ width: '100%' }}>
@@ -468,26 +515,26 @@ const MeetingAddModal: React.FC = () => {
                                         placeholder='참석자'
                                         letterSpacing={0.15}
                                         fontSize={1}
-                                        value={input.keyword}
+                                        value={keyword}
                                         disabled={input.participateGroups.includes('All')}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            handleChangeData('keyword', e.currentTarget.value);
+                                            setKeyword(e.currentTarget.value);
                                         }}
                                     />
-                                    {input.keyItems.length > 0 && input.keyword && (
+                                    {keyItems.length > 0 && keyword && (
                                         <AutoSearchContainer>
                                             <AutoSearchWrap>
-                                                {input.keyItems.map((search) => {
+                                                {keyItems.map((search) => {
                                                     return (
                                                         <AutoSearchData
                                                             key={search.slackId}
                                                             onClick={() => {
-                                                                handleChangeData('keyword', '');
+                                                                setKeyword('');
                                                                 handleChangeData('participants', [
                                                                     ...input.participants,
                                                                     search,
                                                                 ]);
-                                                                handleChangeData('keyItems', []);
+                                                                setKeyItems([]);
                                                             }}
                                                         >
                                                             <a href='#'>{search.name}</a>
@@ -514,7 +561,7 @@ const MeetingAddModal: React.FC = () => {
                                                 'participants',
                                                 input.participants.filter((p) => {
                                                     return (
-                                                        groups[p.groupId].groupName !==
+                                                        groups[p.groupId + 1].groupName !==
                                                         e.target.value
                                                     );
                                                 }),
@@ -540,14 +587,6 @@ const MeetingAddModal: React.FC = () => {
                         <InputContainer>
                             <div style={{ marginRight: '3.5rem' }} />
                             <ParticipantsContainer>
-                                {currentUser && (
-                                    <ParticipantContainer key={currentUser.slackId}>
-                                        <Text letterSpacing={0.01} fontSize={0.8}>
-                                            {currentUser.name}
-                                        </Text>
-                                    </ParticipantContainer>
-                                )}
-
                                 {input.participants.map((p) => {
                                     return (
                                         <ParticipantContainer key={p.slackId}>
@@ -606,6 +645,7 @@ const MeetingAddModal: React.FC = () => {
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                 handleChangeData('room', e.target.value);
                             }}
+                            defaultValue={input.room}
                             placeholder='회의실'
                             letterSpacing={0.15}
                             fontSize={1}
@@ -644,14 +684,56 @@ const MeetingAddModal: React.FC = () => {
                                 width={40}
                                 verticalPadding={0.5}
                                 marginRight={0}
-                                bgColor={!validation ? theme.submitBtnColor : theme.cancelBtnColor}
-                                disabled={validation}
+                                bgColor={validation ? theme.submitBtnColor : theme.cancelBtnColor}
+                                disabled={!validation}
                                 onClick={() => {
                                     // todo: 회의실 예약 api call
-                                    setMeetingAddModalVisible(!meetingAddModalVisible);
+                                    const slackIds = ['team@lucentblock.com'];
+                                    if (input.participateGroups.length > 0) {
+                                        if (input.participateGroups.includes('All')) {
+                                            users.map((u) => {
+                                                slackIds.push(u.slackId);
+                                            });
+                                        } else {
+                                            input.participateGroups.map((pg) => {
+                                                users
+                                                    .filter((u) => {
+                                                        return (
+                                                            groups[u.groupId + 1].groupName === pg
+                                                        );
+                                                    })
+                                                    .map((pu) => {
+                                                        slackIds.push(pu.slackId);
+                                                    });
+                                            });
+                                        }
+                                    }
+                                    input.participants.map((p) => slackIds.push(p.slackId));
+                                    const roomId = rooms.find((r) => {
+                                        return r.roomName === input.room;
+                                    })?.roomId;
+                                    const data = {
+                                        roomId: roomId,
+                                        date: input.date,
+                                        startTime: input.startTime,
+                                        endTime: input.endTime,
+                                        title: input.title,
+                                        content: input.content,
+                                        repeat: input.repeat,
+                                        slackId: slackIds,
+                                    };
+                                    if (meetingModifyModal.visible) {
+                                        Object.assign(data, {
+                                            meetingId: meetingModifyModal.meeting.meetingId,
+                                        });
+                                    }
+                                    console.log(data);
+                                    return meetingAddModalVisible
+                                        ? resetMeetingAddModal()
+                                        : resetMeetingModifyModal();
                                 }}
                             >
-                                예약
+                                {meetingAddModalVisible ? '추가' : '수정'}
                             </CustomButton>
                             <CustomButton
                                 fontSize={1.2}
@@ -661,7 +743,9 @@ const MeetingAddModal: React.FC = () => {
                                 marginRight={0}
                                 bgColor={theme.cancelBtnColor}
                                 onClick={() => {
-                                    setMeetingAddModalVisible(!meetingAddModalVisible);
+                                    return meetingAddModalVisible
+                                        ? resetMeetingAddModal()
+                                        : resetMeetingModifyModal();
                                 }}
                             >
                                 취소
@@ -674,4 +758,4 @@ const MeetingAddModal: React.FC = () => {
     );
 };
 
-export default MeetingAddModal;
+export default MeetingModal;

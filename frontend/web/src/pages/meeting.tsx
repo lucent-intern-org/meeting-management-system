@@ -2,9 +2,9 @@
 import { DateClickArg } from '@fullcalendar/interaction';
 import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dayDetailModalState, meetingAddModalVisibleState } from '../atom';
+import { dayDetailModalState, meetingAddModalVisibleState, userState } from '../atom';
 import Calendar from '../templates/calendar';
 import { meetings, rooms } from '../temp_db';
 import { toStringDateByFormatting } from '../utils/date';
@@ -18,6 +18,7 @@ const Meeting: React.FC = () => {
     const [meetingAddModalVisible, setMeetingAddModalVisible] = useRecoilState(
         meetingAddModalVisibleState,
     );
+    const user = useRecoilValue(userState);
 
     return (
         <Container>
@@ -26,7 +27,9 @@ const Meeting: React.FC = () => {
                     addMeeting: {
                         text: '미팅 추가',
                         click: () => {
-                            setMeetingAddModalVisible(!meetingAddModalVisible);
+                            return user.name.length > 0 && user.email.length > 0
+                                ? setMeetingAddModalVisible(!meetingAddModalVisible)
+                                : alert('로그인이 필요합니다.');
                         },
                     },
                 }}
@@ -39,17 +42,15 @@ const Meeting: React.FC = () => {
                     return info.jsEvent.type === 'mouseup'
                         ? setDayDetailModal({
                               visible: !dayDetailModal.visible,
-                              date: (info as DateClickArg).date,
+                              date: toStringDateByFormatting((info as DateClickArg).date),
                           })
                         : setDayDetailModal({
                               visible: !dayDetailModal.visible,
-                              date: new Date(
-                                  (info as EventClickArg).event.start!.setHours(0, 0, 0, 0),
-                              ),
+                              date: toStringDateByFormatting((info as EventClickArg).event.start!),
                           });
                 }}
                 events={meetings.map((meeting) => {
-                    const meetingDate = toStringDateByFormatting(meeting.date);
+                    const meetingDate = meeting.date;
                     return {
                         title: meeting.title,
                         start: `${meetingDate}T${meeting.startTime}`,

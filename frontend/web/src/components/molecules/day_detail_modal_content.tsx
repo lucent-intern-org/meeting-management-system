@@ -1,6 +1,9 @@
 import React from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { meetingModifyModalState, userState } from '../../atom';
 import { participants, rooms, users } from '../../temp_db';
+import { meetingType, userType } from '../../types';
 import Text from '../atoms/text';
 import FlexRow from './flex_row';
 
@@ -14,24 +17,27 @@ const ContentContainer = styled.div`
     padding-top: 0.5rem;
 `;
 
-type Meeting = {
-    meetingId: number;
-    roomId: number;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    title: string;
-    content: string;
-    repeat: string;
-};
-
 type dayDetailModalContentProps = {
-    meeting: Meeting;
+    meeting: meetingType;
 };
 
 const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
     meeting,
 }: dayDetailModalContentProps) => {
+    const [meetingModifyModal, setMeetingModifyModal] = useRecoilState(meetingModifyModalState);
+    const [pu, setPu] = React.useState<userType[]>([]);
+    const user = useRecoilValue(userState);
+
+    React.useEffect(() => {
+        setPu(
+            participants.map((p) => {
+                return users.find((u) => {
+                    return p.meetingId === meeting.meetingId && u.slackId === p.slackId;
+                });
+            }) as userType[],
+        );
+    }, [meeting]);
+
     return (
         <Container>
             <FlexRow>
@@ -48,18 +54,15 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
             </FlexRow>
             <FlexRow>
                 <div>
-                    {participants.map((p) => {
-                        const pu = users.find((u) => {
-                            return p.meetingId === meeting.meetingId && u.slackId === p.slackId;
-                        });
-                        if (pu !== undefined) {
+                    {pu[0] &&
+                        pu.length > 0 &&
+                        pu.map((p) => {
                             return (
-                                <Text fontSize={0.8} fontWeight={400} key={pu?.slackId}>
-                                    {`${pu?.name} `}
+                                <Text fontSize={0.8} fontWeight={400} key={p.slackId}>
+                                    {`${p.name} `}
                                 </Text>
                             );
-                        }
-                    })}
+                        })}
                 </div>
                 <Text fontSize={0.8} fontWeight={300}>
                     {meeting.repeat}
@@ -69,10 +72,29 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
             <FlexRow>
                 <div />
                 <div>
-                    <Text fontSize={0.8} fontWeight={300} onClick={() => {}}>
+                    <Text
+                        fontSize={0.8}
+                        fontWeight={300}
+                        onClick={() => {
+                            return user.email.length > 0 && user.name.length > 0
+                                ? setMeetingModifyModal({
+                                      visible: !meetingModifyModal.visible,
+                                      meeting: meeting,
+                                      participants: pu,
+                                  })
+                                : alert('로그인이 필요합니다.');
+                        }}
+                    >
                         수정
                     </Text>
-                    <Text fontSize={0.8} fontWeight={300} onClick={() => {}}>
+                    <Text
+                        fontSize={0.8}
+                        fontWeight={300}
+                        onClick={() => {
+                            console.log(meeting);
+                            console.log(pu);
+                        }}
+                    >
                         삭제
                     </Text>
                 </div>
@@ -81,4 +103,4 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
     );
 };
 
-export default DayDetailModalContent;
+export default React.memo(DayDetailModalContent);

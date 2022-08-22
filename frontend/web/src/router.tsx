@@ -6,25 +6,27 @@ import {
     signUpModalVisibleState,
     logInModalVisibleState,
     meetingAddModalVisibleState,
+    meetingModifyModalState,
 } from './atom';
 
 import Header from './components/organisms/header';
 import SignupModal from './components/organisms/signup_modal';
 import Meeting from './pages/meeting';
 import LoginModal from './components/organisms/login_modal';
-import MeetingAddModal from './components/organisms/meeting_add_modal';
+import MeetingModal from './components/organisms/meeting_modal';
 
 const Router: React.FC = () => {
     const signUpModalOpen = useRecoilValue(signUpModalVisibleState);
     const loginModalOpen = useRecoilValue(logInModalVisibleState);
     const meetingAddModalVisible = useRecoilValue(meetingAddModalVisibleState);
+    const meetingModifyModalVisible = useRecoilValue(meetingModifyModalState).visible;
     return (
         <BrowserRouter>
             <DayDetailModal />
             <Header />
             {signUpModalOpen && <SignupModal />}
             {loginModalOpen && <LoginModal />}
-            {meetingAddModalVisible && <MeetingAddModal />}
+            {(meetingAddModalVisible || meetingModifyModalVisible) && <MeetingModal />}
             <Routes>
                 <Route path='/' element={<Meeting />} />
             </Routes>
