@@ -688,7 +688,7 @@ const MeetingModal: React.FC = () => {
                                 disabled={!validation}
                                 onClick={() => {
                                     // todo: 회의실 예약 api call
-                                    const slackIds = ['team@lucentblock.com'];
+                                    const slackIds: string[] = [];
                                     if (input.participateGroups.length > 0) {
                                         if (input.participateGroups.includes('All')) {
                                             users.map((u) => {
