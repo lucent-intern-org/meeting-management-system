@@ -1,7 +1,7 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { meetingModifyModalState, userState } from '../../atom';
+import { meetingModifyModalState } from '../../atom';
 import { participants, rooms, users } from '../../temp_db';
 import { meetingType, userType } from '../../types';
 import Text from '../atoms/text';
@@ -26,7 +26,7 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
 }: dayDetailModalContentProps) => {
     const [meetingModifyModal, setMeetingModifyModal] = useRecoilState(meetingModifyModalState);
     const [pu, setPu] = React.useState<userType[]>([]);
-    const user = useRecoilValue(userState);
+    const user = { email: localStorage.getItem('email'), name: localStorage.getItem('name') };
 
     React.useEffect(() => {
         setPu(
@@ -36,7 +36,7 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
                 });
             }) as userType[],
         );
-    }, [meeting]);
+    }, [meeting.meetingId]);
 
     return (
         <Container>
@@ -76,7 +76,7 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
                         fontSize={0.8}
                         fontWeight={300}
                         onClick={() => {
-                            return user.email.length > 0 && user.name.length > 0
+                            return user.email && user.name
                                 ? setMeetingModifyModal({
                                       visible: !meetingModifyModal.visible,
                                       meeting: meeting,

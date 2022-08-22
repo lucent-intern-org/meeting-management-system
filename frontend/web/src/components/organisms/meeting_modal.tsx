@@ -10,7 +10,7 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import { IoMdClose } from 'react-icons/io';
 import { IoBusinessOutline } from 'react-icons/io5';
 import styled from 'styled-components';
-import { meetingAddModalVisibleState, meetingModifyModalState, userState } from '../../atom';
+import { meetingAddModalVisibleState, meetingModifyModalState } from '../../atom';
 import theme from '../../styles/theme';
 import { groups, rooms, users } from '../../temp_db';
 import { meetingInputType, userType } from '../../types';
@@ -185,7 +185,7 @@ const MeetingModal: React.FC = () => {
     const meetingModifyModal = useRecoilValue(meetingModifyModalState);
     const resetMeetingModifyModal = useResetRecoilState(meetingModifyModalState);
 
-    const user = useRecoilValue(userState);
+    const user = { email: localStorage.getItem('email'), name: localStorage.getItem('name') };
     const today = new Date();
     const minDate = toStringDateByFormatting(today);
     const minTime = today.toLocaleTimeString('en-US', { hour12: false }).substring(0, 5);
@@ -206,7 +206,7 @@ const MeetingModal: React.FC = () => {
                   content: '',
                   participants: [
                       users.find((u) => {
-                          return u.email === user.email;
+                          return u.email === localStorage.getItem('email');
                       }) as userType,
                   ],
                   room: '',

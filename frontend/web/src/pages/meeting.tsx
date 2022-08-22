@@ -4,7 +4,7 @@ import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dayDetailModalState, meetingAddModalVisibleState, userState } from '../atom';
+import { dayDetailModalState, loginState, meetingAddModalVisibleState } from '../atom';
 import Calendar from '../templates/calendar';
 import { meetings, rooms } from '../temp_db';
 import { toStringDateByFormatting } from '../utils/date';
@@ -18,7 +18,7 @@ const Meeting: React.FC = () => {
     const [meetingAddModalVisible, setMeetingAddModalVisible] = useRecoilState(
         meetingAddModalVisibleState,
     );
-    const user = useRecoilValue(userState);
+    const isLogin = useRecoilValue(loginState);
 
     return (
         <Container>
@@ -27,7 +27,9 @@ const Meeting: React.FC = () => {
                     addMeeting: {
                         text: '미팅 추가',
                         click: () => {
-                            return user.name.length > 0 && user.email.length > 0
+                            return isLogin &&
+                                localStorage.getItem('name') &&
+                                localStorage.getItem('email')
                                 ? setMeetingAddModalVisible(!meetingAddModalVisible)
                                 : alert('로그인이 필요합니다.');
                         },

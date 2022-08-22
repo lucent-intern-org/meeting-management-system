@@ -49,14 +49,6 @@ export const userSignUpInfoState = atom({
     default: { slackId: '', name: '', email: '', groupId: -1000, role: '' },
 });
 
-export const userState = atom({
-    key: 'user',
-    default: {
-        email: '',
-        name: '',
-    },
-});
-
 export const loginState = atom({ key: 'login', default: false });
 
 export const isAdminState = atom({ key: 'isAdmin', default: false });

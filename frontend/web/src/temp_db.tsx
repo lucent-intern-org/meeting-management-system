@@ -25,15 +25,15 @@ export const meetings = [
 export const participants = [
     {
         meetingId: 0,
-        slackId: 'rjsduf0503@gmail.com',
+        slackId: 'U03N0QNP3PW',
     },
     {
         meetingId: 0,
-        slackId: 'leecr1215@gmail.com',
+        slackId: 'U03MYCGGAQJ',
     },
     {
         meetingId: 0,
-        slackId: 'rlawogns@gmail.com',
+        slackId: 'U03MVEYQ421',
     },
 ];
 
