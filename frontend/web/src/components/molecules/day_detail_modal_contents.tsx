@@ -15,7 +15,7 @@ const Container = styled.div`
 const DayDetailModalContents: React.FC = () => {
     const dayDetailModal = useRecoilValue(dayDetailModalState);
     const filteredMeeting = meetings.filter((meeting) => {
-        return meeting.date.getTime() === dayDetailModal.date.getTime();
+        return meeting.date === dayDetailModal.date;
     });
     return (
         <Container>

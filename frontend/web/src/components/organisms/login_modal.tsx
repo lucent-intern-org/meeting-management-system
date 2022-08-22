@@ -49,8 +49,9 @@ const LoginModal: React.FC = () => {
                 console.log(isAdmin);
                 setIsAdmin(!isAdmin);
             }
-
             localStorage.setItem('token', token);
+            localStorage.setItem('name', name);
+            localStorage.setItem('email', email);
         } else {
             alert('LUCETBLOCK의 회원이 아닙니다');
         }
