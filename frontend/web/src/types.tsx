@@ -16,8 +16,6 @@ export type meetingInputType = {
     participants: userType[];
     room: string;
     participateGroups: string[];
-    // keyword: string;
-    // keyItems: userType[];
 };
 
 export type meetingType = {
