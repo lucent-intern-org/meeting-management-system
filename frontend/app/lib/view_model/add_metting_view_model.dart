@@ -17,6 +17,10 @@ class AddMettingViewModel {
   List<String> participantUsers = [GoogleSignInApi.currentUser()!.displayName!];
   List<String> participantGroups = [];
   List<String> participantList = [];
+  Future<void> initFormModel() async {
+    await addMeetingModel.initData();
+  }
+
   void setParticipantList() {
     participantList = participantUsers + participantGroups;
   }
@@ -116,7 +120,7 @@ class AddMettingViewModel {
 
   bool addMeeting() {
     var meetingId = 6;
-    var roomId = addMeetingModel.roomList.indexOf(addMeetingModel.room);
+    var roomId = addMeetingModel.roomList.indexOf(addMeetingModel.room!);
     var date = addMeetingModel.date;
     var startTime = addMeetingModel.start;
     var endTime = addMeetingModel.end;
