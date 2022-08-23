@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { meetingModifyModalState } from '../../atom';
+import { meetingDeleteModalState, meetingModifyModalState } from '../../atom';
 import { participants, rooms, users } from '../../temp_db';
 import { meetingType, userType } from '../../types';
 import Text from '../atoms/text';
@@ -25,6 +25,7 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
     meeting,
 }: dayDetailModalContentProps) => {
     const [meetingModifyModal, setMeetingModifyModal] = useRecoilState(meetingModifyModalState);
+    const [meetingDeleteModal, setMeetingDeleteModal] = useRecoilState(meetingDeleteModalState);
     const [pu, setPu] = React.useState<userType[]>([]);
     const user = { email: localStorage.getItem('email'), name: localStorage.getItem('name') };
 
@@ -91,8 +92,14 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
                         fontSize={0.8}
                         fontWeight={300}
                         onClick={() => {
-                            console.log(meeting);
-                            console.log(pu);
+                            return user.email && user.name
+                                ? setMeetingDeleteModal({
+                                      visible: !meetingDeleteModal.visible,
+                                      meetingId: meeting.meetingId,
+                                  })
+                                : alert('로그인이 필요합니다.');
+                            // console.log(meeting);
+                            // console.log(pu);
                         }}
                     >
                         삭제
