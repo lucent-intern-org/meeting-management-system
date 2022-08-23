@@ -56,17 +56,18 @@ export class MeetingController {
         let day = Number(date.substring(8,10));
         await this.MeetingService.createMeeting(date,body);
         let meeting = await this.MeetingService.getMeeting(body);
-        if(body.repeat=="반복 없음"){
-            for (const idx in body.slackId) {
-                await this.ParticipantService.createParticipant(meeting.meetingId,body.slackId[idx]);
-            }
-            return Object.assign({
-                data: body,
-                statusCode: 200,
-                success: true,
-                statusMsg: `데이터 생성이 성공적으로 완료되었습니다.`,
-              });
-        }
+        // if(body.repeat=="반복 없음"){
+        //     //참여자 추가
+        //     for (const idx in body.slackId) {
+        //         await this.ParticipantService.createParticipant(meeting.meetingId,body.slackId[idx]);
+        //     }
+        //     return Object.assign({
+        //         data: body,
+        //         statusCode: 200,
+        //         success: true,
+        //         statusMsg: `데이터 생성이 성공적으로 완료되었습니다.`,
+        //       });
+        // }
         // else if(body.repeat=="매일 반복"){
         //     for (let index = 0; index < 364; index++) {
         //         let date=new Date(Date.UTC(year,month-1,day+index));
@@ -84,16 +85,15 @@ export class MeetingController {
             
         // }
 
-        // let meeting = await this.MeetingService.createMeeting(body);
-        // for (const idx in body.slackId) {
-        //     await this.ParticipantService.createParticipant(body.meetingId,body.slackId[idx]);
-        // }
-        // return Object.assign({
-        //     data: meeting,
-        //     statusCode: 200,
-        //     success: true,
-        //     statusMsg: `데이터 생성이 성공적으로 완료되었습니다.`,
-        //   });
+        for (const idx in body.slackId) {
+            await this.ParticipantService.createParticipant(meeting.meetingId,body.slackId[idx]);
+        }
+        return Object.assign({
+            data: body,
+            statusCode: 200,
+            success: true,
+            statusMsg: `데이터 생성이 성공적으로 완료되었습니다.`,
+          });
     }
     @Post('/update')
     async updateMeeting(@Body() body){

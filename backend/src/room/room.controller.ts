@@ -33,7 +33,7 @@ export class RoomController {
         return Object.assign({
             data: room,
             statusCode: 200,
-            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+            statusMsg: `데이터 생성이 성공적으로 완료되었습니다.`,
           });
     }
     @Post('/update')
@@ -42,7 +42,7 @@ export class RoomController {
         return Object.assign({
             data: room,
             statusCode: 200,
-            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+            statusMsg: `데이터 수정이 성공적으로 완료되었습니다.`,
           });
     }
     @Post('/delete')
@@ -52,7 +52,7 @@ export class RoomController {
         return Object.assign({
             data: room,
             statusCode: 200,
-            statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+            statusMsg: `데이터 삭제가 성공적으로 완료되었습니다.`,
           });
     }
 }
