@@ -1,60 +1,57 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { GroupService } from './group.service';
+import { RoomService } from './room.service';
 
-@Controller('groups')
-export class GroupController {
-    constructor(private GroupService:GroupService){}
+@Controller('rooms')
+export class RoomController {
+    constructor(private RoomService:RoomService){}
 
-    @Get('/group')
-    async getGroup(@Body() body){
+    @Get('/room')
+    async getRoom(@Body() body){
         console.log(body);
-        let user = await this.GroupService.getGroup(body.groupId);
-        console.log(user);
+        let room = await this.RoomService.getRoom(body.roomId);
+        console.log(room);
         return Object.assign({
-            data: user,
+            data: room,
             statusCode: 200,
-            success: true,
             statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
           });
     }
     @Get('/all')
     async getAll(){
-        let user = await this.GroupService.getAll();
-        console.log(user);
+        let room = await this.RoomService.getAll();
+        console.log(room);
         return Object.assign({
-            data: user,
+            data: room,
             statusCode: 200,
-            success: true,
             statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
           });
     }
     @Post('/create')
     async createUser(@Body() body){
-        let user = await this.GroupService.createGroup(body.groupName);
+        let count = await this.RoomService.getCount();
+        let room = await this.RoomService.createRoom(count,body);
         return Object.assign({
-            data: user,
+            data: room,
             statusCode: 200,
-            success: true,
             statusMsg: `데이터 생성이 성공적으로 완료되었습니다.`,
           });
     }
     @Post('/update')
     async updateUser(@Body() body){
-        let user = await this.GroupService.updateGroup(body);
+        let room = await this.RoomService.updateRoom(body);
         return Object.assign({
-            data: user,
+            data: room,
             statusCode: 200,
-            success: true,
             statusMsg: `데이터 수정이 성공적으로 완료되었습니다.`,
           });
     }
     @Post('/delete')
     async deleteUser(@Body() body){
-        let user = await this.GroupService.deleteGroup(body.groupId);
+        let count = await this.RoomService.getCount();
+        let room = await this.RoomService.deleteRoom(count,body.roomId);
         return Object.assign({
-            data: user,
+            data: room,
             statusCode: 200,
-            success: true,
             statusMsg: `데이터 삭제가 성공적으로 완료되었습니다.`,
           });
     }
