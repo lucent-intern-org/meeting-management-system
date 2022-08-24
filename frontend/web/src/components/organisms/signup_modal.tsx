@@ -1,67 +1,52 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import ReactDOM from 'react-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
     GoogleLogin,
     GoogleLoginResponse,
     GoogleLoginResponseOffline,
 } from '@leecheuk/react-google-login';
+import GoogleButton from 'react-google-button';
 import ModalHeader from '../molecules/modal_header';
 import DropDown from '../atoms/drop_down';
 import Input from '../atoms/input';
 import Text from '../atoms/text';
-
-import signUpModalVisibleState, { logInModalVisibleState, userSignUpInfoState } from '../../atom';
+import { signUpModalVisibleState, logInModalVisibleState } from '../../atom';
 import { groups } from '../../temp_db';
-
-const Background = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: rgb(0, 0, 0, 0.5);
-`;
-
-const Container = styled.div`
-    width: 33vw;
-    height: 50vh;
-    position: relative;
-    border-radius: 2%;
-    text-align: center;
-    padding: 2vh;
-    background-color: white;
-    box-shadow: 1px 1px 13px #4a4848;
-`;
-
-const MarginTop = styled.div`
-    margin-top: 5vh;
-`;
+import CenteredModal from './centered_modal';
+import theme from '../../styles/theme';
+import FlexColumn from '../molecules/flex_column';
+import ModalCloseButton from '../molecules/modal_close_button';
 
 const SignupModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+    const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
+    const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
+    const [slackId, setSlackId] = useState<string>('');
+    const [position, setPosition] = useState<string>('');
 
-    const setSignUpModalOpen = useSetRecoilState(signUpModalVisibleState);
-    const setLogInModalOpen = useSetRecoilState(logInModalVisibleState);
-    const setUserSignUpInfo = useSetRecoilState(userSignUpInfoState);
-    const [slackId, setSlackId] = useState('');
-    const [position, setPosition] = useState('');
-    const info = useRecoilValue(userSignUpInfoState);
-
-    const addUserInfo = (email: string, name: string) => {
-        setUserSignUpInfo({
-            slackId: slackId,
-            group: position,
-            email: email,
-            name: name,
-            role: 'user',
+    const toNum = (p: string) => {
+        let id = 0;
+        groups.map((group) => {
+            if (group.groupName === p) {
+                id = group.groupId;
+            }
         });
-        console.log(info);
+        return id;
+    };
+
+    const addUserInfo = (email: string, name: string, p: number) => {
+        setSignUpModalVisible({
+            visible: !signUpModalVisible.visible,
+            signUpUser: {
+                slackId: slackId,
+                groupId: p,
+                email: email,
+                name: name,
+                role: 'user',
+            },
+        });
     };
 
     const onSignUpSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -73,41 +58,42 @@ const SignupModal: React.FC = () => {
         // if ('tokenId' in res) {
         //     token = res.tokenId;
         // }
-        addUserInfo(profile.email, profile.name);
+        addUserInfo(profile.email, profile.name, toNum(position));
     };
 
-    const hasBlank = () => {
-        if (slackId === '' || position === '') {
-            return true;
-        }
-        return false;
+    const validation = () => {
+        return !(
+            slackId.length >= 1 &&
+            slackId.length <= 15 &&
+            (slackId[0] === 'W' || slackId[0] === 'U') &&
+            position !== ''
+        );
     };
-
-    return ReactDOM.createPortal(
-        <Background>
-            <Container>
-                <ModalHeader setState={signUpModalVisibleState}>회원가입</ModalHeader>
-                <Input
-                    type='text'
-                    placeholder='Slack ID'
-                    letterSpacing={0.15}
-                    width={305}
-                    marginTop='3vh'
-                    onChange={(e) => {
-                        setSlackId(e.target.value);
-                    }}
-                />
-                <br />
-                <DropDown
-                    onChange={(e) => {
-                        setPosition(e.target.value);
-                    }}
-                    placeholder='Position'
-                    letterSpacing={0.15}
-                    options={groups}
-                />
-                <br />
-                <MarginTop>
+    return (
+        <CenteredModal width={34} height={34}>
+            <ModalCloseButton state={signUpModalVisibleState} />
+            <FlexColumn>
+                <ModalHeader>회원가입</ModalHeader>
+                <FlexColumn justifyContent='center'>
+                    <Input
+                        type='text'
+                        placeholder=' Slack ID'
+                        letterSpacing={0.15}
+                        onChange={(e) => {
+                            setSlackId(e.target.value);
+                        }}
+                    />
+                    <DropDown
+                        onChange={(e) => {
+                            setPosition(e.target.value);
+                        }}
+                        placeholder='Position'
+                        letterSpacing={0.15}
+                        options={groups}
+                        width={100}
+                    />
+                </FlexColumn>
+                <FlexColumn justifyContent='space-around'>
                     <GoogleLogin
                         clientId={googleClientId}
                         onSuccess={onSignUpSuccess}
@@ -116,25 +102,42 @@ const SignupModal: React.FC = () => {
                         }}
                         pluginName='googleSignup'
                         buttonText='Sign up with Google'
-                        disabled={hasBlank()}
+                        disabled={validation()}
+                        render={(props) => (
+                            <GoogleButton
+                                style={{
+                                    width: '20rem',
+                                    backgroundColor: 'white',
+                                    color: validation() ? theme.inputColor : 'black',
+                                }}
+                                onClick={props.onClick}
+                                disabled={props.disabled}
+                                label='Sign up with Google'
+                            >
+                                Sign up with Google
+                            </GoogleButton>
+                        )}
                     />
-                </MarginTop>
-                <br />
-                <Text fontSize={0.7}>이미 계정이 있으신가요?</Text>
-                <Text
-                    marginTop='3vh'
-                    fontSize={0.7}
-                    color='#346DF1'
-                    onClick={() => {
-                        setSignUpModalOpen(false);
-                        setLogInModalOpen(true);
-                    }}
-                >
-                    로그인
-                </Text>
-            </Container>
-        </Background>,
-        document.getElementById('modal-root')!,
+                    <div>
+                        <Text fontSize={0.7}>이미 계정이 있으신가요? </Text>
+                        <Text
+                            fontSize={0.7}
+                            color={theme.submitBtnColor}
+                            onClick={() => {
+                                setSignUpModalVisible((prev) => ({
+                                    ...prev,
+                                    visible: !signUpModalVisible.visible,
+                                }));
+
+                                setLogInModalVisible(!logInModalVisible);
+                            }}
+                        >
+                            로그인
+                        </Text>
+                    </div>
+                </FlexColumn>
+            </FlexColumn>
+        </CenteredModal>
     );
 };
 

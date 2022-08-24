@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import theme from './theme';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -19,9 +20,10 @@ time, mark, audio, video, input {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  /* font: inherit; */
   vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, main, menu, nav, section {
@@ -33,6 +35,10 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+}
+@font-face {
+  font-family: 'inter';
+  src: url('../assets/fonts/inter.ttf') format('truetype');
 }
 menu, ol, ul {
   list-style: none;
@@ -67,9 +73,17 @@ button {
   background-color: transparent;
   cursor: pointer;
 }
-@font-face {
+
+input, select {
+  border-bottom: 2px solid ${theme.inputColor};
+  font-weight: 900;
+  font-size: 0.8rem;
+  height: 4vh;
   font-family: 'inter';
-  src: url('./assets/fonts/inter.ttf');
+}
+
+input:focus, select:focus {
+  outline: none;
 }
 
 input, select {
