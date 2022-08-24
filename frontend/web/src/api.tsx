@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import SERVER from './url';
-import { roomType, userType } from './types';
+import { addMeetingType, roomType, userType } from './types';
 
 export const getAllMeetings = async () => {
     try {
@@ -31,7 +31,25 @@ export const getDayMeetings = async (date: string) => {
 };
 
 export const useGetDayMeetings = (date: string) => {
-    return useQuery(['meetings', date], () => getDayMeetings(date), {
+    return useQuery(['meetings', { date }], () => getDayMeetings(date), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
+
+export const getDayMeetingParticipants = async (meetingId: number) => {
+    try {
+        const { data } = await axios.get(`${SERVER}/participant/participant/`, {
+            params: { meetingId: meetingId },
+        });
+        return data;
+    } catch (err) {
+        throw new Error('fetch meeting error');
+    }
+};
+
+export const useGetDayMeetingParticipants = (meetingId: number) => {
+    return useQuery(['meetings', { meetingId }], () => getDayMeetingParticipants(meetingId), {
         staleTime: 5000,
         cacheTime: Infinity,
     });
@@ -53,11 +71,29 @@ export const useGetAllRooms = () => {
     });
 };
 
+export const getAllGroups = async () => {
+    try {
+        const { data } = await axios.get(`${SERVER}/groups/all`, {});
+        return data;
+    } catch (err) {
+        throw new Error('fetch groups error');
+    }
+};
+
+export const useGetAllGroups = () => {
+    return useQuery(['groups'], () => getAllGroups(), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
+
 /* 관리자 > 사용자 */
 export const getAllUsers = async () => {
-    const response = await axios.get(`${SERVER}/users/all`);
-    if (response.data.statusCode === 200) {
-        return response.data.data;
+    try {
+        const { data } = await axios.get(`${SERVER}/users/all`, {});
+        return data;
+    } catch (err) {
+        throw new Error('fetch users error');
     }
 };
 
@@ -66,6 +102,15 @@ export const useGetAllUsers = () => {
         staleTime: 5000,
         cacheTime: Infinity,
     });
+};
+
+export const addMeeting = async (submitData: addMeetingType) => {
+    try {
+        const { data } = await axios.post(`${SERVER}/meetings/create`, submitData);
+        return data;
+    } catch (err) {
+        throw new Error('post meeting error');
+    }
 };
 
 export const addUser = async (userInfo: userType) => {

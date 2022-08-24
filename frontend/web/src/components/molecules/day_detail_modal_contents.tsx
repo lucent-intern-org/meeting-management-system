@@ -16,20 +16,20 @@ const Container = styled.div`
 
 const DayDetailModalContents: React.FC = () => {
     const dayDetailModal = useRecoilValue(dayDetailModalState);
-    const { status, data, error } = useGetDayMeetings(dayDetailModal.date);
+    const dayMeetings = useGetDayMeetings(dayDetailModal.date);
 
     const renderByStatus = React.useCallback(() => {
         let sorted = [];
-        switch (status) {
+        switch (dayMeetings.status) {
             case 'loading':
                 return <Loading />;
             case 'error':
-                if (error instanceof Error) {
-                    return <div>Error: {error.message}</div>;
+                if (dayMeetings.error instanceof Error) {
+                    return <div>Error: {dayMeetings.error.message}</div>;
                 }
                 break;
             default:
-                sorted = data.data.sort((a: meetingType, b: meetingType) => {
+                sorted = dayMeetings.data.data.sort((a: meetingType, b: meetingType) => {
                     if (a.startTime > b.startTime) {
                         return 1;
                     }
@@ -44,7 +44,6 @@ const DayDetailModalContents: React.FC = () => {
                     }
                     return -1;
                 });
-                console.log(sorted);
                 return sorted.length !== 0 ? (
                     sorted.map((meeting: meetingType) => {
                         return <DayDetailModalContent meeting={meeting} key={meeting.meetingId} />;
@@ -58,7 +57,7 @@ const DayDetailModalContents: React.FC = () => {
                     </FlexRow>
                 );
         }
-    }, [data, error, status]);
+    }, [dayMeetings]);
 
     return <Container>{renderByStatus()}</Container>;
 };

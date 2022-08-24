@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ParticipantService } from './participant.service';
 
 @Controller('participant')
@@ -6,10 +6,8 @@ export class ParticipantController {
   constructor(private ParticipantService: ParticipantService) {}
 
   @Get('/participant')
-  async getParticipant(@Body() body) {
-    const participant = await this.ParticipantService.getParticipant(
-      body.meetingId,
-    );
+  async getParticipant(@Query('meetingId') meetingId: number) {
+    const participant = await this.ParticipantService.getParticipant(meetingId);
     return Object.assign({
       data: participant,
       statusCode: 200,
