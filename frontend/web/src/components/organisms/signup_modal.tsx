@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-syntax */
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     GoogleLogin,
     GoogleLoginResponse,
@@ -18,47 +20,58 @@ import CenteredModal from './centered_modal';
 import theme from '../../styles/theme';
 import FlexColumn from '../molecules/flex_column';
 import ModalCloseButton from '../molecules/modal_close_button';
+import { addUser } from '../../api';
+import { userType } from '../../types';
 
 const SignupModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
     const [signUpModalVisible, setSignUpModalVisible] = useRecoilState(signUpModalVisibleState);
     const [logInModalVisible, setLogInModalVisible] = useRecoilState(logInModalVisibleState);
     const [slackId, setSlackId] = useState<string>('');
+    const [groupId, setGroupId] = useState<number>(-9999);
     const [position, setPosition] = useState<string>('');
 
     const toNum = (p: string) => {
-        let id = 0;
-        groups.map((group) => {
-            if (group.groupName === p) {
-                id = group.groupId;
-            }
+        const groupName = groups.find((data) => {
+            return data.groupName === p;
         });
-        return id;
+
+        return groupName!.groupId;
     };
 
-    const addUserInfo = (email: string, name: string, p: number) => {
-        setSignUpModalVisible({
+    const queryClient = useQueryClient();
+
+    // 사용자 추가
+    const addUserMutation = useMutation((userInfo: userType) => addUser(userInfo), {
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        },
+    });
+
+    const addUserConfirm = (userInfo: userType) => {
+        addUserMutation.mutate(userInfo);
+        setSignUpModalVisible((prev) => ({
+            ...prev,
             visible: !signUpModalVisible.visible,
-            signUpUser: {
-                slackId: slackId,
-                groupId: p,
-                email: email,
-                name: name,
-                role: 'user',
-            },
-        });
+        }));
     };
 
     const onSignUpSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-        let profile = { email: '', name: '' };
         // let token;
         if ('profileObj' in res) {
-            profile = res.profileObj;
+            const profile = res.profileObj;
+            const data: userType = {
+                slackId: slackId,
+                groupId: groupId,
+                email: profile.email,
+                name: profile.name,
+                role: 'user',
+            };
+            addUserConfirm(data);
         }
         // if ('tokenId' in res) {
         //     token = res.tokenId;
         // }
-        addUserInfo(profile.email, profile.name, toNum(position));
     };
 
     const validation = () => {
@@ -69,6 +82,7 @@ const SignupModal: React.FC = () => {
             position !== ''
         );
     };
+
     return (
         <CenteredModal width={34} height={34}>
             <ModalCloseButton state={signUpModalVisibleState} />
@@ -85,6 +99,7 @@ const SignupModal: React.FC = () => {
                     />
                     <DropDown
                         onChange={(e) => {
+                            setGroupId(toNum(e.target.value));
                             setPosition(e.target.value);
                         }}
                         placeholder='Position'
