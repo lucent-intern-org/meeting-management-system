@@ -12,7 +12,7 @@ import Input from '../atoms/input';
 import FlexColumn from '../molecules/flex_column';
 import FlexRow from '../molecules/flex_row';
 import { roomType } from '../../types';
-import { addRoom, getUseAllRooms, modifyRoom } from '../../api';
+import { addRoom, useGetAllRooms, modifyRoom } from '../../api';
 import { addRoomModalVisibleState, modifyRoomModalVisibleState } from '../../atom';
 
 const RoomModal: React.FC = () => {
@@ -20,7 +20,7 @@ const RoomModal: React.FC = () => {
     const [modifyRoomModalVisible, setModifyRoomModalVisible] = useRecoilState(
         modifyRoomModalVisibleState,
     );
-    const { data: rooms } = getUseAllRooms;
+    const { data: rooms } = useGetAllRooms;
 
     const [roomInfo, setRoomInfo] = useState<roomType>(
         addRoomModalVisible

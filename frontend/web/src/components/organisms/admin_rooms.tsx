@@ -4,12 +4,12 @@ import { useRecoilState } from 'recoil';
 import { addRoomModalVisibleState } from '../../atom';
 import CustomButton from '../atoms/custom_button';
 import Table from '../molecules/table';
-import { getUseAllRooms } from '../../api';
+import { useGetAllRooms } from '../../api';
 
 const AdminRooms: React.FC = () => {
     const userTableHeader = ['Color', 'Name'];
     const [addRoomModalVisible, setAddRoomModalVisible] = useRecoilState(addRoomModalVisibleState);
-    const { data: rooms } = getUseAllRooms;
+    const { data: rooms } = useGetAllRooms;
 
     return (
         <div>

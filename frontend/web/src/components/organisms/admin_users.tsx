@@ -4,12 +4,12 @@ import { useRecoilState } from 'recoil';
 import CustomButton from '../atoms/custom_button';
 import Table from '../molecules/table';
 import { addUserModalVisibleState } from '../../atom';
-import { getUseAllUsers } from '../../api';
+import { useGetAllUsers } from '../../api';
 
 const AdminUsers: React.FC = () => {
     const userTableHeader = ['Slack Id', 'Name', 'Email', 'Position', 'Role'];
     const [addUserModalVisible, setAddUserModalVisible] = useRecoilState(addUserModalVisibleState);
-    const { data: users } = getUseAllUsers;
+    const { data: users } = useGetAllUsers;
     return (
         <div>
             <div style={{ marginBottom: '1.5rem' }}>

@@ -11,7 +11,7 @@ export const getAllUsers = async () => {
     }
 };
 
-export const getUseAllUsers = useQuery<Array<userType>>(['users'], getAllUsers);
+export const useGetAllUsers = useQuery<Array<userType>>(['users'], getAllUsers);
 
 export const addUser = async (userInfo: userType) => {
     try {
@@ -54,7 +54,7 @@ export const getAllRooms = async () => {
     }
 };
 
-export const getUseAllRooms = useQuery<Array<roomType>>(['rooms'], getAllRooms);
+export const useGetAllRooms = useQuery<Array<roomType>>(['rooms'], getAllRooms);
 
 export const addRoom = async (roomInfo: roomType) => {
     try {
