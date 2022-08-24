@@ -22,7 +22,7 @@ const AdminRooms: React.FC = () => {
                     회의실 추가
                 </CustomButton>
             </div>
-            <Table header={userTableHeader} body={rooms!} />
+            <Table header={userTableHeader} body={rooms.data!} />
         </div>
     );
 };
