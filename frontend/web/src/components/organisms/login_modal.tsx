@@ -7,7 +7,7 @@ import {
     GoogleLogin,
     GoogleLoginResponse,
     GoogleLoginResponseOffline,
-} from '@leecheuk/react-google-login'
+} from '@leecheuk/react-google-login';
 import GoogleButton from 'react-google-button';
 import Text from '../atoms/text';
 import {
@@ -35,10 +35,12 @@ const LoginModal: React.FC = () => {
     const authenticate = (email: string, name: string, token: string) => {
         let isMember = false;
         let role = 'user';
-        for (let i = 0; i < users.length; i += 1) {
-            if (users[i].email === email) {
+
+        for (let i = 0; i < users.data.length; i += 1) {
+            console.log(users.data[i].email);
+            if (users.data[i].email === email) {
                 isMember = true;
-                role = users[i].role;
+                role = users.data[i].role;
                 break;
             }
         }
@@ -67,7 +69,6 @@ const LoginModal: React.FC = () => {
         if ('tokenId' in res) {
             token = res.tokenId;
         }
-
         authenticate(profile.email, profile.name, token);
         console.log(res);
     };
