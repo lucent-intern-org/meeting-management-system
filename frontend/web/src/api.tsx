@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import SERVER from './url';
 import { roomType } from './types';
@@ -19,12 +19,30 @@ export const useGetAllMeetings = () => {
     });
 };
 
+export const getDayMeetings = async (date: string) => {
+    try {
+        const { data } = await axios.get(`${SERVER}/meetings/meeting/`, {
+            params: { date: date },
+        });
+        return data;
+    } catch (err) {
+        throw new Error('fetch meeting error');
+    }
+};
+
+export const useGetDayMeetings = (date: string) => {
+    return useQuery(['meetings', date], () => getDayMeetings(date), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
+
 export const getAllRooms = async () => {
     try {
         const { data } = await axios.get(`${SERVER}/rooms/all`, {});
         return data;
     } catch (err) {
-        throw new Error('fetch playlist error');
+        throw new Error('fetch rooms error');
     }
 };
 
@@ -33,7 +51,7 @@ export const useGetAllRooms = () => {
         staleTime: 5000,
         cacheTime: Infinity,
     });
-}
+};
 
 /* 관리자 >  회의실 */
 export const getRooms = async () => {
