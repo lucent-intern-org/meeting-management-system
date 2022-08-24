@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { roomType } from './types';
 
 export const dayDetailModalState = atom({
     key: 'dayDetailModal',
@@ -92,3 +93,8 @@ export const deleteRoomModalVisibleState = atom({
 });
 
 export const logoutModalVisibleState = atom({ key: 'logoutModalVisible', default: false });
+
+export const roomsState = atom<Array<roomType>>({
+    key: 'rooms',
+    default: [],
+});
