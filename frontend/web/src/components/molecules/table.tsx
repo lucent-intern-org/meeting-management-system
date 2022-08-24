@@ -16,9 +16,8 @@ import {
 import RoomColor from '../atoms/room_color';
 
 const Container = styled.div`
-    max-height: 60vh;
+    max-height: 36rem;
     overflow-y: auto;
-
     table,
     td,
     tr {
@@ -50,11 +49,6 @@ const Container = styled.div`
     }
 `;
 
-type TablesProps = {
-    header: Array<string>;
-    body?: Array<object>;
-};
-
 type userType = {
     slackId: string;
     name: string;
@@ -67,6 +61,11 @@ type roomType = {
     roomId: number;
     roomColor: string;
     roomName: string;
+};
+
+type TablesProps = {
+    header: Array<string>;
+    body: Array<roomType | userType>;
 };
 
 const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
