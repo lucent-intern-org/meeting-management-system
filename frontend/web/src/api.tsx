@@ -43,7 +43,12 @@ export const getAllUsers = async () => {
     }
 };
 
-export const useGetAllUsers = useQuery<Array<userType>>(['users'], getAllUsers);
+export const useGetAllUsers = () => {
+    return useQuery(['users'], () => getAllUsers(), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
 
 export const addUser = async (userInfo: userType) => {
     try {

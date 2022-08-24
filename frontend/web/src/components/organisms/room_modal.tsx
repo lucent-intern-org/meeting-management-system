@@ -20,7 +20,7 @@ const RoomModal: React.FC = () => {
     const [modifyRoomModalVisible, setModifyRoomModalVisible] = useRecoilState(
         modifyRoomModalVisibleState,
     );
-    const { data: rooms } = useGetAllRooms;
+    const { data: rooms } = useGetAllRooms();
 
     const [roomInfo, setRoomInfo] = useState<roomType>(
         addRoomModalVisible
