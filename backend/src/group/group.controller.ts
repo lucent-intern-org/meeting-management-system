@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { GroupService } from './group.service';
 
 @Controller('groups')
@@ -6,9 +6,9 @@ export class GroupController {
   constructor(private GroupService: GroupService) {}
 
   @Get('/group')
-  async getGroup(@Body() body) {
-    console.log(body);
-    const user = await this.GroupService.getGroup(body.groupId);
+  async getGroup(@Query('groupId') groupId) {
+    console.log(groupId);
+    const user = await this.GroupService.getGroup(groupId);
     console.log(user);
     return Object.assign({
       data: user,
