@@ -37,7 +37,6 @@ const LoginModal: React.FC = () => {
         let role = 'user';
 
         for (let i = 0; i < users.data.length; i += 1) {
-            console.log(users.data[i].email);
             if (users.data[i].email === email) {
                 isMember = true;
                 role = users.data[i].role;

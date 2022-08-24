@@ -5,7 +5,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { VscTrash } from 'react-icons/vsc';
 import { BiPencil } from 'react-icons/bi';
 import theme from '../../styles/theme';
-import { groups } from '../../temp_db';
 import {
     adminPageState,
     deleteRoomModalVisibleState,
@@ -14,6 +13,7 @@ import {
     modifyUserModalVisibleState,
 } from '../../atom';
 import RoomColor from '../atoms/room_color';
+import { useGetAllGroups } from '../../api';
 
 const Container = styled.div`
     max-height: 36rem;
@@ -79,6 +79,8 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
         modifyRoomModalVisibleState,
     );
 
+    const { data: groups } = useGetAllGroups();
+
     return (
         <Container>
             <table>
@@ -104,7 +106,7 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                                         return adminPage === 'users' ? (
                                             <td key={value}>
                                                 {typeof value === 'number'
-                                                    ? groups[value].groupName
+                                                    ? groups.data[value].groupName
                                                     : value}
                                             </td>
                                         ) : (
