@@ -9,7 +9,7 @@ import { useGetAllRooms } from '../../api';
 const AdminRooms: React.FC = () => {
     const userTableHeader = ['Color', 'Name'];
     const [addRoomModalVisible, setAddRoomModalVisible] = useRecoilState(addRoomModalVisibleState);
-    const { data: rooms } = useGetAllRooms;
+    const { data: rooms } = useGetAllRooms();
 
     return (
         <div>

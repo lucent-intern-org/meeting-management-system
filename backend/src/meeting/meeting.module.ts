@@ -7,8 +7,8 @@ import { MeetingController } from './meeting.controller';
 import { MeetingService } from './meeting.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Meetings,Participants])],
+  imports: [TypeOrmModule.forFeature([Meetings, Participants])],
   controllers: [MeetingController],
-  providers: [MeetingService,ParticipantService]
+  providers: [MeetingService, ParticipantService],
 })
 export class MeetingModule {}

@@ -3,6 +3,38 @@ import axios from 'axios';
 import SERVER from './url';
 import { roomType, userType } from './types';
 
+export const getAllMeetings = async () => {
+    try {
+        const { data } = await axios.get(`${SERVER}/meetings/all`, {});
+        return data;
+    } catch (err) {
+        throw new Error('fetch playlist error');
+    }
+};
+
+export const useGetAllMeetings = () => {
+    return useQuery(['meetings'], () => getAllMeetings(), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
+
+export const getAllRooms = async () => {
+    try {
+        const { data } = await axios.get(`${SERVER}/rooms/all`, {});
+        return data;
+    } catch (err) {
+        throw new Error('fetch playlist error');
+    }
+};
+
+export const useGetAllRooms = () => {
+    return useQuery(['rooms'], () => getAllRooms(), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
+
 /* 관리자 > 사용자 */
 export const getAllUsers = async () => {
     const response = await axios.get(`${SERVER}/users/all`);
@@ -45,16 +77,7 @@ export const deleteUser = async (userInfo: userType) => {
         console.log(`사용자 삭제 에러: ${error}`);
     }
 };
-
 /* 관리자 >  회의실 */
-export const getAllRooms = async () => {
-    const response = await axios.get(`${SERVER}/rooms/all`);
-    if (response.data.statusCode === 200) {
-        return response.data.data;
-    }
-};
-
-export const useGetAllRooms = useQuery<Array<roomType>>(['rooms'], getAllRooms);
 
 export const addRoom = async (roomInfo: roomType) => {
     try {

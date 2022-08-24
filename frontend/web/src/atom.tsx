@@ -32,6 +32,14 @@ export const meetingModifyModalState = atom({
     },
 });
 
+export const meetingDeleteModalState = atom({
+    key: 'meetingDeleteModal',
+    default: {
+        visible: false,
+        meetingId: -9999,
+    },
+});
+
 export const signUpModalVisibleState = atom({
     key: 'signUpModalVisible',
     default: {
