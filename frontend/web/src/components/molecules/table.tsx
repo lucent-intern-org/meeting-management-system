@@ -26,24 +26,20 @@ const Container = styled.div`
         font-family: 'inter';
         font-size: 17px;
     }
-
     table {
         width: 100%;
         text-align: center;
     }
-
     thead {
         height: 3rem;
         color: white;
         background-color: ${theme.primaryColor};
         font-weight: 700;
     }
-
     tbody {
         font-weight: 500;
         max-height: 4rem;
     }
-
     tbody > tr {
         height: 4rem;
     }

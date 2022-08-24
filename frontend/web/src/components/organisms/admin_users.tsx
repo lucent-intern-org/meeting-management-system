@@ -19,7 +19,7 @@ const AdminUsers: React.FC = () => {
                 </CustomButton>
             </div>
 
-            <Table header={userTableHeader} body={users!} />
+            <Table header={userTableHeader} body={users.data!} />
         </div>
     );
 };
