@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ParticipantService } from '../participant/participant.service';
 import { MeetingService } from './meeting.service';
 
@@ -10,10 +10,10 @@ export class MeetingController {
   ) {}
 
   @Get('/meeting')
-  async getMeeting(@Body() body) {
-    console.log(body);
+  async getMeeting(@Query('date') date: string) {
+    console.log(date);
     // let meetingList=[];
-    const meeting = await this.MeetingService.getDate(body.date);
+    const meeting = await this.MeetingService.getDate(date);
     // for (const idx in meeting) {
     //     console.log(meeting[idx]);
 
