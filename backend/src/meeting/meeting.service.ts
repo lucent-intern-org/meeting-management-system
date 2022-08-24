@@ -11,7 +11,9 @@ export class MeetingService {
   ) {}
 
   async getDate(date: string) {
-    const meeting = await this.meetingRepository.find({ where: { date } });
+    const meeting = await this.meetingRepository.find({
+      where: { date: date },
+    });
     return meeting;
   }
   async getMeeting(meeting) {
