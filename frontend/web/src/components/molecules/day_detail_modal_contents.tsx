@@ -3,7 +3,6 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { dayDetailModalState } from '../../atom';
-import { meetings } from '../../temp_db';
 import DayDetailModalContent from './day_detail_modal_content';
 import Text from '../atoms/text';
 import FlexRow from './flex_row';
@@ -61,26 +60,7 @@ const DayDetailModalContents: React.FC = () => {
         }
     }, [data, error, status]);
 
-    const filteredMeeting = meetings.filter((meeting) => {
-        return meeting.date === dayDetailModal.date;
-    });
-    return (
-        <Container>
-            {renderByStatus()}
-            {/* {filteredMeeting.length !== 0 ? (
-                filteredMeeting.map((meeting) => {
-                    return <DayDetailModalContent meeting={meeting} key={meeting.meetingId} />;
-                })
-            ) : (
-                <FlexRow>
-                    <div />
-                    <Text fontSize={1.6} fontWeight={700}>
-                        🔒 회의가 아직 없습니다!
-                    </Text>
-                </FlexRow>
-            )} */}
-        </Container>
-    );
+    return <Container>{renderByStatus()}</Container>;
 };
 
 export default DayDetailModalContents;

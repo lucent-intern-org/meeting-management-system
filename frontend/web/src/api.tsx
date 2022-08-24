@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import SERVER from './url';
 import { roomType } from './types';
