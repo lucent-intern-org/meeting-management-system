@@ -146,7 +146,6 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                                     <td key='trash' className='trash' style={{ width: '6%' }}>
                                         <VscTrash
                                             onClick={() => {
-                                                /* TODO: 백으로 data 넘겨서 삭제 */
                                                 if (adminPage === 'users') {
                                                     setDeleteUserModalVisible({
                                                         visible: !deleteUserModalVisible.visible,
