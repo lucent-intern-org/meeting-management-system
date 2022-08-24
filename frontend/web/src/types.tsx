@@ -33,3 +33,9 @@ export type participantType = {
     slackId: string;
     meetingId: number;
 };
+
+export type roomType = {
+    roomId: number;
+    roomColor: string;
+    roomName: string;
+};

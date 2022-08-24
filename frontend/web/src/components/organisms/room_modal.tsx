@@ -3,28 +3,25 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { SketchPicker } from 'react-color';
-import { addRoomModalVisibleState, modifyRoomModalVisibleState } from '../../atom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import theme from '../../styles/theme';
 import CenteredModal from './centered_modal';
 import ModalCloseButton from '../molecules/modal_close_button';
 import CustomButton from '../atoms/custom_button';
 import Input from '../atoms/input';
-import { rooms } from '../../temp_db';
-
 import FlexColumn from '../molecules/flex_column';
 import FlexRow from '../molecules/flex_row';
-
-type roomType = {
-    roomId: number;
-    roomColor: string;
-    roomName: string;
-};
+import { roomType } from '../../types';
+import { addRoom, getRooms, modifyRoom } from '../../api';
+import { addRoomModalVisibleState, modifyRoomModalVisibleState } from '../../atom';
 
 const RoomModal: React.FC = () => {
     const [addRoomModalVisible, setAddRoomModalVisible] = useRecoilState(addRoomModalVisibleState);
     const [modifyRoomModalVisible, setModifyRoomModalVisible] = useRecoilState(
         modifyRoomModalVisibleState,
     );
+    // const [rooms, setRooms] = useRecoilState<Array<roomType>>(roomsState);
+    const { data: rooms } = useQuery(['rooms'], getRooms, { staleTime: 5000 });
 
     const [roomInfo, setRoomInfo] = useState<roomType>(
         addRoomModalVisible
@@ -37,7 +34,6 @@ const RoomModal: React.FC = () => {
     );
 
     const onChange = (key: string, value: string | number) => {
-        console.log(value);
         setRoomInfo((prev) => ({ ...prev, [key]: value }));
     };
 
@@ -68,6 +64,30 @@ const RoomModal: React.FC = () => {
         return roomInfo.roomName === '';
     };
 
+    const queryClient = useQueryClient();
+
+    // 회의실 추가
+    const addRoomMutation = useMutation(() => addRoom(roomInfo), {
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        },
+    });
+
+    const add = async () => {
+        addRoomMutation.mutate();
+    };
+
+    // 회의실 수정
+    const modifyRoomMutation = useMutation(() => modifyRoom(roomInfo), {
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        },
+    });
+
+    const modify = async () => {
+        modifyRoomMutation.mutate();
+    };
+
     return (
         <CenteredModal width={30} height={35}>
             <ModalCloseButton
@@ -89,7 +109,6 @@ const RoomModal: React.FC = () => {
                     color={roomInfo.roomColor}
                     onChangeComplete={(color) => {
                         onChange('roomColor', color.hex);
-                        console.log(color.hex);
                     }}
                 />
                 <div style={{ width: '100%' }}>
@@ -105,6 +124,12 @@ const RoomModal: React.FC = () => {
                                 } else if (hasBlank()) {
                                     alert('회의실 이름을 작성해주세요');
                                 } else {
+                                    if (addRoomModalVisible) {
+                                        add();
+                                    } else {
+                                        modify();
+                                    }
+
                                     changeModalOpen();
                                 }
                                 console.log(roomInfo);

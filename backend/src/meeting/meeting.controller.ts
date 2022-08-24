@@ -12,12 +12,12 @@ export class MeetingController {
   @Get('/meeting')
   async getMeeting(@Body() body) {
     console.log(body);
-    // const meetingList=[];
+    // let meetingList=[];
     const meeting = await this.MeetingService.getDate(body.date);
     // for (const idx in meeting) {
     //     console.log(meeting[idx]);
 
-    //     const participant = await this.ParticipantService.getParticipant(meeting[idx].meetingId);
+    //     let participant = await this.ParticipantService.getParticipant(meeting[idx].meetingId);
     //     meetingList.push({meeting : meeting[idx], participants: participant})
     //     console.log(participant);
     // }
@@ -72,10 +72,10 @@ export class MeetingController {
     //       });
     // }
     // else if(body.repeat=="매일 반복"){
-    //     for (const index = 0; index < 364; index++) {
-    //         const date=new Date(Date.UTC(year,month-1,day+index));
+    //     for (let index = 0; index < 364; index++) {
+    //         let date=new Date(Date.UTC(year,month-1,day+index));
     //         await this.MeetingService.createMeeting(date,body);
-    //         const meeting = await this.MeetingService.getMeeting(body);
+    //         let meeting = await this.MeetingService.getMeeting(body);
     //         for (const idx in body.slackId) {
     //             await this.ParticipantService.createParticipant(meeting.meetingId,body.slackId[idx]);
     //         }
