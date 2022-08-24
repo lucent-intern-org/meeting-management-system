@@ -21,12 +21,17 @@ class UpdateMettingViewModel {
   UpdateMettingViewModel(this.meeting) {
     titleController = TextEditingController(text: meeting.title);
     contentController = TextEditingController(text: meeting.content);
-    updateMeetingModel.room = updateMeetingModel.roomList[meeting.roomId!];
     updateMeetingModel.repeat = meeting.repeat!;
     updateMeetingModel.start = meeting.startTime!;
     updateMeetingModel.end = meeting.endTime!;
     updateMeetingModel.date = meeting.date;
   }
+  Future<bool> initFormModel() async {
+    await updateMeetingModel.initData().then((value) =>
+        updateMeetingModel.room = updateMeetingModel.roomList[meeting.roomId!]);
+    return true;
+  }
+
   void setParticipantList() {
     participantList = participantUsers + participantGroups;
   }
@@ -128,7 +133,7 @@ class UpdateMettingViewModel {
 
   bool updateMeeting() {
     var meetingId = 6;
-    var roomId = updateMeetingModel.roomList.indexOf(updateMeetingModel.room);
+    var roomId = updateMeetingModel.roomList.indexOf(updateMeetingModel.room!);
     var date = updateMeetingModel.date;
     var startTime = updateMeetingModel.start;
     var endTime = updateMeetingModel.end;
