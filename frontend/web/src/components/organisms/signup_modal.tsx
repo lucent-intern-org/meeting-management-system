@@ -15,13 +15,13 @@ import DropDown from '../atoms/drop_down';
 import Input from '../atoms/input';
 import Text from '../atoms/text';
 import { signUpModalVisibleState, logInModalVisibleState } from '../../atom';
-import { groups } from '../../temp_db';
 import CenteredModal from './centered_modal';
 import theme from '../../styles/theme';
 import FlexColumn from '../molecules/flex_column';
 import ModalCloseButton from '../molecules/modal_close_button';
-import { addUser } from '../../api';
+import { addUser, useGetAllGroups } from '../../api';
 import { userType } from '../../types';
+import Loading from '../molecules/loading';
 
 const SignupModal: React.FC = () => {
     const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
@@ -31,8 +31,10 @@ const SignupModal: React.FC = () => {
     const [groupId, setGroupId] = useState<number>(-9999);
     const [position, setPosition] = useState<string>('');
 
+    const { data: groups } = useGetAllGroups();
+
     const toNum = (p: string) => {
-        const groupName = groups.find((data) => {
+        const groupName = groups.data.find((data: { groupName: string; groupId: string }) => {
             return data.groupName === p;
         });
 
@@ -83,7 +85,7 @@ const SignupModal: React.FC = () => {
         );
     };
 
-    return (
+    return groups !== undefined ? (
         <CenteredModal width={34} height={34}>
             <ModalCloseButton state={signUpModalVisibleState} />
             <FlexColumn>
@@ -104,7 +106,7 @@ const SignupModal: React.FC = () => {
                         }}
                         placeholder='Position'
                         letterSpacing={0.15}
-                        options={groups}
+                        options={groups.data}
                         width={100}
                     />
                 </FlexColumn>
@@ -152,6 +154,10 @@ const SignupModal: React.FC = () => {
                     </div>
                 </FlexColumn>
             </FlexColumn>
+        </CenteredModal>
+    ) : (
+        <CenteredModal width={34} height={34}>
+            <Loading />
         </CenteredModal>
     );
 };
