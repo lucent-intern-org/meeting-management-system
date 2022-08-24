@@ -1,6 +1,39 @@
 import axios from 'axios';
-import SERVER from './config';
+import { useQuery } from '@tanstack/react-query';
+import SERVER from './url';
 import { roomType } from './types';
+
+export const getAllMeetings = async () => {
+    try {
+        const { data } = await axios.get(`${SERVER}/meetings/all`, {});
+        return data;
+    } catch (err) {
+        throw new Error('fetch playlist error');
+    }
+};
+
+export const useGetAllMeetings = () => {
+    return useQuery(['meetings'], () => getAllMeetings(), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+};
+
+export const getAllRooms = async () => {
+    try {
+        const { data } = await axios.get(`${SERVER}/rooms/all`, {});
+        return data;
+    } catch (err) {
+        throw new Error('fetch playlist error');
+    }
+};
+
+export const useGetAllRooms = () => {
+    return useQuery(['rooms'], () => getAllRooms(), {
+        staleTime: 5000,
+        cacheTime: Infinity,
+    });
+}
 
 /* 관리자 >  회의실 */
 export const getRooms = async () => {

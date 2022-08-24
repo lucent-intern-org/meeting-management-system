@@ -5,14 +5,16 @@ import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { useGetAllMeetings, useGetAllRooms } from '../api';
 import {
     dayDetailModalState,
     isAdminState,
     loginState,
     meetingAddModalVisibleState,
 } from '../atom';
+import Loading from '../components/molecules/loading';
 import Calendar from '../templates/calendar';
-import { meetings, rooms } from '../temp_db';
+import { meetingType } from '../types';
 import { toStringDateByFormatting } from '../utils/date';
 
 const Container = styled.div`
@@ -24,7 +26,8 @@ const Meeting: React.FC = () => {
     const [meetingAddModalVisible, setMeetingAddModalVisible] = useRecoilState(
         meetingAddModalVisibleState,
     );
-
+    const meetings = useGetAllMeetings();
+    const rooms = useGetAllRooms();
     const [login, setLogin] = useRecoilState(loginState);
     const setIsAdmin = useSetRecoilState(isAdminState);
 
@@ -37,8 +40,18 @@ const Meeting: React.FC = () => {
         }
     }, []);
 
-    return (
-        <Container>
+    const renderByStatus = React.useCallback(() => {
+        const status = [meetings.status, rooms.status];
+        if (status.includes('loading')) {
+            return <Loading />;
+        }
+        if (status.includes('error')) {
+            if (meetings.error instanceof Error) {
+                return <div>Error: {meetings.error.message}</div>;
+            }
+            return <div>Error!!</div>;
+        }
+        return (
             <Calendar
                 customButtons={{
                     addMeeting: {
@@ -68,13 +81,13 @@ const Meeting: React.FC = () => {
                               date: toStringDateByFormatting((info as EventClickArg).event.start!),
                           });
                 }}
-                events={meetings.map((meeting) => {
+                events={meetings.data.data.map((meeting: meetingType) => {
                     const meetingDate = meeting.date;
                     return {
                         title: meeting.title,
                         start: `${meetingDate}T${meeting.startTime}`,
                         end: `${meetingDate}T${meeting.endTime}`,
-                        color: `${rooms[meeting.roomId].roomColor}`,
+                        color: `${rooms.data.data[meeting.roomId].roomColor}`,
                     };
                 })}
                 eventTimeFormat={{
@@ -91,8 +104,10 @@ const Meeting: React.FC = () => {
                     },
                 }}
             />
-        </Container>
-    );
+        );
+    }, [meetings.status, rooms.status]);
+
+    return <Container>{renderByStatus()}</Container>;
 };
 
 export default Meeting;
