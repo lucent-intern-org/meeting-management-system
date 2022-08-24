@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { RoomService } from './room.service';
 
 @Controller('rooms')
@@ -6,9 +6,9 @@ export class RoomController {
   constructor(private RoomService: RoomService) {}
 
   @Get('/room')
-  async getRoom(@Body() body) {
-    console.log(body);
-    const room = await this.RoomService.getRoom(body.roomId);
+  async getRoom(@Query('roomId') roomId) {
+    console.log(roomId);
+    const room = await this.RoomService.getRoom(roomId);
     console.log(room);
     return Object.assign({
       data: room,

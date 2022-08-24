@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 
@@ -7,9 +7,9 @@ export class UserController {
   constructor(private UserService: UserService) {}
 
   @Get('/email')
-  async getEmail(@Body() body) {
-    console.log(body);
-    const user = await this.UserService.getEmail(body.email);
+  async getEmail(@Query('email') email) {
+    console.log(email);
+    const user = await this.UserService.getEmail(email);
     console.log(user);
     return Object.assign({
       data: user,
@@ -18,9 +18,9 @@ export class UserController {
     });
   }
   @Get('/slack')
-  async getSlack(@Body() body) {
-    console.log(body);
-    const user = await this.UserService.getSlack(body.slackId);
+  async getSlack(@Query('slackId') slackId) {
+    console.log(slackId);
+    const user = await this.UserService.getSlack(slackId);
     console.log(user);
     return Object.assign({
       data: user,
@@ -29,9 +29,9 @@ export class UserController {
     });
   }
   @Get('/group')
-  async getGroup(@Body() body) {
-    console.log(body);
-    const user = await this.UserService.getGroup(body.groupId);
+  async getGroup(@Query('groupId') groupId) {
+    console.log(groupId);
+    const user = await this.UserService.getGroup(groupId);
     console.log(user);
     return Object.assign({
       data: user,
