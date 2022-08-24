@@ -29,6 +29,29 @@ export type meetingType = {
     roomId: number;
 };
 
+export type addMeetingType = {
+    title: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    repeat: string;
+    content: string;
+    roomId: number;
+    slackId: string[];
+};
+
+export type modifyMeetingType = {
+    title: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    repeat: string;
+    content: string;
+    meetingId: number;
+    roomId: number;
+    slackId: string[];
+};
+
 export type participantType = {
     slackId: string;
     meetingId: number;

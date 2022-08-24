@@ -105,7 +105,7 @@ const Meeting: React.FC = () => {
                 }}
             />
         );
-    }, [meetings.status, rooms.status]);
+    }, [meetings, rooms]);
 
     return <Container>{renderByStatus()}</Container>;
 };
