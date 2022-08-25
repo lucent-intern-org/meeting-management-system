@@ -1,7 +1,9 @@
+import 'package:app/urldata.dart';
 import 'package:dio/dio.dart';
 
 class Meeting_Form_Model {
   var dio = Dio();
+  UrlData urlData = UrlData();
   List<String> repeatList = ['반복 없음', '매일 반복', '매주 반복', '매월 반복'];
   String repeat = '반복 없음';
   List<String> startList = List.generate(
@@ -25,12 +27,12 @@ class Meeting_Form_Model {
 
   String? date; //yyyymmdd
   Future<bool> initData() async {
-    await dio.get('http://192.168.0.30:3000/groups/all').then((value) {
+    await dio.get('${urlData.url}/groups/all').then((value) {
       for (var i in value.data['data']) {
         groupList.add(i["groupName"]);
       }
     });
-    await dio.get('http://192.168.0.30:3000/rooms/all').then((value) {
+    await dio.get('${urlData.url}/rooms/all').then((value) {
       for (var i in value.data['data']) {
         roomList.add(i["roomName"]);
         roomColor.add(i["roomColor"]);
@@ -38,7 +40,7 @@ class Meeting_Form_Model {
       room = roomList[0];
     });
 
-    await dio.get('http://192.168.0.30:3000/users/all').then((value) {
+    await dio.get('${urlData.url}/users/all').then((value) {
       for (var i in value.data['data']) {
         userList.add(i["name"]);
       }
