@@ -1,73 +1,87 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## **📋Backend File Tree**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
 ```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+📦backend
+ ┣ 📂dist
+ ┃ ┣ 📂entities
+ ┃ ┃ ┣ 📜Groups.d.ts
+ ┃ ┃ ┣ 📜Groups.js
+ ┃ ┃ ┣ 📜Groups.js.map
+ ┃ ┃ ┣ 📜Meetings.d.ts
+ ┃ ┃ ┣ 📜Meetings.js
+ ┃ ┃ ┣ 📜Meetings.js.map
+ ┃ ┃ ┣ 📜Participants.d.ts
+ ┃ ┃ ┣ 📜Participants.js
+ ┃ ┃ ┣ 📜Participants.js.map
+ ┃ ┃ ┣ 📜Rooms.d.ts
+ ┃ ┃ ┣ 📜Rooms.js
+ ┃ ┃ ┣ 📜Rooms.js.map
+ ┃ ┃ ┣ 📜Users.d.ts
+ ┃ ┃ ┣ 📜Users.js
+ ┃ ┃ ┗ 📜Users.js.map
+ ┃ ┣ 📂group
+ ┃ ┃ ┣ 📜group.controller.d.ts
+ ┃ ┃ ┣ 📜group.controller.js
+ ┃ ┃ ┣ 📜group.controller.js.map
+ ┃ ┃ ┣ 📜group.module.d.ts
+ ┃ ┃ ┣ 📜group.module.js
+ ┃ ┃ ┣ 📜group.module.js.map
+ ┃ ┃ ┣ 📜group.service.d.ts
+ ┃ ┃ ┣ 📜group.service.js
+ ┃ ┃ ┗ 📜group.service.js.map
+ ┃ ┣ 📂meeting
+ ┃ ┃ ┣ 📜meeting.controller.d.ts
+ ┃ ┃ ┣ 📜meeting.controller.js
+ ┃ ┃ ┣ 📜meeting.controller.js.map
+ ┃ ┃ ┣ 📜meeting.module.d.ts
+ ┃ ┃ ┣ 📜meeting.module.js
+ ┃ ┃ ┣ 📜meeting.module.js.map
+ ┃ ┃ ┣ 📜meeting.service.d.ts
+ ┃ ┃ ┣ 📜meeting.service.js
+ ┃ ┃ ┗ 📜meeting.service.js.map
+ ┃ ┣ 📂participant
+ ┃ ┃ ┣ 📜participant.controller.d.ts
+ ┃ ┃ ┣ 📜participant.controller.js
+ ┃ ┃ ┣ 📜participant.controller.js.map
+ ┃ ┃ ┣ 📜participant.module.d.ts
+ ┃ ┃ ┣ 📜participant.module.js
+ ┃ ┃ ┣ 📜participant.module.js.map
+ ┃ ┃ ┣ 📜participant.service.d.ts
+ ┃ ┃ ┣ 📜participant.service.js
+ ┃ ┃ ┗ 📜participant.service.js.map
+ ┃ ┣ 📂room
+ ┃ ┃ ┣ 📜room.controller.d.ts
+ ┃ ┃ ┣ 📜room.controller.js
+ ┃ ┃ ┣ 📜room.controller.js.map
+ ┃ ┃ ┣ 📜room.module.d.ts
+ ┃ ┃ ┣ 📜room.module.js
+ ┃ ┃ ┣ 📜room.module.js.map
+ ┃ ┃ ┣ 📜room.service.d.ts
+ ┃ ┃ ┣ 📜room.service.js
+ ┃ ┃ ┗ 📜room.service.js.map
+ ┃ ┣ 📂user
+ ┃ ┃ ┣ 📜user.controller.d.ts
+ ┃ ┃ ┣ 📜user.controller.js
+ ┃ ┃ ┣ 📜user.controller.js.map
+ ┃ ┃ ┣ 📜user.module.d.ts
+ ┃ ┃ ┣ 📜user.module.js
+ ┃ ┃ ┣ 📜user.module.js.map
+ ┃ ┃ ┣ 📜user.service.d.ts
+ ┃ ┃ ┣ 📜user.service.js
+ ┃ ┃ ┗ 📜user.service.js.map
+ ┃ ┣ 📜app.controller.d.ts
+ ┃ ┣ 📜app.controller.js
+ ┃ ┣ 📜app.controller.js.map
+ ┃ ┣ 📜app.module.d.ts
+ ┃ ┣ 📜app.module.js
+ ┃ ┣ 📜app.module.js.map
+ ┃ ┣ 📜app.service.d.ts
+ ┃ ┣ 📜app.service.js
+ ┃ ┣ 📜app.service.js.map
+ ┃ ┣ 📜main.d.ts
+ ┃ ┣ 📜main.js
+ ┃ ┣ 📜main.js.map
+ ┃ ┗ 📜tsconfig.build.tsbuildinfo
+ ┣ 📂node_modules
+ ┗ 📜ormconfig.json
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

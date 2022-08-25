@@ -5,35 +5,34 @@ import { Groups } from '../entities/Groups';
 
 @Injectable()
 export class GroupService {
-    constructor(
-        @InjectRepository(Groups)
-        private groupRepository: Repository<Groups>,
-    ){}
+  constructor(
+    @InjectRepository(Groups)
+    private groupRepository: Repository<Groups>,
+  ) {}
 
-    async getGroup(groupId){
-        let group = await this.groupRepository.findOne({where:{groupId},
-        });
-        return group;
+  async getGroup(groupId) {
+    const group = await this.groupRepository.findOne({ where: { groupId } });
+    return group;
+  }
+  async getAll() {
+    const group = await this.groupRepository.find();
+    return group;
+  }
+  async createGroup(groupName) {
+    const count = await this.groupRepository.count();
+    console.log(count);
+    await this.groupRepository.save({ groupId: count, groupName: groupName });
+  }
+  async updateGroup(group) {
+    await this.groupRepository.update(group.groupId, {
+      groupName: group.groupName,
+    });
+  }
+  async deleteGroup(groupId) {
+    const count = await this.groupRepository.count();
+    await this.groupRepository.delete({ groupId: groupId });
+    for (let index = groupId + 1; index <= count; index++) {
+      await this.groupRepository.update(index, { groupId: index - 1 });
     }
-    async getAll(){
-        let group = await this.groupRepository.find();
-        return group;
-    }
-    async createGroup(groupName){
-        let count=await this.groupRepository.count();
-        console.log(count);
-        await this.groupRepository.save({groupId:count,groupName:groupName});
-
-    }
-    async updateGroup(group){
-        await this.groupRepository.update(group.groupId,{groupName:group.groupName});
-    }
-    async deleteGroup(groupId){
-        let count=await this.groupRepository.count();
-        await this.groupRepository.delete({groupId : groupId});
-        for (let index = groupId+1; index <= count; index++) {
-            await this.groupRepository.update(index,{groupId : index-1});
-            
-        }
-    }
+  }
 }

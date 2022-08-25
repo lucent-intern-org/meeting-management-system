@@ -45,6 +45,16 @@
         "object-shorthand": 0,
         "react-hooks/rules-of-hooks": 0,
         "array-callback-return": 0,
-        "prefer-destructuring": 0
+        "prefer-destructuring": 0,
+        "react/function-component-definition": [
+            2,
+            {
+                "namedComponents": "arrow-function",
+                "unnamedComponents": "arrow-function"
+            }
+        ],
+        "react/prop-types": "off", // Since we do not use prop-types
+        "react/require-default-props": "off", // Since we do not use prop-types
+        "@typescript-eslint/no-empty-function": "off"
     }
 }
