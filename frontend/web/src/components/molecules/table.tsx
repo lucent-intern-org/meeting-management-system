@@ -14,6 +14,7 @@ import {
 } from '../../atom';
 import RoomColor from '../atoms/room_color';
 import { useGetAllGroups } from '../../api';
+import { roomType, userType } from '../../types';
 
 const Container = styled.div`
     max-height: 36rem;
@@ -44,20 +45,6 @@ const Container = styled.div`
         height: 4rem;
     }
 `;
-
-type userType = {
-    slackId: string;
-    name: string;
-    email: string;
-    groupId: number;
-    role: string;
-};
-
-type roomType = {
-    roomId: number;
-    roomColor: string;
-    roomName: string;
-};
 
 type TablesProps = {
     header: Array<string>;

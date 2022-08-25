@@ -35,7 +35,6 @@ const Admin: React.FC = () => {
         }
     }, []);
 
-    /* TODO: 로그인되어있고 & 관리자인 경우에만 접근 가능하게 */
     return isAdmin && (login || localStorage.getItem('token')) ? (
         <Container>
             <Header>

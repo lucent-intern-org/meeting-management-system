@@ -11,6 +11,7 @@ type inputProps = {
     disabled?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
 const Input: React.FC<inputProps> = ({
     type = 'text',
     value,

@@ -235,14 +235,7 @@ const MeetingModal: React.FC = () => {
                   endTime: meetingModifyModal.meeting.endTime,
                   repeat: meetingModifyModal.meeting.repeat,
                   content: meetingModifyModal.meeting.content,
-                  participants: [
-                      //   users.data.data.find((u: userType) => {
-                      //       return u.email === user.email;
-                      //   }) as userType,
-                      //   ...meetingModifyModal.participants.filter((p) => {
-                      //       return p.email !== user.email;
-                      //   }),
-                  ],
+                  participants: [],
                   room: '',
                   participateGroups: [],
               },

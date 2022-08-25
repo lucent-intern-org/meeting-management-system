@@ -13,14 +13,7 @@ import DropDown from '../atoms/drop_down';
 import FlexColumn from '../molecules/flex_column';
 import FlexRow from '../molecules/flex_row';
 import { addUser, modifyUser, useGetAllGroups } from '../../api';
-
-type userType = {
-    slackId: string;
-    name: string;
-    email: string;
-    groupId: number;
-    role: string;
-};
+import { userType } from '../../types';
 
 const UserModal: React.FC = () => {
     const [addUserModalVisible, setAddUserModalVisible] = useRecoilState(addUserModalVisibleState);

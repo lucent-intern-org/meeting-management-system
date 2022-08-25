@@ -39,10 +39,7 @@ export const strToMins: strToMinsType = (value) => {
 
 type minsToStrType = (str: number) => string;
 export const minsToStr: minsToStrType = (value) => {
-    // console.log(`00${value % 60}`);
     const min = Number(`00${Math.abs(value % 60)}`.slice(-2));
     const val = `${leftPad(Math.trunc(value / 60))}:${leftPad(min)}`;
-    // console.log(val);
     return value < 0 ? `-${val}` : val;
-    // return val;
 };
