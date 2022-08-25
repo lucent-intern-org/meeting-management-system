@@ -81,7 +81,7 @@ const Meeting: React.FC = () => {
                               date: toStringDateByFormatting((info as EventClickArg).event.start!),
                           });
                 }}
-                events={meetings.data.data.map((meeting: meetingType) => {
+                events={meetings.data.data.sort().map((meeting: meetingType) => {
                     const meetingDate = meeting.date;
                     return {
                         title: meeting.title,

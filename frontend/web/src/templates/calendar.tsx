@@ -104,6 +104,7 @@ type CalendarProps = {
             dayMaxEvents: number;
         };
     };
+    eventOrder?: string;
 };
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -123,6 +124,7 @@ const Calendar: React.FC<CalendarProps> = ({
     fixedWeekCount = false,
     height = 'auto',
     views,
+    eventOrder = 'start,duration',
 }: CalendarProps) => {
     return (
         <Container>
@@ -141,6 +143,7 @@ const Calendar: React.FC<CalendarProps> = ({
                 height={height}
                 views={views}
                 eventClick={dateClick}
+                eventOrder={eventOrder}
             />
         </Container>
     );
