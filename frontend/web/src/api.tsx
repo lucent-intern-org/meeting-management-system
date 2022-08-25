@@ -109,7 +109,7 @@ export const addMeeting = async (submitData: addMeetingType) => {
         const { data } = await axios.post(`${SERVER}/meetings/create`, submitData);
         return data;
     } catch (err) {
-        throw new Error('post meeting error');
+        throw new Error('add meeting error');
     }
 };
 
@@ -118,7 +118,16 @@ export const modifyMeeting = async (submitData: modifyMeetingType) => {
         const { data } = await axios.post(`${SERVER}/meetings/update`, submitData);
         return data;
     } catch (err) {
-        throw new Error('post meeting error');
+        throw new Error('modify meeting error');
+    }
+};
+
+export const deleteMeeting = async (meetingId: number) => {
+    try {
+        const { data } = await axios.post(`${SERVER}/meetings/delete`, { meetingId });
+        return data;
+    } catch (err) {
+        throw new Error('delete meeting error');
     }
 };
 
