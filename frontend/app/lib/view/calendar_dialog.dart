@@ -1,11 +1,11 @@
-import 'package:app/view_model/update_metting_view_model.dart';
+import 'package:app/view_model/update_meeting_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarDialog extends StatefulWidget {
   CalendarDialog(this.updateMettingViewModel, {Key? key}) : super(key: key);
-  final UpdateMettingViewModel updateMettingViewModel;
+  final UpdateMeetingViewModel updateMettingViewModel;
   @override
   State<CalendarDialog> createState() =>
       _CalendarDialogState(updateMettingViewModel);
@@ -13,7 +13,7 @@ class CalendarDialog extends StatefulWidget {
 
 class _CalendarDialogState extends State<CalendarDialog> {
   _CalendarDialogState(this.updateMettingViewModel);
-  final UpdateMettingViewModel updateMettingViewModel;
+  final UpdateMeetingViewModel updateMettingViewModel;
   String? date;
   DateTime? _focusedDay;
   DateTime? _selectedDay;
