@@ -5,7 +5,7 @@ import { EventClickArg } from '@fullcalendar/react';
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { useGetAllGroups, useGetAllMeetings, useGetAllRooms } from '../api';
+import { useGetAllMeetings, useGetAllRooms } from '../api';
 import {
     dayDetailModalState,
     isAdminState,

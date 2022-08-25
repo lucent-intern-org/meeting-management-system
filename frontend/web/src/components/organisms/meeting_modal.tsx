@@ -767,7 +767,6 @@ const MeetingModal: React.FC = () => {
                             bgColor={validation ? theme.submitBtnColor : theme.cancelBtnColor}
                             disabled={!validation}
                             onClick={() => {
-                                // todo: 회의실 예약 api call
                                 const slackIds: string[] = [];
                                 if (input.participateGroups.length > 0) {
                                     if (input.participateGroups.includes('All')) {
