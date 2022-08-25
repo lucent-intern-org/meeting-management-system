@@ -86,7 +86,7 @@ class _SignUpState extends State<SignUp> {
                           color: Theme.of(context).hintColor,
                         ),
                       ),
-                      items: googleSignViewModel.gropList
+                      items: googleSignViewModel.groupList
                           .map((item) => DropdownMenuItem<String>(
                                 value: item,
                                 child: Text(
@@ -99,10 +99,10 @@ class _SignUpState extends State<SignUp> {
                           .toList(),
                       dropdownFullScreen: true,
                       dropdownMaxHeight: 200,
-                      value: googleSignViewModel.grop,
+                      value: googleSignViewModel.group,
                       onChanged: (value) {
                         setState(() {
-                          googleSignViewModel.grop = value as String;
+                          googleSignViewModel.group = value as String;
                         });
                       },
                       buttonHeight: 30,
@@ -113,12 +113,9 @@ class _SignUpState extends State<SignUp> {
                   child: ElevatedButton(
                     child: const Text("구글 아이디로 회원가입"),
                     onPressed: () async {
-                      setState(() {
-                        googleSignViewModel.gropcheck = true;
-                      });
                       if (googleSignViewModel.formKey.currentState!
                               .validate() &&
-                          googleSignViewModel.grop != null) {
+                          googleSignViewModel.group != null) {
                         googleSignViewModel.signUp(context).then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
