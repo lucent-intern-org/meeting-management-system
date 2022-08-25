@@ -129,7 +129,7 @@ class DetailMeeting extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     alignment: Alignment.centerRight,
                     child: Text(
-                      "${meeting.date!.substring(0, 4)}년 ${meeting.date!.substring(4, 6)}월 ${meeting.date!.substring(6, 8)}일 ${DateFormat('E', 'ko_KR').format(DateTime(int.parse(meeting.date!.substring(0, 4)), int.parse(meeting.date!.substring(4, 6)), int.parse(meeting.date!.substring(6, 8))))}요일",
+                      "${meeting.date!.substring(0, 4)}년 ${meeting.date!.substring(5, 7)}월 ${meeting.date!.substring(8, 10)}일 ${DateFormat('E', 'ko_KR').format(DateTime(int.parse(meeting.date!.substring(0, 4)), int.parse(meeting.date!.substring(5, 7)), int.parse(meeting.date!.substring(8, 10))))}요일",
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
