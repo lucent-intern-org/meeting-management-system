@@ -100,10 +100,16 @@ class UpdateMeetingViewModel {
         updateMeetingModel.startList.indexOf(updateMeetingModel.start);
     var endIndex = updateMeetingModel.endList.indexOf(updateMeetingModel.end);
     //이미 존재하는 회의인지 체크
-    for (Meeting i in TestData().meetings[7]) {
-      if (startIndex < updateMeetingModel.endList.indexOf(i.endTime!) &&
-          endIndex > updateMeetingModel.startList.indexOf(i.startTime!)) {
-        return '이미 회의 존재';
+    var meetingList = meetings.get()[updateMeetingModel.date];
+    if (meetingList != null) {
+      for (Meeting i in meetings.get()[updateMeetingModel.date]!) {
+        if (startIndex < updateMeetingModel.endList.indexOf(i.endTime!) &&
+            endIndex > updateMeetingModel.startList.indexOf(i.startTime!)) {
+          if (updateMeetingModel.room ==
+              updateMeetingModel.roomList[i.roomId!]) {
+            return '이미 회의 존재';
+          }
+        }
       }
     }
     return null;
@@ -114,10 +120,16 @@ class UpdateMeetingViewModel {
         updateMeetingModel.startList.indexOf(updateMeetingModel.start);
     var endIndex = updateMeetingModel.endList.indexOf(updateMeetingModel.end);
     //이미 존재하는 회의인지 체크
-    for (Meeting i in TestData().meetings[7]) {
-      if (startIndex < updateMeetingModel.endList.indexOf(i.endTime!) &&
-          endIndex > updateMeetingModel.startList.indexOf(i.startTime!)) {
-        return '이미 회의 존재';
+    var meetingList = meetings.get()[updateMeetingModel.date];
+    if (meetingList != null) {
+      for (Meeting i in meetings.get()[updateMeetingModel.date]!) {
+        if (startIndex < updateMeetingModel.endList.indexOf(i.endTime!) &&
+            endIndex > updateMeetingModel.startList.indexOf(i.startTime!)) {
+          if (updateMeetingModel.room ==
+              updateMeetingModel.roomList[i.roomId!]) {
+            return '이미 회의 존재';
+          }
+        }
       }
     }
     //종료 시간이 시작 시간보다 빠른지 체크
@@ -129,7 +141,7 @@ class UpdateMeetingViewModel {
   }
 
   String? contentValidator(value) {
-    if (value == '') {
+    if (value.toString().replaceAll('\n', '').replaceAll(' ', '') == '') {
       return '내용을 입력해주세요.';
     }
     return null;
