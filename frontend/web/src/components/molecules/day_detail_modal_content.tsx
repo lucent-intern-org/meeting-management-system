@@ -43,7 +43,7 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
                 }) as userType[],
             );
         }
-    }, [meeting.meetingId, participants.status, users.status]);
+    }, [meeting.meetingId, participants.status, participants.data, users.status]);
 
     const renderByStatus = React.useCallback(() => {
         switch (rooms.status) {
@@ -124,7 +124,7 @@ const DayDetailModalContent: React.FC<dayDetailModalContentProps> = ({
                     </>
                 );
         }
-    }, [pu, rooms.status]);
+    }, [pu, rooms.status, meeting]);
 
     return <Container>{renderByStatus()}</Container>;
 };
