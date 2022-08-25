@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import SERVER from './url';
-import { addMeetingType, roomType, userType } from './types';
+import { addMeetingType, modifyMeetingType, roomType, userType } from './types';
 
 export const getAllMeetings = async () => {
     try {
@@ -49,7 +49,7 @@ export const getDayMeetingParticipants = async (meetingId: number) => {
 };
 
 export const useGetDayMeetingParticipants = (meetingId: number) => {
-    return useQuery(['meetings', { meetingId }], () => getDayMeetingParticipants(meetingId), {
+    return useQuery(['participants', { meetingId }], () => getDayMeetingParticipants(meetingId), {
         staleTime: 5000,
         cacheTime: Infinity,
     });
@@ -109,7 +109,25 @@ export const addMeeting = async (submitData: addMeetingType) => {
         const { data } = await axios.post(`${SERVER}/meetings/create`, submitData);
         return data;
     } catch (err) {
-        throw new Error('post meeting error');
+        throw new Error('add meeting error');
+    }
+};
+
+export const modifyMeeting = async (submitData: modifyMeetingType) => {
+    try {
+        const { data } = await axios.post(`${SERVER}/meetings/update`, submitData);
+        return data;
+    } catch (err) {
+        throw new Error('modify meeting error');
+    }
+};
+
+export const deleteMeeting = async (meetingId: number) => {
+    try {
+        const { data } = await axios.post(`${SERVER}/meetings/delete`, { meetingId });
+        return data;
+    } catch (err) {
+        throw new Error('delete meeting error');
     }
 };
 

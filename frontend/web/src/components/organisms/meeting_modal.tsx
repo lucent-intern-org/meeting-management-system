@@ -31,6 +31,7 @@ import ModalCloseButton from '../molecules/modal_close_button';
 import CenteredModal from './centered_modal';
 import {
     addMeeting,
+    modifyMeeting,
     useGetAllGroups,
     useGetAllMeetings,
     useGetAllRooms,
@@ -242,7 +243,7 @@ const MeetingModal: React.FC = () => {
                       //       return p.email !== user.email;
                       //   }),
                   ],
-                  room: rooms.data.data[meetingModifyModal.meeting.roomId].roomName,
+                  room: '',
                   participateGroups: [],
               },
     );
@@ -262,6 +263,20 @@ const MeetingModal: React.FC = () => {
             queryClient.invalidateQueries(['meetings', { date: input.date }]);
         },
     });
+
+    const modifyMeetingMutation = useMutation(
+        (submitData: modifyMeetingType) => modifyMeeting(submitData),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['meetings']);
+                queryClient.invalidateQueries(['meetings', { date: input.date }]);
+                queryClient.invalidateQueries([
+                    'participants',
+                    { meetingId: meetingModifyModal.meeting.meetingId },
+                ]);
+            },
+        },
+    );
 
     const updateData = () => {
         const filteredUsers = input.participateGroups.includes('All')
@@ -330,7 +345,8 @@ const MeetingModal: React.FC = () => {
                           .map((p) => {
                               return participateUsers.includes(p);
                           })
-                          .includes(false)
+                          .includes(false) &&
+                      participateUsers.length === meetingModifyModal.participants.length
                   );
     };
 
@@ -345,19 +361,39 @@ const MeetingModal: React.FC = () => {
 
     React.useEffect(() => {
         const debounce = setTimeout(() => {
-            if (users.status === 'success' && input.participants.length === 0) {
-                handleChangeData('participants', [
-                    ...input.participants,
-                    users.data.data.find((u: userType) => {
-                        return u.email === localStorage.getItem('email');
-                    }) as userType,
-                ]);
+            if (
+                users.status === 'success' &&
+                rooms.status === 'success' &&
+                input.participants.length === 0
+            ) {
+                if (meetingAddModalVisible) {
+                    handleChangeData('participants', [
+                        ...input.participants,
+                        users.data.data.find((u: userType) => {
+                            return u.email === localStorage.getItem('email');
+                        }) as userType,
+                    ]);
+                }
+                if (meetingModifyModal.visible) {
+                    handleChangeData(
+                        'room',
+                        rooms.data.data[meetingModifyModal.meeting.roomId].roomName,
+                    );
+                    handleChangeData('participants', [
+                        users.data.data.find((u: userType) => {
+                            return u.email === user.email;
+                        }) as userType,
+                        ...meetingModifyModal.participants.filter((p) => {
+                            return p.email !== user.email;
+                        }),
+                    ]);
+                }
             }
         }, 200);
         return () => {
             clearTimeout(debounce);
         };
-    }, [users.status]);
+    }, [users.status, rooms.status]);
 
     const renderByStatus = React.useCallback(() => {
         const status = [meetings.status, rooms.status, groups.status, users.status];
@@ -731,7 +767,6 @@ const MeetingModal: React.FC = () => {
                             bgColor={validation ? theme.submitBtnColor : theme.cancelBtnColor}
                             disabled={!validation}
                             onClick={() => {
-                                // todo: 회의실 예약 api call
                                 const slackIds: string[] = [];
                                 if (input.participateGroups.length > 0) {
                                     if (input.participateGroups.includes('All')) {
@@ -772,10 +807,10 @@ const MeetingModal: React.FC = () => {
                                     resetMeetingAddModal();
                                 }
                                 if (meetingModifyModal.visible) {
-                                    Object.assign(data, {
+                                    const plusData = Object.assign(data, {
                                         meetingId: meetingModifyModal.meeting.meetingId,
-                                    });
-                                    // modify
+                                    }) as modifyMeetingType;
+                                    modifyMeetingMutation.mutate(plusData, {});
                                     resetMeetingModifyModal();
                                 }
                             }}
