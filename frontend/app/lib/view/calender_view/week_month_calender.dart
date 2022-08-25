@@ -1,8 +1,8 @@
 import 'package:app/model/meeting.dart';
 import 'package:app/provider/date_provider.dart';
-import 'package:app/test/test_data.dart';
 import 'package:app/view/add_meeting.dart';
 import 'package:app/view/detail_meeting.dart';
+import 'package:app/view_model/week_month_calendar_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
@@ -15,20 +15,25 @@ class WeekMonthCalender extends StatefulWidget {
 }
 
 class _WeekMonthCalenderState extends State<WeekMonthCalender> {
-  late ValueNotifier<List<Meeting>> _selectedEvents;
-
-  List<List<Meeting>> meetings = TestData().meetings;
+  ValueNotifier<List<Meeting>>? _selectedEvents;
+  WeekMonthCalenderViewModel weekMonthCalenderViewModel =
+      WeekMonthCalenderViewModel();
   late DateTime _focusedDay;
   late DateTime _selectedDay;
   late CalendarFormat format;
 
   @override
   void initState() {
-    super.initState();
     _focusedDay = Provider.of<DateProvider>(context, listen: false).focusedDay;
     _selectedDay =
         Provider.of<DateProvider>(context, listen: false).selectedDay;
-    _selectedEvents = ValueNotifier(meetings[_selectedDay.day.toInt()]);
+    //meeting 가져오면 setstate실행
+    weekMonthCalenderViewModel.setMeeting().then((value) {
+      setState(() {});
+    });
+    //_selectedEvents = ValueNotifier(meetings[_selectedDay.day.toInt()]);
+    _selectedEvents = ValueNotifier([]);
+    super.initState();
   }
 
   @override
@@ -41,6 +46,7 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
     return SafeArea(
         child: Column(children: [
       Container(
+        padding: const EdgeInsets.only(top: 10),
         child: TableCalendar(
           calendarFormat: format,
           headerVisible: false,
@@ -56,8 +62,11 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
                 .setCalender(dateTime);
           },
           eventLoader: (day) {
-            if (meetings.length > day.day.toInt()) {
-              return meetings[day.day.toInt()];
+            if (weekMonthCalenderViewModel.meetings
+                    .get()[day.toString().substring(0, 10)] !=
+                null) {
+              return weekMonthCalenderViewModel.meetings
+                  .get()[day.toString().substring(0, 10)]!;
             }
             return [];
           },
@@ -75,12 +84,14 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
                   MaterialPageRoute(
                       builder: ((context) => AddMeeting(
                           date: _selectedDay.toString(),
-                          timeindex: DateTime.now().hour + 1))));
+                          timeindex: DateTime.now().hour + 1)))).then((value) {
+                setState(() {});
+              });
             },
             icon: Icon(Icons.add)),
       ),
       ValueListenableBuilder<List<Meeting>>(
-        valueListenable: _selectedEvents,
+        valueListenable: _selectedEvents!,
         builder: (context, value, _) {
           return ListView.builder(
             //해당 일의 회의리스트
@@ -99,10 +110,25 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
                 child: ListTile(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) =>
-                                DetailMeeting(meeting: value[index]))));
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) =>
+                                    DetailMeeting(meeting: value[index]))))
+                        .then((value) {
+                      if (value == true) {
+                        setState(() {
+                          if (weekMonthCalenderViewModel.meetings.get()[
+                                  _selectedDay.toString().substring(0, 10)] !=
+                              null) {
+                            _selectedEvents!.value =
+                                weekMonthCalenderViewModel.meetings.get()[
+                                    _selectedDay.toString().substring(0, 10)]!;
+                          } else {
+                            _selectedEvents!.value = [];
+                          }
+                        });
+                      }
+                    });
                   },
                   title: Text(
                       '${value[index].startTime} ~ ${value[index].endTime} : ${value[index].title}'),
@@ -123,7 +149,17 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
       });
       Provider.of<DateProvider>(context, listen: false)
           .setday(focusedDay, selectedDay);
-      _selectedEvents.value = meetings[_selectedDay.day.toInt()];
+      //_selectedEvents.value = meetings[_selectedDay.day.toInt()];
+      //미팅이 비었으면 []반환
+      if (weekMonthCalenderViewModel.meetings
+              .get()[_selectedDay.toString().substring(0, 10)] ==
+          null) {
+        _selectedEvents!.value = [];
+      } else {
+        //해당 날짜의 미팅리스트를 반환
+        _selectedEvents!.value = weekMonthCalenderViewModel.meetings
+            .get()[_selectedDay.toString().substring(0, 10)]!;
+      }
     }
   }
 }

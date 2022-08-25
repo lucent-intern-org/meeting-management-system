@@ -1,11 +1,16 @@
 import 'package:app/google_sign_in_api.dart';
 import 'package:app/model/meeting_form_model.dart';
 import 'package:app/model/meeting.dart';
+import 'package:app/model/meetings.dart';
+import 'package:app/model/user.dart';
 import 'package:app/test/test_data.dart';
 import 'package:flutter/material.dart';
 
-class AddMettingViewModel {
+import '../model/users.dart';
+
+class AddMeetingViewModel {
   Meeting? meeting;
+  Meetings meetings = Meetings();
   Meeting_Form_Model addMeetingModel = Meeting_Form_Model();
 
   TextEditingController titleController = TextEditingController();
@@ -17,8 +22,10 @@ class AddMettingViewModel {
   List<String> participantUsers = [GoogleSignInApi.currentUser()!.displayName!];
   List<String> participantGroups = [];
   List<String> participantList = [];
-  Future<void> initFormModel() async {
-    await addMeetingModel.initData();
+  Users users = Users();
+
+  Future<bool> initFormModel() async {
+    return await addMeetingModel.initData();
   }
 
   void setParticipantList() {
@@ -118,8 +125,7 @@ class AddMettingViewModel {
     return null;
   }
 
-  bool addMeeting() {
-    var meetingId = 6;
+  Future<bool> addMeeting() async {
     var roomId = addMeetingModel.roomList.indexOf(addMeetingModel.room!);
     var date = addMeetingModel.date;
     var startTime = addMeetingModel.start;
@@ -130,29 +136,41 @@ class AddMettingViewModel {
     if (title == "" || content == "") {
       return false;
     }
-    //해당 시간에 등록 가능한가 체크
-    meeting = Meeting(
-        meetingId, roomId, date, startTime, endTime, title, content, repeat);
+    var slackId = await getParticipant();
+    meeting = Meeting(roomId, date, startTime, endTime, title, content, repeat);
+    var body = {
+      "roomId": roomId,
+      "date": date,
+      "startTime": startTime,
+      "endTime": endTime,
+      "title": title,
+      "content": content,
+      "repeat": repeat,
+      "slackId": slackId
+    };
+    await meetings.addMeeting(body);
+    await meetings.getMeeting();
     return true;
   }
 
-  void addParticipant() {
+  Future<List> getParticipant() async {
+    var slackIdList = Set();
     for (String i in participantGroups) {
       //i그룹에 대한 유저 리스트
       var getGroupUser = [i];
-      for (String j in participantUsers) {
-        //그룹들 안에 해당 유저 있는지 파악
-        if (getGroupUser.contains(j)) {
-          //그룹과의 중복 제거를 위해 유저삭제
-          participantUsers.remove(j);
-        }
+      for (String slackId in await users
+          .getGroupUserId({"groupId": addMeetingModel.groupList.indexOf(i)})) {
+        slackIdList.add(slackId);
       }
-      participantList += getGroupUser;
+
+      print(slackIdList);
     }
-    participantList += participantUsers;
-    for (String i in participantList) {
+    for (String i in participantUsers) {
       //참여자 유저 하나씩 저장
-      var participant = {'meetingId': 6, 'slackId': i};
+      var a = await users.getNameUserId({"name": i});
+      print(a);
+      slackIdList.add(a);
     }
+    return slackIdList.toList();
   }
 }

@@ -18,6 +18,7 @@ class Meeting_Form_Model {
   String? group;
   List<String> roomList = [];
   String? room;
+  List<String> roomColor = [];
   List<String> userList = [];
 
   String? user;
@@ -32,6 +33,7 @@ class Meeting_Form_Model {
     await dio.get('http://192.168.0.30:3000/rooms/all').then((value) {
       for (var i in value.data['data']) {
         roomList.add(i["roomName"]);
+        roomColor.add(i["roomColor"]);
       }
       room = roomList[0];
     });

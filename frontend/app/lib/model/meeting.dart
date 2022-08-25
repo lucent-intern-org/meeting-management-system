@@ -9,6 +9,7 @@ class Meeting {
   String? repeat;
   //List<String>? user;
 
-  Meeting(this.meetingId, this.roomId, this.date, this.startTime, this.endTime,
-      this.title, this.content, this.repeat);
+  Meeting(this.roomId, this.date, this.startTime, this.endTime, this.title,
+      this.content, this.repeat,
+      {this.meetingId});
 }
