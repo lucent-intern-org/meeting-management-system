@@ -31,7 +31,6 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
     weekMonthCalenderViewModel.setMeeting().then((value) {
       setState(() {});
     });
-    //_selectedEvents = ValueNotifier(meetings[_selectedDay.day.toInt()]);
     _selectedEvents = ValueNotifier([]);
     super.initState();
   }
@@ -75,7 +74,6 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
         ),
       ),
       Container(
-        //width: MediaQuery.of(context).size.width,
         alignment: Alignment.centerRight,
         child: IconButton(
             onPressed: () {
@@ -149,7 +147,6 @@ class _WeekMonthCalenderState extends State<WeekMonthCalender> {
       });
       Provider.of<DateProvider>(context, listen: false)
           .setday(focusedDay, selectedDay);
-      //_selectedEvents.value = meetings[_selectedDay.day.toInt()];
       //미팅이 비었으면 []반환
       if (weekMonthCalenderViewModel.meetings
               .get()[_selectedDay.toString().substring(0, 10)] ==
