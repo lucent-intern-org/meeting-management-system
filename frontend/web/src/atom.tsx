@@ -101,8 +101,3 @@ export const deleteRoomModalVisibleState = atom({
 });
 
 export const logoutModalVisibleState = atom({ key: 'logoutModalVisible', default: false });
-
-export const roomsState = atom<Array<roomType>>({
-    key: 'rooms',
-    default: [],
-});

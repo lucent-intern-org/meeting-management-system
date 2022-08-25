@@ -59,7 +59,6 @@ const SignupModal: React.FC = () => {
     };
 
     const onSignUpSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-        // let token;
         if ('profileObj' in res) {
             const profile = res.profileObj;
             const data: userType = {
@@ -71,9 +70,6 @@ const SignupModal: React.FC = () => {
             };
             addUserConfirm(data);
         }
-        // if ('tokenId' in res) {
-        //     token = res.tokenId;
-        // }
     };
 
     const validation = () => {

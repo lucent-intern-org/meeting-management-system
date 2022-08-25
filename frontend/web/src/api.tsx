@@ -87,7 +87,6 @@ export const useGetAllGroups = () => {
     });
 };
 
-/* 관리자 > 사용자 */
 export const getAllUsers = async () => {
     try {
         const { data } = await axios.get(`${SERVER}/users/all`, {});
@@ -163,7 +162,6 @@ export const deleteUser = async (userInfo: userType) => {
         console.log(`사용자 삭제 에러: ${error}`);
     }
 };
-/* 관리자 >  회의실 */
 
 export const addRoom = async (roomInfo: roomType) => {
     try {
