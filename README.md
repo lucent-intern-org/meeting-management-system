@@ -18,6 +18,13 @@
 export const SERVER = "http://<ip>:<server_port>";
 ```
 
+- .env
+
+```
+REACT_APP_GOOGLE_CLIENT_ID=<google_client_id>
+SKIP_PREFLIGHT_CHECK=true
+```
+
 ### **Backend Setting**
 
 - ormconfig.json
@@ -67,3 +74,13 @@ npm run start
 | Frontend | ![react](https://img.shields.io/badge/react-gray?logo=react) ![Typescript](https://img.shields.io/badge/typescript-grey?logo=typescript) ![axios](https://img.shields.io/badge/axios-gray?logo=axios) ![Styled-components](https://img.shields.io/badge/styled_components-gray?logo=styled-components) ![npm](https://img.shields.io/badge/npm-8.16.0-red?logo=npm) ![recoil](https://img.shields.io/badge/recoil-grey?logo=recoil) ![React-Query](https://img.shields.io/badge/react_query-grey?logo=react_query) ![flutter](https://img.shields.io/badge/flutter-3.0.4-blue?logo=flutter) |
 | Backend  | ![NestJS](https://img.shields.io/badge/nestjs-9.0.0-red?logo=nestjs) ![Node](https://img.shields.io/badge/node-16.16.0-skyblue?logo=node) ![Postman](https://img.shields.io/badge/postman-gray?logo=postman)                                                                                                                                                                                                                                                                                                                                                                                |
 | DB       | ![MySQL](https://img.shields.io/badge/mysql-gray?logo=mysql)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+
+## **📋 File Tree**
+
+```
+📦Meeting-Management-System
+┣ 📂backend
+┗ 📂frontend
+  ┣ 📂web
+  ┗ 📂app
+```
