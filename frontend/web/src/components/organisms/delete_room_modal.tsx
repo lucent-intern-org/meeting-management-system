@@ -1,5 +1,7 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { deleteRoom } from '../../api';
 import { deleteRoomModalVisibleState } from '../../atom';
 import Text from '../atoms/text';
 
@@ -8,12 +10,25 @@ import AlertModal from './alert_modal';
 const DeleteRoomModal: React.FC = () => {
     const deleteRoomModalVisible = useRecoilValue(deleteRoomModalVisibleState);
 
+    // 회의실 삭제
+    const queryClient = useQueryClient();
+
+    const deleteRoomMutation = useMutation(() => deleteRoom(deleteRoomModalVisible.deleteRoom), {
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        },
+    });
+
+    const deleteRoomConfirm = async () => {
+        deleteRoomMutation.mutate();
+    };
+
     return (
         <AlertModal
             header='회의실 삭제'
             setState={deleteRoomModalVisibleState}
             confirmClick={() => {
-                // TODO: backend로 deleteRoom 보내서 삭제시키고 테이블 reload
+                deleteRoomConfirm();
             }}
         >
             <div>

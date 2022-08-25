@@ -5,7 +5,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { VscTrash } from 'react-icons/vsc';
 import { BiPencil } from 'react-icons/bi';
 import theme from '../../styles/theme';
-import { groups } from '../../temp_db';
 import {
     adminPageState,
     deleteRoomModalVisibleState,
@@ -14,11 +13,11 @@ import {
     modifyUserModalVisibleState,
 } from '../../atom';
 import RoomColor from '../atoms/room_color';
+import { useGetAllGroups } from '../../api';
 
 const Container = styled.div`
-    max-height: 60vh;
+    max-height: 36rem;
     overflow-y: auto;
-
     table,
     td,
     tr {
@@ -27,33 +26,24 @@ const Container = styled.div`
         font-family: 'inter';
         font-size: 17px;
     }
-
     table {
         width: 100%;
         text-align: center;
     }
-
     thead {
         height: 3rem;
         color: white;
         background-color: ${theme.primaryColor};
         font-weight: 700;
     }
-
     tbody {
         font-weight: 500;
         max-height: 4rem;
     }
-
     tbody > tr {
         height: 4rem;
     }
 `;
-
-type TablesProps = {
-    header: Array<string>;
-    body?: Array<object>;
-};
 
 type userType = {
     slackId: string;
@@ -67,6 +57,11 @@ type roomType = {
     roomId: number;
     roomColor: string;
     roomName: string;
+};
+
+type TablesProps = {
+    header: Array<string>;
+    body: Array<roomType | userType>;
 };
 
 const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
@@ -83,6 +78,8 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
     const [modifyRoomModalVisible, setModifyRoomModalVisible] = useRecoilState(
         modifyRoomModalVisibleState,
     );
+
+    const { data: groups } = useGetAllGroups();
 
     return (
         <Container>
@@ -109,7 +106,7 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                                         return adminPage === 'users' ? (
                                             <td key={value}>
                                                 {typeof value === 'number'
-                                                    ? groups[value].groupName
+                                                    ? groups.data[value].groupName
                                                     : value}
                                             </td>
                                         ) : (
@@ -147,7 +144,6 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                                     <td key='trash' className='trash' style={{ width: '6%' }}>
                                         <VscTrash
                                             onClick={() => {
-                                                /* TODO: 백으로 data 넘겨서 삭제 */
                                                 if (adminPage === 'users') {
                                                     setDeleteUserModalVisible({
                                                         visible: !deleteUserModalVisible.visible,

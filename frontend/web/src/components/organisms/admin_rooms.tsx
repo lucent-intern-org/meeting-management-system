@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { addRoomModalVisibleState } from '../../atom';
-import { rooms } from '../../temp_db';
 import CustomButton from '../atoms/custom_button';
 import Table from '../molecules/table';
+import { useGetAllRooms } from '../../api';
 
 const AdminRooms: React.FC = () => {
     const userTableHeader = ['Color', 'Name'];
     const [addRoomModalVisible, setAddRoomModalVisible] = useRecoilState(addRoomModalVisibleState);
+    const { data: rooms } = useGetAllRooms();
 
     return (
         <div>
@@ -20,7 +22,7 @@ const AdminRooms: React.FC = () => {
                     회의실 추가
                 </CustomButton>
             </div>
-            <Table header={userTableHeader} body={rooms} />
+            <Table header={userTableHeader} body={rooms.data!} />
         </div>
     );
 };

@@ -2,16 +2,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addUserModalVisibleState, modifyUserModalVisibleState } from '../../atom';
 import theme from '../../styles/theme';
 import CenteredModal from './centered_modal';
 import ModalCloseButton from '../molecules/modal_close_button';
 import CustomButton from '../atoms/custom_button';
 import Input from '../atoms/input';
-import { groups } from '../../temp_db';
 import DropDown from '../atoms/drop_down';
 import FlexColumn from '../molecules/flex_column';
 import FlexRow from '../molecules/flex_row';
+import { addUser, modifyUser, useGetAllGroups } from '../../api';
 
 type userType = {
     slackId: string;
@@ -27,6 +28,8 @@ const UserModal: React.FC = () => {
         modifyUserModalVisibleState,
     );
     const [validation, setValidation] = useState(false);
+
+    const { data: groups } = useGetAllGroups();
 
     const [userInfo, setUserInfo] = useState<userType>(
         addUserModalVisible
@@ -68,7 +71,6 @@ const UserModal: React.FC = () => {
     }, [userInfo]);
 
     const onChange = (key: string, value: string | number) => {
-        console.log(value);
         setUserInfo((prev) => ({ ...prev, [key]: value }));
     };
 
@@ -79,6 +81,30 @@ const UserModal: React.FC = () => {
                   ...prev,
                   visible: !modifyUserModalVisible.visible,
               }));
+    };
+
+    const queryClient = useQueryClient();
+
+    // 사용자 추가
+    const addUserMutation = useMutation(() => addUser(userInfo), {
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        },
+    });
+
+    const addUserConfirm = async () => {
+        addUserMutation.mutate();
+    };
+
+    // 사용자 수정
+    const modifyUserMutation = useMutation(() => modifyUser(userInfo), {
+        onSuccess: () => {
+            queryClient.invalidateQueries();
+        },
+    });
+
+    const modifyUserConfirm = async () => {
+        modifyUserMutation.mutate();
     };
 
     const roles = [{ roleName: 'user' }, { roleName: 'admin' }];
@@ -125,16 +151,19 @@ const UserModal: React.FC = () => {
                 />
                 <DropDown
                     onChange={(e: { target: { value: string } }) => {
-                        const g = groups.find((val) => val.groupName === e.target.value);
+                        const g = groups.data.find(
+                            (val: { groupName: string; groupId: string }) =>
+                                val.groupName === e.target.value,
+                        );
                         onChange('groupId', g!.groupId);
                     }}
                     placeholder='Position'
                     letterSpacing={0.15}
                     margin={0}
                     width={54.25}
-                    options={groups}
+                    options={groups.data}
                     defaultValue={
-                        userInfo.groupId < 0 ? 'default' : groups[userInfo.groupId].groupName
+                        userInfo.groupId < 0 ? 'default' : groups.data[userInfo.groupId].groupName
                     }
                 />
                 <DropDown
@@ -158,6 +187,13 @@ const UserModal: React.FC = () => {
                             disabled={validation}
                             onClick={() => {
                                 console.log(userInfo);
+                                if (addUserModalVisible) {
+                                    // 사용자 추가
+                                    addUserConfirm();
+                                } else {
+                                    // 사용자 수정
+                                    modifyUserConfirm();
+                                }
                                 changeModalOpen();
                             }}
                         >

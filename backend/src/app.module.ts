@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -11,7 +12,14 @@ import { ParticipantModule } from './participant/participant.module';
 const settings = require('../ormconfig.json');
 
 @Module({
-  imports: [TypeOrmModule.forRoot(settings),UserModule, GroupModule, RoomModule, MeetingModule, ParticipantModule],
+  imports: [
+    TypeOrmModule.forRoot(settings),
+    UserModule,
+    GroupModule,
+    RoomModule,
+    MeetingModule,
+    ParticipantModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
