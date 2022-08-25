@@ -5,13 +5,14 @@ import { addRoomModalVisibleState } from '../../atom';
 import CustomButton from '../atoms/custom_button';
 import Table from '../molecules/table';
 import { useGetAllRooms } from '../../api';
+import Loading from '../molecules/loading';
 
 const AdminRooms: React.FC = () => {
     const userTableHeader = ['Color', 'Name'];
     const [addRoomModalVisible, setAddRoomModalVisible] = useRecoilState(addRoomModalVisibleState);
     const { data: rooms } = useGetAllRooms();
 
-    return (
+    return rooms !== undefined ? (
         <div>
             <div style={{ marginBottom: '1.5rem' }}>
                 <CustomButton
@@ -24,6 +25,8 @@ const AdminRooms: React.FC = () => {
             </div>
             <Table header={userTableHeader} body={rooms.data!} />
         </div>
+    ) : (
+        <Loading />
     );
 };
 

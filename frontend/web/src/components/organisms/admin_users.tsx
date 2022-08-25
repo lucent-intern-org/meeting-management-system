@@ -5,13 +5,14 @@ import CustomButton from '../atoms/custom_button';
 import Table from '../molecules/table';
 import { addUserModalVisibleState } from '../../atom';
 import { useGetAllUsers } from '../../api';
+import Loading from '../molecules/loading';
 
 const AdminUsers: React.FC = () => {
     const userTableHeader = ['Slack Id', 'Name', 'Email', 'Position', 'Role'];
     const [addUserModalVisible, setAddUserModalVisible] = useRecoilState(addUserModalVisibleState);
     const { data: users } = useGetAllUsers();
 
-    return (
+    return users !== undefined ? (
         <div>
             <div style={{ marginBottom: '1.5rem' }}>
                 <CustomButton onClick={() => setAddUserModalVisible(!addUserModalVisible)}>
@@ -21,6 +22,8 @@ const AdminUsers: React.FC = () => {
 
             <Table header={userTableHeader} body={users.data!} />
         </div>
+    ) : (
+        <Loading />
     );
 };
 

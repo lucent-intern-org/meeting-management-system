@@ -15,6 +15,8 @@ import {
 import RoomColor from '../atoms/room_color';
 import { useGetAllGroups } from '../../api';
 import { roomType, userType } from '../../types';
+import CenteredModal from '../organisms/centered_modal';
+import Loading from './loading';
 
 const Container = styled.div`
     max-height: 36rem;
@@ -68,7 +70,7 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
 
     const { data: groups } = useGetAllGroups();
 
-    return (
+    return groups !== undefined ? (
         <Container>
             <table>
                 <thead>
@@ -155,6 +157,8 @@ const Table: React.FC<TablesProps> = ({ header, body = [] }: TablesProps) => {
                 </tbody>
             </table>
         </Container>
+    ) : (
+        <Loading />
     );
 };
 
