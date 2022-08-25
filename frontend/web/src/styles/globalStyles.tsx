@@ -94,8 +94,6 @@ input, select {
   font-family: 'inter';
 }
 
-<<<<<<< HEAD:frontend/web/src/styles/globalStyles.tsx
-=======
 input, select {
   border-bottom: 2px solid #808080;
   font-weight: 900;
@@ -104,7 +102,6 @@ input, select {
   font-family: 'inter';
 }
 
->>>>>>> ed1403db9552999c15d9cbb33f225c7fa9b73f2c:frontend/web/src/globalStyles.tsx
 input:focus, select:focus {
   outline: none;
 }
