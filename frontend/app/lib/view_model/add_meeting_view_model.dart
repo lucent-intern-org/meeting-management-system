@@ -2,8 +2,6 @@ import 'package:app/google_sign_in_api.dart';
 import 'package:app/model/meeting_form_model.dart';
 import 'package:app/model/meeting.dart';
 import 'package:app/model/meetings.dart';
-import 'package:app/model/user.dart';
-import 'package:app/test/test_data.dart';
 import 'package:flutter/material.dart';
 
 import '../model/users.dart';
@@ -91,12 +89,18 @@ class AddMeetingViewModel {
     var startIndex = addMeetingModel.startList.indexOf(addMeetingModel.start);
     var endIndex = addMeetingModel.endList.indexOf(addMeetingModel.end);
     //이미 존재하는 회의인지 체크
-    for (Meeting i in TestData().meetings[7]) {
-      if (startIndex < addMeetingModel.endList.indexOf(i.endTime!) &&
-          endIndex > addMeetingModel.startList.indexOf(i.startTime!)) {
-        return '이미 회의 존재';
+    var meetingList = meetings.get()[addMeetingModel.date];
+    if (meetingList != null) {
+      for (Meeting i in meetings.get()[addMeetingModel.date]!) {
+        if (startIndex < addMeetingModel.endList.indexOf(i.endTime!) &&
+            endIndex > addMeetingModel.startList.indexOf(i.startTime!)) {
+          if (addMeetingModel.room == addMeetingModel.roomList[i.roomId!]) {
+            return '이미 회의 존재';
+          }
+        }
       }
     }
+
     return null;
   }
 
@@ -104,10 +108,15 @@ class AddMeetingViewModel {
     var startIndex = addMeetingModel.startList.indexOf(addMeetingModel.start);
     var endIndex = addMeetingModel.endList.indexOf(addMeetingModel.end);
     //이미 존재하는 회의인지 체크
-    for (Meeting i in TestData().meetings[7]) {
-      if (startIndex < addMeetingModel.endList.indexOf(i.endTime!) &&
-          endIndex > addMeetingModel.startList.indexOf(i.startTime!)) {
-        return '이미 회의 존재';
+    var meetingList = meetings.get()[addMeetingModel.date];
+    if (meetingList != null) {
+      for (Meeting i in meetings.get()[addMeetingModel.date]!) {
+        if (startIndex < addMeetingModel.endList.indexOf(i.endTime!) &&
+            endIndex > addMeetingModel.startList.indexOf(i.startTime!)) {
+          if (addMeetingModel.room == addMeetingModel.roomList[i.roomId!]) {
+            return '이미 회의 존재';
+          }
+        }
       }
     }
     //종료 시간이 시작 시간보다 빠른지 체크
@@ -119,7 +128,7 @@ class AddMeetingViewModel {
   }
 
   String? contentValidator(value) {
-    if (value == '') {
+    if (value.toString().replaceAll('\n', '').replaceAll(' ', '') == '') {
       return '내용을 입력해주세요.';
     }
     return null;
