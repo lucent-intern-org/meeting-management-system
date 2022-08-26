@@ -12,13 +12,13 @@
 
 ### **Frontend web Setting**
 
-- url.tsx
+- frontend/web/src/url.tsx
 
 ```typescript
 export const SERVER = "http://<ip>:<server_port>";
 ```
 
-- .env
+- frontend/web/.env
 
 ```
 REACT_APP_GOOGLE_CLIENT_ID=<google_client_id>
@@ -27,7 +27,7 @@ SKIP_PREFLIGHT_CHECK=true
 
 ### **Backend Setting**
 
-- ormconfig.json
+- backend/ormconfig.json
 
 ```json
 {
@@ -89,5 +89,3 @@ npm run start
   ┣ 📂web
   ┗ 📂app
 ```
-
-[backend File Tree](backend/README.md), [web File Tree](frontend/web/README.md), [app File Tree](frontend/app/README.md)
