@@ -10,6 +10,10 @@ export class UserService {
     private userRepository: Repository<Users>,
   ) {}
 
+  async getName(name: string) {
+    const user = await this.userRepository.findOne({ where: { name } });
+    return user;
+  }
   async getEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     return user;

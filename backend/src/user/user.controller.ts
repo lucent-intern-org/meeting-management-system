@@ -6,6 +6,18 @@ import { Response } from 'express';
 export class UserController {
   constructor(private UserService: UserService) {}
 
+  @Get('/name')
+  async getName(@Query('name') name) {
+    console.log(name);
+    const user = await this.UserService.getName(name);
+    console.log(user);
+    return Object.assign({
+      data: user,
+      statusCode: 200,
+      statusMsg: `데이터 조회가 성공적으로 완료되었습니다.`,
+    });
+  }
+  
   @Get('/email')
   async getEmail(@Query('email') email) {
     console.log(email);
